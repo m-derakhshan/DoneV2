@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "391407801122",
+    "project_id": "newagent-ysydry",
+    "storage_bucket": "newagent-ysydry.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:391407801122:android:a8336828acb32ae45b8b7b",
+        "android_client_info": {
+          "package_name": "m.derakhshan.done"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "391407801122-4dabbo7urce2bh62kpu33b5spgbpc9qa.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBQs0pQKDXQXmOwz4Ny8BEw_Payk0PRLCQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "391407801122-4dabbo7urce2bh62kpu33b5spgbpc9qa.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
