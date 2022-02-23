@@ -5,5 +5,7 @@ data class AuthenticationState(
     val password: String = "",
     val nameAndFamily: String = "",
     val showNameAndFamily: Boolean = false,
-    val isPasswordVisible: Boolean = false
+    val isPasswordVisible: Boolean = false,
+    val isLoadingButtonExpanded: Boolean = true,
+    val isNameAndFamilyFieldVisible: Boolean = false
 )

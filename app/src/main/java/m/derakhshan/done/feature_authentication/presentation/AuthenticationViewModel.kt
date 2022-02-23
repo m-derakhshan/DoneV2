@@ -3,13 +3,17 @@ package m.derakhshan.done.feature_authentication.presentation
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import m.derakhshan.done.feature_authentication.presentation.AuthenticationEvent.*
 import javax.inject.Inject
 
 
 @HiltViewModel
-class AuthenticationViewModel @Inject constructor() : ViewModel() {
+class AuthenticationViewModel @Inject constructor(
+    private val authentication: FirebaseAuth,
+) : ViewModel() {
+
 
     private val _state = mutableStateOf(AuthenticationState())
     val state: State<AuthenticationState> = _state
@@ -17,7 +21,10 @@ class AuthenticationViewModel @Inject constructor() : ViewModel() {
 
     fun onEvent(event: AuthenticationEvent) {
         when (event) {
-            is LoginSignUpClicked -> {}
+            is LoginSignUpClicked -> {
+                loginOrSignUp()
+
+            }
             is EmailChanged -> {
                 _state.value = _state.value.copy(
                     email = event.email
@@ -28,12 +35,28 @@ class AuthenticationViewModel @Inject constructor() : ViewModel() {
                     password = event.password
                 )
             }
+            is NameAndFamilyChanged -> {
+                _state.value = _state.value.copy(
+                    nameAndFamily = event.NameAndFamily
+                )
+            }
             is TogglePasswordVisibility -> {
                 _state.value = _state.value.copy(
                     isPasswordVisible = !_state.value.isPasswordVisible
                 )
             }
         }
+    }
+
+    // TODO: solve the authentication listener problem
+    private fun loginOrSignUp() {
+        _state.value = _state.value.copy(
+            isLoadingButtonExpanded = false
+        )
+        authentication.signInWithEmailAndPassword(
+            _state.value.email,
+            _state.value.password
+        )
     }
 
 
