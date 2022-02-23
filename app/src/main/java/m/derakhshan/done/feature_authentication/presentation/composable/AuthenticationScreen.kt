@@ -10,6 +10,7 @@ import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -21,6 +22,7 @@ import androidx.navigation.NavController
 import m.derakhshan.done.R
 import m.derakhshan.done.feature_authentication.presentation.AuthenticationEvent
 import m.derakhshan.done.feature_authentication.presentation.AuthenticationViewModel
+import m.derakhshan.done.feature_authentication.utils.AuthenticationTestingConstants
 import m.derakhshan.done.ui.theme.spacing
 
 
@@ -36,12 +38,12 @@ fun AuthenticationScreen(
             .fillMaxSize()
             .verticalScroll(scroll)
     ) {
-
-        LottieBanner(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(350.dp)
-        )
+        // todo: comment or uncomment this part for android testing
+//        LottieBanner(
+//            modifier = Modifier
+//                .fillMaxWidth()
+//                .height(350.dp)
+//        )
 
         Text(
             text = stringResource(id = R.string.welcome),
@@ -62,6 +64,7 @@ fun AuthenticationScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(MaterialTheme.spacing.small)
+                .testTag(AuthenticationTestingConstants.EMAIL_TEXT_FIELD)
         )
 
         OutlinedTextField(
@@ -80,15 +83,19 @@ fun AuthenticationScreen(
                     Icons.Filled.Visibility
                 else
                     Icons.Default.VisibilityOff
-                IconButton(onClick = {
-                    viewModel.onEvent(AuthenticationEvent.TogglePasswordVisibility)
-                }) {
+                IconButton(
+                    onClick = {
+                        viewModel.onEvent(AuthenticationEvent.TogglePasswordVisibility)
+                    },
+                    modifier = Modifier.testTag(AuthenticationTestingConstants.PASSWORD_VISIBILITY_ICON_BUTTON)
+                ) {
                     Icon(imageVector = image, "show or hide password")
                 }
             },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(MaterialTheme.spacing.small)
+                .testTag(AuthenticationTestingConstants.PASSWORD_TEXT_FIELD)
         )
 
 
