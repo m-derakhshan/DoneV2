@@ -5,4 +5,5 @@
     <string name="email">Email</string>
     <string name="password">Password</string>
     <string name="login_signup">Login/SignUp</string>
+    <string name="name_family">Name and Family</string>
 </resources>

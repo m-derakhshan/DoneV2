@@ -1,6 +1,7 @@
 package m.derakhshan.done.feature_authentication.presentation.composable
 
 import androidx.compose.animation.*
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
@@ -14,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -62,7 +64,10 @@ fun AuthenticationScreen(
                 Text(text = stringResource(id = R.string.email))
             },
             onValueChange = { viewModel.onEvent(AuthenticationEvent.EmailChanged(it)) },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Email,
+                imeAction = ImeAction.Next
+            ),
             maxLines = 1,
             modifier = Modifier
                 .fillMaxWidth()
@@ -76,7 +81,10 @@ fun AuthenticationScreen(
                 Text(text = stringResource(id = R.string.password))
             },
             onValueChange = { viewModel.onEvent(AuthenticationEvent.PasswordChanged(it)) },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Password,
+                imeAction = ImeAction.Next
+            ),
             visualTransformation =
             if (state.isPasswordVisible)
                 VisualTransformation.None
@@ -103,22 +111,24 @@ fun AuthenticationScreen(
 
         AnimatedVisibility(
             visible = state.isNameAndFamilyFieldVisible,
-            enter = slideInVertically() + fadeIn(),
-            exit = slideOutVertically() + fadeOut()
+            enter = slideInVertically(animationSpec = tween(500)) + fadeIn(),
+            exit = slideOutVertically(animationSpec = tween(500)) + fadeOut()
         ) {
+
             OutlinedTextField(
-                value = state.email,
+                value = state.nameAndFamily,
                 label = {
-                    Text(text = stringResource(id = R.string.email))
+                    Text(text = stringResource(id = R.string.name_family))
                 },
-                onValueChange = { viewModel.onEvent(AuthenticationEvent.EmailChanged(it)) },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+                onValueChange = { viewModel.onEvent(AuthenticationEvent.NameAndFamilyChanged(it)) },
                 maxLines = 1,
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(MaterialTheme.spacing.small)
-                    .testTag(AuthenticationTestingConstants.EMAIL_TEXT_FIELD)
+                    .testTag(AuthenticationTestingConstants.NAME_FAMILY_TEXT_FIELD)
             )
+
         }
 
 

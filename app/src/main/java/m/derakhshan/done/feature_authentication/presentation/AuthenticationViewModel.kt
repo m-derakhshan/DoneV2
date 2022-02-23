@@ -3,8 +3,11 @@ package m.derakhshan.done.feature_authentication.presentation
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import m.derakhshan.done.feature_authentication.presentation.AuthenticationEvent.*
 import javax.inject.Inject
 
@@ -23,7 +26,6 @@ class AuthenticationViewModel @Inject constructor(
         when (event) {
             is LoginSignUpClicked -> {
                 loginOrSignUp()
-
             }
             is EmailChanged -> {
                 _state.value = _state.value.copy(
@@ -50,13 +52,26 @@ class AuthenticationViewModel @Inject constructor(
 
     // TODO: solve the authentication listener problem
     private fun loginOrSignUp() {
-        _state.value = _state.value.copy(
-            isLoadingButtonExpanded = false
-        )
-        authentication.signInWithEmailAndPassword(
-            _state.value.email,
-            _state.value.password
-        )
+        viewModelScope.launch {
+
+            _state.value = _state.value.copy(
+                isLoadingButtonExpanded = false
+            )
+
+            delay(3000)
+
+            _state.value = _state.value.copy(
+                isLoadingButtonExpanded = true,
+                isNameAndFamilyFieldVisible = true
+            )
+
+        }
+
+
+//        authentication.signInWithEmailAndPassword(
+//            _state.value.email,
+//            _state.value.password
+//        )
     }
 
 
