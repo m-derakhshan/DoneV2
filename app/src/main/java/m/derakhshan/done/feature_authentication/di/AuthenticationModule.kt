@@ -2,6 +2,8 @@ package m.derakhshan.done.feature_authentication.di
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import dagger.Module
 import dagger.Provides
@@ -27,6 +29,12 @@ object AuthenticationModule {
 
     @Singleton
     @Provides
+    fun provideFirestore(): FirebaseFirestore {
+        return Firebase.firestore
+    }
+
+    @Singleton
+    @Provides
     fun provideAuthenticationUseCase(repository: AuthenticationRepository): AuthenticationUseCase {
         return AuthenticationUseCase(
             loginUseCase = LoginUseCase(repository = repository),
@@ -36,7 +44,10 @@ object AuthenticationModule {
 
     @Singleton
     @Provides
-    fun provideAuthenticationRepository(authentication: FirebaseAuth): AuthenticationRepository {
-        return AuthenticationRepositoryImpl(authentication = authentication)
+    fun provideAuthenticationRepository(
+        authentication: FirebaseAuth,
+        storage: FirebaseFirestore
+    ): AuthenticationRepository {
+        return AuthenticationRepositoryImpl(authentication = authentication, storage = storage)
     }
 }

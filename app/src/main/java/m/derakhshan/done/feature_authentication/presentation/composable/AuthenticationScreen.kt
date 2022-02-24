@@ -147,11 +147,12 @@ fun AuthenticationScreen(
 
 
             LoadingButton(
-                buttonText = stringResource(id = R.string.login_signup),
+                buttonText = stringResource(id = state.loadingButtonText),
                 isExpanded = state.isLoadingButtonExpanded,
                 modifier = Modifier
                     .padding(MaterialTheme.spacing.small)
                     .align(Alignment.CenterHorizontally)
+                    .testTag(AuthenticationTestingConstants.LOGIN_BUTTON)
             ) {
                 viewModel.onEvent(AuthenticationEvent.LoginSignUpClicked)
             }
