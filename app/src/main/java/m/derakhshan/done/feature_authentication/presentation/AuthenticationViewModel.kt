@@ -4,22 +4,27 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
+import m.derakhshan.done.core.domain.model.Response
+import m.derakhshan.done.feature_authentication.domain.use_case.AuthenticationUseCase
 import m.derakhshan.done.feature_authentication.presentation.AuthenticationEvent.*
 import javax.inject.Inject
 
 
 @HiltViewModel
 class AuthenticationViewModel @Inject constructor(
-    private val authentication: FirebaseAuth,
+    private val useCase: AuthenticationUseCase
 ) : ViewModel() {
 
 
     private val _state = mutableStateOf(AuthenticationState())
     val state: State<AuthenticationState> = _state
+
+    private val _snackBar = MutableSharedFlow<String>()
+    val snackBar = _snackBar.asSharedFlow()
 
 
     fun onEvent(event: AuthenticationEvent) {
@@ -50,7 +55,7 @@ class AuthenticationViewModel @Inject constructor(
         }
     }
 
-    // TODO: solve the authentication listener problem
+
     private fun loginOrSignUp() {
         viewModelScope.launch {
 
@@ -58,20 +63,23 @@ class AuthenticationViewModel @Inject constructor(
                 isLoadingButtonExpanded = false
             )
 
-            delay(3000)
+            useCase.loginUseCase(email = _state.value.email, password = _state.value.password)
+                .let { response ->
+                    if (response is Response.Success)
+                        _snackBar.emit("User logged in successfully")
+                    else
+                        when (response.responseCode) {
+                            401 -> _snackBar.emit(response.message ?: "Unknown error.")
+                            404 -> _state.value = _state.value.copy(
+                                isNameAndFamilyFieldVisible = true
+                            )
+                        }
+                }
 
             _state.value = _state.value.copy(
-                isLoadingButtonExpanded = true,
-                isNameAndFamilyFieldVisible = true
+                isLoadingButtonExpanded = true
             )
-
         }
-
-
-//        authentication.signInWithEmailAndPassword(
-//            _state.value.email,
-//            _state.value.password
-//        )
     }
 
 
