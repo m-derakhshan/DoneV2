@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import m.derakhshan.done.R
+import m.derakhshan.done.core.data.data_source.Setting
 import m.derakhshan.done.core.domain.model.Response
 import m.derakhshan.done.feature_authentication.domain.use_case.AuthenticationUseCase
 import m.derakhshan.done.feature_authentication.presentation.AuthenticationEvent.*
@@ -17,7 +18,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AuthenticationViewModel @Inject constructor(
-    private val useCase: AuthenticationUseCase
+    private val useCase: AuthenticationUseCase,
+    private val setting: Setting
 ) : ViewModel() {
 
 
@@ -72,8 +74,11 @@ class AuthenticationViewModel @Inject constructor(
             useCase.loginUseCase(email = _state.value.email, password = _state.value.password)
                 .let { response ->
                     if (response is Response.Success)
-                    // TODO: navigate to home screen
-                        _snackBar.emit("User logged in successfully")
+                        _state.value = _state.value.copy(
+                            navigateToHomeScreen = true
+                        ).also {
+                            setting.isUserLoggedIn = true
+                        }
                     else
                         when (response.responseCode) {
                             404 -> _state.value = _state.value.copy(
@@ -102,8 +107,11 @@ class AuthenticationViewModel @Inject constructor(
             )
 
             if (result is Response.Success)
-            // TODO: navigate to home screen
-                _snackBar.emit("User Successfully signed up")
+                _state.value = _state.value.copy(
+                    navigateToHomeScreen = true
+                ).also {
+                    setting.isUserLoggedIn = true
+                }
             else
                 _snackBar.emit(result.message ?: "Unknown Error.")
 

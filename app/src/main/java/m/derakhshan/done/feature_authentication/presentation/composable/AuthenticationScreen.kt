@@ -28,8 +28,10 @@ import kotlinx.coroutines.flow.collectLatest
 import m.derakhshan.done.R
 import m.derakhshan.done.core.presentation.composable.LoadingButton
 import m.derakhshan.done.feature_authentication.presentation.AuthenticationEvent
+import m.derakhshan.done.feature_authentication.presentation.AuthenticationNavGraph
 import m.derakhshan.done.feature_authentication.presentation.AuthenticationViewModel
 import m.derakhshan.done.feature_authentication.utils.AuthenticationTestingConstants
+import m.derakhshan.done.feature_home.presentation.HomeNavGraph
 import m.derakhshan.done.ui.theme.spacing
 
 
@@ -48,6 +50,15 @@ fun AuthenticationScreen(
             scaffoldState.snackbarHostState.currentSnackbarData?.dismiss()
             scaffoldState.snackbarHostState.showSnackbar(message = message)
         }
+    }
+
+    LaunchedEffect(state.navigateToHomeScreen) {
+        if (state.navigateToHomeScreen)
+            navController.navigate(HomeNavGraph.HomeRoute.route) {
+                this.popUpTo(AuthenticationNavGraph.AuthenticationRoute.route) {
+                    inclusive = true
+                }
+            }
     }
 
     Scaffold(scaffoldState = scaffoldState, modifier = Modifier.fillMaxSize()) {

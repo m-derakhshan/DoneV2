@@ -7,6 +7,7 @@ import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
 import m.derakhshan.done.core.domain.model.Response
+import m.derakhshan.done.feature_authentication.data.data_source.dao.UserDao
 import m.derakhshan.done.feature_authentication.domain.model.UserModel
 import m.derakhshan.done.feature_authentication.domain.repository.AuthenticationRepository
 import m.derakhshan.done.feature_authentication.utils.credentialValidityChecker
@@ -15,7 +16,8 @@ import javax.inject.Inject
 
 class AuthenticationRepositoryImpl @Inject constructor(
     private val authentication: FirebaseAuth,
-    private val storage: FirebaseFirestore
+    private val storage: FirebaseFirestore,
+    private val databaseDao: UserDao
 ) : AuthenticationRepository {
     override suspend fun login(email: String, password: String): Response<UserModel> {
 
@@ -26,17 +28,19 @@ class AuthenticationRepositoryImpl @Inject constructor(
                 .await()
                 .user.let { info ->
 
+
                     val userInformation =
                         storage.collection("users").document(info!!.uid).get().await()
 
-                    Response.Success(
-                        UserModel(
-                            uid = info.uid,
-                            email = email,
-                            password = password,
-                            name = userInformation.data?.get("name").toString()
-                        )
+                    val newUser = UserModel(
+                        uid = info.uid,
+                        email = email,
+                        password = password,
+                        name = userInformation.data?.get("name").toString()
                     )
+                    databaseDao.insert(newUser)
+                    Response.Success(newUser)
+
                 }
         } catch (e: Exception) {
             when (e) {
@@ -59,27 +63,24 @@ class AuthenticationRepositoryImpl @Inject constructor(
     ): Response<UserModel> {
 
         return try {
+
             credentialValidityChecker(email = email, password = password, nameAndFamily = name)
-            authentication.createUserWithEmailAndPassword(
-                email, password
-            )
+
+            authentication.createUserWithEmailAndPassword(email, password)
                 .await()
                 .user!!.let { info ->
-                    storage.collection("users").document(info.uid).set(
-                        hashMapOf(
-                            "uid" to info.uid,
-                            "name" to name,
-                        )
-                    ).await()
+                    storage.collection("users").document(info.uid)
+                        .set(hashMapOf("uid" to info.uid, "name" to name))
+                        .await()
 
-                    Response.Success(
-                        UserModel(
-                            uid = info.uid,
-                            email = email,
-                            password = password,
-                            name = name
-                        )
+                    val newUser = UserModel(
+                        uid = info.uid,
+                        email = email,
+                        password = password,
+                        name = name
                     )
+                    databaseDao.insert(newUser)
+                    Response.Success(newUser)
                 }
         } catch (e: Exception) {
             when (e) {

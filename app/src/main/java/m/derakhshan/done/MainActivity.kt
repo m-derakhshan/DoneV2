@@ -5,27 +5,27 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
+import m.derakhshan.done.core.data.data_source.Setting
 import m.derakhshan.done.feature_authentication.presentation.AuthenticationNavGraph
 import m.derakhshan.done.feature_authentication.presentation.authentication
+import m.derakhshan.done.feature_home.presentation.HomeNavGraph
+import m.derakhshan.done.feature_home.presentation.home
 import m.derakhshan.done.ui.theme.DoneTheme
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    private lateinit var auth: FirebaseAuth
+    @Inject
+    lateinit var setting: Setting
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        auth = Firebase.auth
 
-        // TODO: fix the start destination based on that user has logged in or not.
-        //      if so, navigate to home screen.
-        val startDestination = if (true)
-            AuthenticationNavGraph.AuthenticationRoute.route
+
+        val startDestination = if (setting.isUserLoggedIn)
+            HomeNavGraph.HomeRoute.route
         else
             AuthenticationNavGraph.AuthenticationRoute.route
 
@@ -37,6 +37,7 @@ class MainActivity : ComponentActivity() {
                     startDestination = startDestination
                 ) {
                     authentication(navController = navController)
+                    home(navController = navController)
                 }
             }
         }

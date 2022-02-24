@@ -10,5 +10,6 @@ data class AuthenticationState(
     val isPasswordVisible: Boolean = false,
     val isLoadingButtonExpanded: Boolean = true,
     val isNameAndFamilyFieldVisible: Boolean = false,
-    val loadingButtonText: Int = R.string.login_signup
+    val loadingButtonText: Int = R.string.login_signup,
+    val navigateToHomeScreen: Boolean = false
 )
