@@ -1,6 +1,7 @@
 package m.derakhshan.done.feature_authentication.utils
 
-import android.util.Patterns
+
+import androidx.core.util.PatternsCompat
 
 
 @Throws
@@ -9,7 +10,7 @@ fun credentialValidityChecker(email: String, password: String, nameAndFamily: St
         email.isBlank() -> {
             throw InvalidCredentialException("Email address can't left blank.")
         }
-        !Patterns.EMAIL_ADDRESS.matcher(email)
+        !PatternsCompat.EMAIL_ADDRESS.matcher(email)
             .matches() -> {
             throw InvalidCredentialException("Email address format is not correct.")
         }
