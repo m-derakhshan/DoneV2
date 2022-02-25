@@ -31,12 +31,12 @@ fun AnalogClock(
 
     LaunchedEffect(true) {
         while (true) {
-            delay(1000)
             Calendar.getInstance().let {
                 second = it.get(Calendar.SECOND)
                 minute = it.get(Calendar.MINUTE)
                 hour = it.get(Calendar.HOUR_OF_DAY)
             }
+            delay(1000)
         }
     }
 

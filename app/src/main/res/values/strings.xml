@@ -8,4 +8,9 @@
     <string name="sign_up">SignUp</string>
     <string name="name_family">Name and Family</string>
     <string name="reset_password">Reset Password</string>
+
+    <string name="home">Home</string>
+    <string name="profile">Profile</string>
+    <string name="notes">Notes</string>
+    <string name="tasks">Tasks</string>
 </resources>

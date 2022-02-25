@@ -37,7 +37,7 @@ class MainActivity : ComponentActivity() {
                     startDestination = startDestination
                 ) {
                     authentication(navController = navController)
-                    home(navController = navController)
+                    home()
                 }
             }
         }
