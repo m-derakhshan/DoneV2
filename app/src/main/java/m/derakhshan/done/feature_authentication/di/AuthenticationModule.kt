@@ -14,6 +14,7 @@ import m.derakhshan.done.feature_authentication.data.repository.AuthenticationRe
 import m.derakhshan.done.feature_authentication.domain.repository.AuthenticationRepository
 import m.derakhshan.done.feature_authentication.domain.use_case.AuthenticationUseCase
 import m.derakhshan.done.feature_authentication.domain.use_case.LoginUseCase
+import m.derakhshan.done.feature_authentication.domain.use_case.ResetPassword
 import m.derakhshan.done.feature_authentication.domain.use_case.SignUpUseCase
 import javax.inject.Singleton
 
@@ -39,7 +40,8 @@ object AuthenticationModule {
     fun provideAuthenticationUseCase(repository: AuthenticationRepository): AuthenticationUseCase {
         return AuthenticationUseCase(
             loginUseCase = LoginUseCase(repository = repository),
-            signUpUseCase = SignUpUseCase(repository = repository)
+            signUpUseCase = SignUpUseCase(repository = repository),
+            resetPassword = ResetPassword(repository = repository)
         )
     }
 

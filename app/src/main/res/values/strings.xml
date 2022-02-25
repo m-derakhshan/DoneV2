@@ -7,4 +7,5 @@
     <string name="login_signup">Login/SignUp</string>
     <string name="sign_up">SignUp</string>
     <string name="name_family">Name and Family</string>
+    <string name="reset_password">Reset Password</string>
 </resources>

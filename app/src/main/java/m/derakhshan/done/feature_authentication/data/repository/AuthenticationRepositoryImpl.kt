@@ -90,4 +90,16 @@ class AuthenticationRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun resetPassword(email: String): String {
+        return try {
+            credentialValidityChecker(email = email, password = "NoPassword")
+            authentication.sendPasswordResetEmail(email).await()
+            "Reset linked has been sent to your email."
+        } catch (e: Exception) {
+            if (e is CancellationException)
+                throw e
+            e.message ?: "Unknown Error"
+        }
+    }
+
 }

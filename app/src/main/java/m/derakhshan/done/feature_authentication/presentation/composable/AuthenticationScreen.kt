@@ -2,6 +2,7 @@ package m.derakhshan.done.feature_authentication.presentation.composable
 
 import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
@@ -167,6 +168,17 @@ fun AuthenticationScreen(
             ) {
                 viewModel.onEvent(AuthenticationEvent.LoginSignUpClicked)
             }
+
+            Text(
+                text = stringResource(id = R.string.reset_password),
+                style = MaterialTheme.typography.body1,
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable {
+                        viewModel.onEvent(AuthenticationEvent.ResetPassword)
+                    }
+            )
 
 
         }

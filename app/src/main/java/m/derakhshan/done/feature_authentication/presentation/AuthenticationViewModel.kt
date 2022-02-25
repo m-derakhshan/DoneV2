@@ -60,6 +60,14 @@ class AuthenticationViewModel @Inject constructor(
                     isPasswordVisible = !_state.value.isPasswordVisible
                 )
             }
+
+            is ResetPassword -> {
+                viewModelScope.launch {
+                    useCase.resetPassword(email = _state.value.email).let { result ->
+                        _snackBar.emit(result)
+                    }
+                }
+            }
         }
     }
 
