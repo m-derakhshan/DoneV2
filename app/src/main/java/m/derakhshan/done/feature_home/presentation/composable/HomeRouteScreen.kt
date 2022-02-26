@@ -45,22 +45,22 @@ fun HomeRouteScreen() {
                 }
             }
         }
-    ) {
+    ) { padding ->
         NavHost(navController = navController, startDestination = HomeNavGraph.HomeScreen.route) {
             composable(HomeNavGraph.HomeScreen.route) {
-                HomeScreen(navController = navController)
+                HomeScreen(navController = navController, paddingValues = padding)
             }
             composable(HomeNavGraph.ProfileScreen.route) {
                 // TODO: replace with profile screen
-                HomeScreen(navController = navController)
+                HomeScreen(navController = navController, paddingValues = padding)
             }
             composable(HomeNavGraph.TasksScreen.route) {
                 // TODO: replace with tasks screen
-                HomeScreen(navController = navController)
+                HomeScreen(navController = navController, paddingValues = padding)
             }
             composable(HomeNavGraph.NoteScreen.route) {
-                // TODO: replace with notes screen 
-                HomeScreen(navController = navController)
+                // TODO: replace with notes screen
+                HomeScreen(navController = navController, paddingValues = padding)
             }
         }
     }

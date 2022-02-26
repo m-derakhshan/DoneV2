@@ -13,4 +13,6 @@
     <string name="profile">Profile</string>
     <string name="notes">Notes</string>
     <string name="tasks">Tasks</string>
+
+    <string name="write_something">Write Something…</string>
 </resources>
