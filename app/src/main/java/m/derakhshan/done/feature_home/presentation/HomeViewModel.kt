@@ -5,7 +5,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
-import kotlin.math.abs
 
 @HiltViewModel
 class HomeViewModel @Inject constructor() : ViewModel() {
@@ -24,13 +23,17 @@ class HomeViewModel @Inject constructor() : ViewModel() {
                 _state.value = _state.value.copy(
                     isAddNoteAnimationPlaying = true,
                     addNoteAnimationSpeed = when {
-                        event.text.length > 3 && (event.text.length - _state.value.noteFieldText.length) > 0 -> 1f
-                        event.text.length < 4 -> -1.5f
+                        event.text.length > 2 && (event.text.length - _state.value.noteFieldText.length) > 0 -> 1f
+                        event.text.length < 3 -> -1.5f
                         else -> 0f
-                    }
+                    },
+                    noteFieldText = event.text
                 )
             }
             is HomeEvent.OnSaveNoteClicked -> {}
+            is HomeEvent.CloseNoteField -> {
+                _state.value = _state.value.copy(isNoteFieldVisible = false)
+            }
         }
     }
 

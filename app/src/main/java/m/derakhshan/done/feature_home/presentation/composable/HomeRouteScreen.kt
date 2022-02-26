@@ -12,6 +12,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import m.derakhshan.done.feature_home.presentation.HomeNavGraph
+import m.derakhshan.done.feature_note.presentation.composable.NoteScreen
+import m.derakhshan.done.feature_profile.presentation.composable.ProfileScreen
+import m.derakhshan.done.feature_task.presentation.composable.TaskScreen
 
 @Composable
 fun HomeRouteScreen() {
@@ -51,16 +54,13 @@ fun HomeRouteScreen() {
                 HomeScreen(navController = navController, paddingValues = padding)
             }
             composable(HomeNavGraph.ProfileScreen.route) {
-                // TODO: replace with profile screen
-                HomeScreen(navController = navController, paddingValues = padding)
+                ProfileScreen(navController = navController, paddingValues = padding)
             }
             composable(HomeNavGraph.TasksScreen.route) {
-                // TODO: replace with tasks screen
-                HomeScreen(navController = navController, paddingValues = padding)
+                TaskScreen(navController = navController, paddingValues = padding)
             }
             composable(HomeNavGraph.NoteScreen.route) {
-                // TODO: replace with notes screen
-                HomeScreen(navController = navController, paddingValues = padding)
+                NoteScreen(navController = navController, paddingValues = padding)
             }
         }
     }

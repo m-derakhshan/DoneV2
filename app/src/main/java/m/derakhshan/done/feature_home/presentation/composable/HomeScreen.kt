@@ -1,35 +1,39 @@
 package m.derakhshan.done.feature_home.presentation.composable
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.*
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.NoteAdd
-import androidx.compose.material.icons.filled.Send
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.unit.ExperimentalUnitApi
+import androidx.compose.ui.unit.TextUnit
+import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.airbnb.lottie.compose.*
+import m.derakhshan.done.R
 import m.derakhshan.done.feature_home.presentation.HomeEvent
 import m.derakhshan.done.feature_home.presentation.HomeViewModel
-import m.derakhshan.done.R
 import m.derakhshan.done.ui.theme.spacing
 
 
+@OptIn(ExperimentalUnitApi::class)
 @Composable
 fun HomeScreen(
     navController: NavController,
@@ -37,7 +41,9 @@ fun HomeScreen(
     paddingValues: PaddingValues
 ) {
     val focusRequest = remember { FocusRequester() }
-
+    var enableBackHandler by remember {
+        mutableStateOf(false)
+    }
     val state = viewModel.state.value
     val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.add_note_lottie))
     val progress by animateLottieCompositionAsState(
@@ -47,11 +53,20 @@ fun HomeScreen(
         restartOnPlay = false,
         clipSpec = LottieClipSpec.Frame(max = 45)
     )
+
+    BackHandler(enabled = enableBackHandler) {
+        if (state.isNoteFieldVisible)
+            viewModel.onEvent(HomeEvent.CloseNoteField).also {
+                enableBackHandler = false
+            }
+    }
+
     Box(
         modifier = Modifier
             .padding(paddingValues)
             .fillMaxSize()
     ) {
+
         Column(
             modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -59,7 +74,10 @@ fun HomeScreen(
             AnalogClock(modifier = Modifier.size(150.dp))
 
             Button(
-                onClick = { viewModel.onEvent(HomeEvent.OnAddClicked) },
+                onClick = {
+                    viewModel.onEvent(HomeEvent.OnAddClicked)
+                    enableBackHandler = true
+                },
                 modifier = Modifier
                     .padding(MaterialTheme.spacing.small)
                     .size(50.dp)
@@ -69,6 +87,85 @@ fun HomeScreen(
                     imageVector = Icons.Default.Add,
                     contentDescription = "add note",
                 )
+            }
+
+            Box(
+                modifier = Modifier.padding(MaterialTheme.spacing.medium)
+            ) {
+
+                Box(
+                    modifier = Modifier
+                        .padding(vertical = MaterialTheme.spacing.medium)
+                        .matchParentSize()
+                        .border(
+                            3.dp,
+                            color = MaterialTheme.colors.onBackground,
+                            shape = RoundedCornerShape(topStart = 20.dp, bottomEnd = 20.dp)
+                        )
+                )
+
+
+                Box(
+                    modifier = Modifier
+                        .padding(start = MaterialTheme.spacing.large)
+                        .width(80.dp)
+                        .height(20.dp)
+                        .background(MaterialTheme.colors.background)
+                )
+
+                Box(
+                    modifier = Modifier
+                        .padding(end = MaterialTheme.spacing.large)
+                        .width(80.dp)
+                        .height(20.dp)
+                        .background(MaterialTheme.colors.background)
+                        .align(Alignment.BottomEnd)
+                )
+
+                Column(
+                    modifier = Modifier
+                        .padding(MaterialTheme.spacing.medium)
+                        .align(Alignment.Center)
+                ) {
+//                    Text(
+//                        text = "“Your future is created by what you do today not tomorrow!”",
+//                        style = MaterialTheme.typography.h5,
+//
+//                    )
+                    Text(text = buildAnnotatedString {
+                        withStyle(
+                            style = SpanStyle(
+                                fontSize = TextUnit(
+                                    value = 30f,
+                                    type = TextUnitType.Sp
+                                )
+                            )
+                        ) { append("“ ") }
+                        withStyle(
+                            style = SpanStyle(
+                                fontSize = TextUnit(
+                                    value = 22f,
+                                    type = TextUnitType.Sp
+                                )
+                            )
+                        ) {
+                            append(state.inspirationQuote)
+                        }
+                        withStyle(
+                            style = SpanStyle(
+                                fontSize = TextUnit(
+                                    value = 30f,
+                                    type = TextUnitType.Sp
+                                )
+                            )
+                        ) { append(" ”") }
+                    }, modifier = Modifier.padding(top = MaterialTheme.spacing.medium))
+                    Text(
+                        text = state.inspirationQuoteAuthor,
+                        style = MaterialTheme.typography.caption,
+                        modifier = Modifier.padding(vertical = MaterialTheme.spacing.small)
+                    )
+                }
             }
 
         }
