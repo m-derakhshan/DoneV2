@@ -24,15 +24,16 @@ I want to develop this project using Kotlin. also, I'm learning TDD; so it is a 
 **Here is the project status**
  - [x] Init the project.
  - [x] Add Authentication Feature structure.
- - [ ] Design Authentication Screen compose.
- - [ ] Connect to Firebase Authentication.
- - [ ] Connect to Firebase Firestore.
- - [ ] Prepare Room library.
- - [ ] Implement Login.
- - [ ] Implement Sign Up.
- - [ ] Add Home Feature Structure.
- - [ ] Design Home Screen compose.
- - [ ] Implement Daily inspiration quote.
+ - [x] Design Authentication Screen compose.
+ - [x] Connect to Firebase Authentication.
+ - [x] Connect to Firebase Firestore.
+ - [x] Prepare Room library.
+ - [x] Implement Login.
+ - [x] Implement Sign Up.
+ - [x] Implement password recovery logic.
+ - [x] Add Home Feature Structure.
+ - [x] Design Home Screen compose.
+ - [x] Implement Daily inspiration quote.
  - [ ] Design Profile Screen.
  - [ ] Implement Updating Profile Logic.
  - [ ] Design Note Screen.
