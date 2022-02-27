@@ -53,6 +53,10 @@ android {
     }
 }
 
+kotlin.sourceSets.all {
+    languageSettings.useExperimentalAnnotation("kotlin.RequiresOptIn")
+}
+
 dependencies {
 
     implementation 'androidx.core:core-ktx:1.7.0'
