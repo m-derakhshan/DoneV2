@@ -6,5 +6,6 @@ data class HomeState(
     val inspirationQuote: String = "Try your best!",
     val noteFieldText: String = "",
     val isAddNoteAnimationPlaying: Boolean = false,
-    val addNoteAnimationSpeed: Float = 1f
+    val addNoteAnimationSpeed: Float = 1f,
+    val greetings: String = ""
 )

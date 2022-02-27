@@ -2,6 +2,8 @@ package m.derakhshan.done.feature_home.data.repository
 
 import android.util.Log
 import kotlinx.coroutines.flow.Flow
+import m.derakhshan.done.feature_authentication.data.data_source.dao.UserDao
+import m.derakhshan.done.feature_authentication.domain.model.UserModel
 import m.derakhshan.done.feature_home.data.data_source.HomeApi
 import m.derakhshan.done.feature_home.data.data_source.dao.InspirationQuoteDao
 import m.derakhshan.done.feature_home.data.data_source.dto.toInspirationQuoteModel
@@ -12,17 +14,22 @@ import javax.inject.Inject
 
 class HomeRepositoryImpl @Inject constructor(
     private val inspirationQuoteDao: InspirationQuoteDao,
-    private val homeApi: HomeApi
+    private val homeApi: HomeApi,
+    private val userDao: UserDao,
 ) : HomeRepository {
 
     override fun getInspirationQuote(): Flow<InspirationQuoteModel?> {
         return inspirationQuoteDao.getQuote(1)
     }
 
+    override suspend fun getUserName(): String {
+        return userDao.getUserName()
+    }
+
     override suspend fun updateInspirationQuotes() {
         try {
             val quote = homeApi.getTodayQuote()
-            inspirationQuoteDao.insert(quote.map { it.toInspirationQuoteModel()})
+            inspirationQuoteDao.insert(quote.map { it.toInspirationQuoteModel() })
         } catch (e: Exception) {
             if (e is CancellationException)
                 throw e

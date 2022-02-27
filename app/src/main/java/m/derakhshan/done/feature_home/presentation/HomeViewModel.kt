@@ -14,7 +14,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val useCases: HomeUseCases
+    private val useCases: HomeUseCases,
 ) : ViewModel() {
 
     private val _state = mutableStateOf(HomeState())
@@ -24,6 +24,7 @@ class HomeViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
+            _state.value = _state.value.copy(greetings = useCases.greetingsUseCase())
             useCases.updateInspirationQuotesUseCase()
         }
         getTodayQuote()
@@ -59,7 +60,7 @@ class HomeViewModel @Inject constructor(
         job?.cancel()
         job = useCases.getInsertInspirationQuoteUseCase(
         ).onEach {
-            it?.let { quote->
+            it?.let { quote ->
                 _state.value = _state.value.copy(
                     inspirationQuote = quote.quote,
                     inspirationQuoteAuthor = quote.author

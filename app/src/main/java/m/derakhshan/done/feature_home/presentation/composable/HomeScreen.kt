@@ -2,9 +2,7 @@ package m.derakhshan.done.feature_home.presentation.composable
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.*
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -20,6 +18,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.ExperimentalUnitApi
@@ -43,9 +42,7 @@ fun HomeScreen(
     paddingValues: PaddingValues
 ) {
     val focusRequest = remember { FocusRequester() }
-    var enableBackHandler by remember {
-        mutableStateOf(false)
-    }
+    var enableBackHandler by remember { mutableStateOf(false) }
     val state = viewModel.state.value
     val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.add_note_lottie))
     val progress by animateLottieCompositionAsState(
@@ -55,24 +52,35 @@ fun HomeScreen(
         restartOnPlay = false,
         clipSpec = LottieClipSpec.Frame(max = 45)
     )
-
     BackHandler(enabled = enableBackHandler) {
         if (state.isNoteFieldVisible)
             viewModel.onEvent(HomeEvent.CloseNoteField).also {
                 enableBackHandler = false
             }
     }
+    val verticalScrollState = rememberScrollState()
 
     Box(
         modifier = Modifier
             .padding(paddingValues)
             .fillMaxSize()
+            .verticalScroll(verticalScrollState)
     ) {
 
         Column(
             modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
+            Text(
+                text = state.greetings,
+                style = MaterialTheme.typography.h6,
+                textAlign = TextAlign.Start,
+                modifier = Modifier
+                    .padding(MaterialTheme.spacing.small)
+                    .fillMaxWidth()
+            )
+            Spacer(modifier = Modifier.size(10.dp))
+
             AnalogClock(modifier = Modifier.size(150.dp))
 
             Button(
@@ -200,9 +208,7 @@ fun HomeScreen(
                             .focusRequester(focusRequest),
                         label = {
                             Text(text = stringResource(id = R.string.write_something))
-                        },
-                        keyboardOptions = KeyboardOptions(autoCorrect = false)
-                    )
+                        })
                     LottieAnimation(
                         composition = composition,
                         progress = progress,

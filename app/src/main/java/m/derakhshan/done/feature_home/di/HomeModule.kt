@@ -10,6 +10,7 @@ import m.derakhshan.done.feature_home.data.data_source.HomeApi
 import m.derakhshan.done.feature_home.data.repository.HomeRepositoryImpl
 import m.derakhshan.done.feature_home.domain.repository.HomeRepository
 import m.derakhshan.done.feature_home.domain.use_case.GetInspirationQuoteUseCase
+import m.derakhshan.done.feature_home.domain.use_case.GreetingsUseCase
 import m.derakhshan.done.feature_home.domain.use_case.HomeUseCases
 import m.derakhshan.done.feature_home.domain.use_case.UpdateInspirationQuotesUseCase
 import retrofit2.Retrofit
@@ -40,7 +41,8 @@ object HomeModule {
     ): HomeRepository {
         return HomeRepositoryImpl(
             inspirationQuoteDao = database.inspirationQuoteDao,
-            homeApi = homeApi
+            homeApi = homeApi,
+            userDao = database.userDao
         )
     }
 
@@ -50,7 +52,9 @@ object HomeModule {
     fun provideHomeUseCases(repository: HomeRepository): HomeUseCases {
         return HomeUseCases(
             getInsertInspirationQuoteUseCase = GetInspirationQuoteUseCase(repository = repository),
-            updateInspirationQuotesUseCase = UpdateInspirationQuotesUseCase(repository = repository)
+            updateInspirationQuotesUseCase = UpdateInspirationQuotesUseCase(repository = repository),
+            greetingsUseCase = GreetingsUseCase(repository = repository)
+
         )
     }
 
