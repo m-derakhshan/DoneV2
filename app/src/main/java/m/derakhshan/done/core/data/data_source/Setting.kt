@@ -18,4 +18,14 @@ class Setting @Inject constructor(
         }
         get() = share.getBoolean("isUserLoggedIn", false)
 
+    var userProfileImage: String
+        set(value) {
+            edit.putString("userProfileImage", value)
+            edit.apply()
+        }
+        get() = share.getString(
+            "userProfileImage",
+            "https://www.constrack.ng/uploads/icon-user-default.png"
+        ) ?: "https://www.constrack.ng/uploads/icon-user-default.png"
+
 }

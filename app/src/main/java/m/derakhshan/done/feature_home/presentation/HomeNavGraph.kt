@@ -11,28 +11,40 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import m.derakhshan.done.R
+import m.derakhshan.done.core.data.data_source.Setting
 import m.derakhshan.done.feature_home.presentation.composable.HomeRouteScreen
 
 
-fun NavGraphBuilder.home() {
+fun NavGraphBuilder.home(setting: Setting) {
     navigation(
         startDestination = HomeNavGraph.HomeScreen.route,
         route = HomeNavGraph.HomeRoute.route
     ) {
         composable(route = HomeNavGraph.HomeScreen.route)
         {
-            HomeRouteScreen()
+            HomeRouteScreen(setting = setting)
         }
     }
 }
 
 
-sealed class HomeNavGraph(val route: String, val icon: ImageVector? = null, val label: Int? = null) {
+sealed class HomeNavGraph(
+    val route: String,
+    val icon: ImageVector? = null,
+    val label: Int? = null
+) {
 
     object HomeRoute : HomeNavGraph("HomeRoute")
-    object HomeScreen : HomeNavGraph(route = "HomeScreen", icon = Icons.Default.Home, label = R.string.home)
-    object TasksScreen : HomeNavGraph(route = "TasksScreen", icon = Icons.Default.Task, label = R.string.tasks)
-    object ProfileScreen : HomeNavGraph(route = "ProfileScreen", icon = Icons.Default.Person, label = R.string.profile)
-    object NoteScreen : HomeNavGraph(route = "NoteScreen", icon = Icons.Default.Notes, label = R.string.notes)
+    object HomeScreen :
+        HomeNavGraph(route = "HomeScreen", icon = Icons.Default.Home, label = R.string.home)
+
+    object TasksScreen :
+        HomeNavGraph(route = "TasksScreen", icon = Icons.Default.Task, label = R.string.tasks)
+
+    object ProfileScreen :
+        HomeNavGraph(route = "ProfileScreen", icon = Icons.Default.Person, label = R.string.profile)
+
+    object NoteScreen :
+        HomeNavGraph(route = "NoteScreen", icon = Icons.Default.Notes, label = R.string.notes)
 
 }
