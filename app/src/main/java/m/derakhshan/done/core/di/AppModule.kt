@@ -7,7 +7,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import m.derakhshan.done.core.data.data_source.NoteDatabase
+import m.derakhshan.done.core.data.data_source.DoneDatabase
 import javax.inject.Singleton
 
 
@@ -17,12 +17,11 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideDatabase(@ApplicationContext context: Context): NoteDatabase {
+    fun provideDatabase(@ApplicationContext context: Context): DoneDatabase {
         return Room.databaseBuilder(
             context,
-            NoteDatabase::class.java,
-            "note_database").build()
+            DoneDatabase::class.java,
+            "done_database").build()
     }
-
 
 }

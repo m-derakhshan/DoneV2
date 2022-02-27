@@ -9,7 +9,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import m.derakhshan.done.core.data.data_source.NoteDatabase
+import m.derakhshan.done.core.data.data_source.DoneDatabase
 import m.derakhshan.done.feature_authentication.data.repository.AuthenticationRepositoryImpl
 import m.derakhshan.done.feature_authentication.domain.repository.AuthenticationRepository
 import m.derakhshan.done.feature_authentication.domain.use_case.AuthenticationUseCase
@@ -50,7 +50,7 @@ object AuthenticationModule {
     fun provideAuthenticationRepository(
         authentication: FirebaseAuth,
         storage: FirebaseFirestore,
-        database: NoteDatabase
+        database: DoneDatabase
     ): AuthenticationRepository {
         return AuthenticationRepositoryImpl(
             authentication = authentication,

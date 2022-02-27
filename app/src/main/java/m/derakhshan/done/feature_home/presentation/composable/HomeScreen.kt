@@ -19,6 +19,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.ExperimentalUnitApi
 import androidx.compose.ui.unit.TextUnit
@@ -127,11 +128,7 @@ fun HomeScreen(
                         .padding(MaterialTheme.spacing.medium)
                         .align(Alignment.Center)
                 ) {
-//                    Text(
-//                        text = "“Your future is created by what you do today not tomorrow!”",
-//                        style = MaterialTheme.typography.h5,
-//
-//                    )
+
                     Text(text = buildAnnotatedString {
                         withStyle(
                             style = SpanStyle(
@@ -163,7 +160,10 @@ fun HomeScreen(
                     Text(
                         text = state.inspirationQuoteAuthor,
                         style = MaterialTheme.typography.caption,
-                        modifier = Modifier.padding(vertical = MaterialTheme.spacing.small)
+                        textAlign = TextAlign.End,
+                        modifier = Modifier
+                            .padding(vertical = MaterialTheme.spacing.small)
+                            .fillMaxWidth()
                     )
                 }
             }

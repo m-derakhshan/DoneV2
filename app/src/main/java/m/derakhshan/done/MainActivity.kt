@@ -23,7 +23,6 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-
         val startDestination = if (setting.isUserLoggedIn)
             HomeNavGraph.HomeRoute.route
         else
