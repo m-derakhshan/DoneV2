@@ -3,7 +3,6 @@ package m.derakhshan.done.feature_home.data.repository
 import android.util.Log
 import kotlinx.coroutines.flow.Flow
 import m.derakhshan.done.feature_authentication.data.data_source.dao.UserDao
-import m.derakhshan.done.feature_authentication.domain.model.UserModel
 import m.derakhshan.done.feature_home.data.data_source.HomeApi
 import m.derakhshan.done.feature_home.data.data_source.dao.InspirationQuoteDao
 import m.derakhshan.done.feature_home.data.data_source.dto.toInspirationQuoteModel
