@@ -55,7 +55,12 @@ fun AnalogClock(
             for (i in 0..59)
                 rotate(degrees = i * 6f, pivot = Offset(x = width / 2, y = height / 2)) {
                     drawRect(
-                        color = Color(ColorUtils.blendARGB(clockBackgroundColor.toArgb(), 0, 0.5f)),
+                        color = Color(
+                            if (i <= second)
+                                clockBackgroundColor.toArgb()
+                            else
+                                ColorUtils.blendARGB(clockBackgroundColor.toArgb(), 0, 0.5f)
+                        ),
                         topLeft = Offset(x = width / 2 - 2.5f, y = 0f),
                         size = Size(width = 5f, height = 35f),
                     )
