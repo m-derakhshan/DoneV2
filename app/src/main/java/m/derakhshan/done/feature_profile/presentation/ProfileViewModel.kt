@@ -22,7 +22,8 @@ class ProfileViewModel @Inject constructor(
         viewModelScope.launch {
             useCases.getUserInfo().collectLatest {
                 _state.value = _state.value.copy(
-                    name = it.name
+                    name = it.name,
+                    email = it.email,
                 )
             }
         }
@@ -31,6 +32,14 @@ class ProfileViewModel @Inject constructor(
     fun onEvent(event: ProfileEvent) {
         when (event) {
             is ProfileEvent.OnEditProfileClicked -> {}
+            is ProfileEvent.OnNameChanged -> {
+                _state.value = _state.value.copy(
+                    name = event.name.replace("\n", "")
+                )
+            }
+            is ProfileEvent.OnPasswordChangeClicked -> {}
+            is ProfileEvent.ApplyChanges -> {}
+            is ProfileEvent.Logout -> {}
         }
     }
 }

@@ -1,14 +1,11 @@
 package m.derakhshan.done.feature_profile.presentation.composable
 
-import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AddAPhoto
+import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -26,11 +23,9 @@ import coil.compose.rememberImagePainter
 import coil.transform.CircleCropTransformation
 import m.derakhshan.done.R
 import m.derakhshan.done.core.utils.plus
+import m.derakhshan.done.feature_profile.presentation.ProfileEvent
 import m.derakhshan.done.feature_profile.presentation.ProfileViewModel
-import m.derakhshan.done.ui.theme.Blue
-import m.derakhshan.done.ui.theme.DarkBlue
-import m.derakhshan.done.ui.theme.White
-import m.derakhshan.done.ui.theme.spacing
+import m.derakhshan.done.ui.theme.*
 
 @Composable
 fun ProfileScreen(
@@ -83,6 +78,90 @@ fun ProfileScreen(
                         )
                     }
                 }
+            }
+
+            Column(
+                modifier = Modifier.padding(
+                    vertical = MaterialTheme.spacing.extraLarge,
+                    horizontal = MaterialTheme.spacing.small
+                )
+            ) {
+
+                TextField(
+                    value = state.name,
+                    onValueChange = { viewModel.onEvent(ProfileEvent.OnNameChanged(it)) },
+                    label = { Text(text = stringResource(id = R.string.name_family)) },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = MaterialTheme.spacing.small),
+                    leadingIcon = { Icon(Icons.Default.Person, contentDescription = "person") }
+                )
+
+                TextField(
+                    value = state.email,
+                    onValueChange = {},
+                    enabled = false,
+                    label = { Text(text = stringResource(id = R.string.email)) },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = MaterialTheme.spacing.small),
+                    leadingIcon = { Icon(Icons.Default.Email, contentDescription = "email") }
+                )
+
+                TextField(
+                    value = stringResource(id = R.string.reset_password),
+                    onValueChange = {},
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = MaterialTheme.spacing.small)
+                        .clickable { viewModel.onEvent(ProfileEvent.OnPasswordChangeClicked) },
+                    enabled = false,
+                    leadingIcon = {
+                        Icon(
+                            Icons.Default.Lock,
+                            contentDescription = "reset password"
+                        )
+                    },
+                    trailingIcon = {
+                        Icon(
+                            imageVector = Icons.Default.RestartAlt,
+                            contentDescription = "reset password"
+                        )
+                    }
+                )
+
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(
+                            vertical = MaterialTheme.spacing.large,
+                            horizontal = MaterialTheme.spacing.small
+                        )
+                ) {
+
+                    Button(
+                        onClick = { viewModel.onEvent(ProfileEvent.Logout) },
+                        colors = ButtonDefaults.buttonColors(backgroundColor = White)
+                    ) {
+                        Text(
+                            text = stringResource(id = R.string.log_out),
+                            modifier = Modifier.padding(MaterialTheme.spacing.small)
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.padding(MaterialTheme.spacing.small))
+
+                    Button(
+                        onClick = { viewModel.onEvent(ProfileEvent.ApplyChanges) },
+                        modifier = Modifier.weight(0.75f),
+                    ) {
+                        Text(
+                            text = stringResource(id = R.string.apply_changes),
+                            modifier = Modifier.padding(MaterialTheme.spacing.small)
+                        )
+                    }
+                }
+
             }
 
 
