@@ -1,6 +1,6 @@
 package m.derakhshan.done.feature_profile.presentation
 
-sealed class ProfileEvent() {
+sealed class ProfileEvent {
     object OnEditProfileClicked : ProfileEvent()
     data class OnNameChanged(val name: String) : ProfileEvent()
     object OnPasswordChangeClicked : ProfileEvent()

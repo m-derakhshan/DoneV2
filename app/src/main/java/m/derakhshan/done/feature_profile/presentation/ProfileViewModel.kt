@@ -7,12 +7,13 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import m.derakhshan.done.core.data.data_source.Setting
 import m.derakhshan.done.feature_profile.domain.use_case.ProfileUseCases
 import javax.inject.Inject
 
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
-    useCases: ProfileUseCases
+    private val useCases: ProfileUseCases
 ) : ViewModel() {
 
     private val _state = mutableStateOf(ProfileState())
@@ -39,7 +40,11 @@ class ProfileViewModel @Inject constructor(
             }
             is ProfileEvent.OnPasswordChangeClicked -> {}
             is ProfileEvent.ApplyChanges -> {}
-            is ProfileEvent.Logout -> {}
+            is ProfileEvent.Logout -> {
+                viewModelScope.launch {
+                    useCases.logOutUser()
+                }
+            }
         }
     }
 }

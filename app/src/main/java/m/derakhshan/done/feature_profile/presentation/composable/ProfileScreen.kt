@@ -7,6 +7,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -22,20 +23,26 @@ import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import coil.transform.CircleCropTransformation
 import m.derakhshan.done.R
-import m.derakhshan.done.core.utils.plus
+import m.derakhshan.done.core.data.data_source.Setting
+import m.derakhshan.done.feature_authentication.presentation.AuthenticationNavGraph
+import m.derakhshan.done.feature_home.presentation.HomeNavGraph
 import m.derakhshan.done.feature_profile.presentation.ProfileEvent
 import m.derakhshan.done.feature_profile.presentation.ProfileViewModel
-import m.derakhshan.done.ui.theme.*
+import m.derakhshan.done.ui.theme.Blue
+import m.derakhshan.done.ui.theme.DarkBlue
+import m.derakhshan.done.ui.theme.White
+import m.derakhshan.done.ui.theme.spacing
 
 @Composable
 fun ProfileScreen(
     viewModel: ProfileViewModel = hiltViewModel(),
     navController: NavController,
-    paddingValues: PaddingValues
 ) {
 
+    val state = viewModel.state.value
+
     Scaffold {
-        val state = viewModel.state.value
+
         Column(
             modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally

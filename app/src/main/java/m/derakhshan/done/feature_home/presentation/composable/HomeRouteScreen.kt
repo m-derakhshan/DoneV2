@@ -29,9 +29,7 @@ import m.derakhshan.done.feature_task.presentation.composable.TaskScreen
 import m.derakhshan.done.ui.theme.DarkBlue
 
 @Composable
-fun HomeRouteScreen(
-    setting: Setting
-) {
+fun HomeRouteScreen() {
     val screens = listOf(
         HomeNavGraph.HomeScreen,
         HomeNavGraph.TasksScreen,
@@ -90,7 +88,7 @@ fun HomeRouteScreen(
                 HomeScreen(navController = navController, paddingValues = padding)
             }
             composable(HomeNavGraph.ProfileScreen.route) {
-                ProfileScreen(navController = navController, paddingValues = padding)
+                ProfileScreen(navController = navController)
             }
             composable(HomeNavGraph.TasksScreen.route) {
                 TaskScreen(navController = navController, paddingValues = padding)

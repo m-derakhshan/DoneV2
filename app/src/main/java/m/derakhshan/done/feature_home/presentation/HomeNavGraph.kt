@@ -15,14 +15,14 @@ import m.derakhshan.done.core.data.data_source.Setting
 import m.derakhshan.done.feature_home.presentation.composable.HomeRouteScreen
 
 
-fun NavGraphBuilder.home(setting: Setting) {
+fun NavGraphBuilder.home() {
     navigation(
         startDestination = HomeNavGraph.HomeScreen.route,
         route = HomeNavGraph.HomeRoute.route
     ) {
         composable(route = HomeNavGraph.HomeScreen.route)
         {
-            HomeRouteScreen(setting = setting)
+            HomeRouteScreen()
         }
     }
 }
