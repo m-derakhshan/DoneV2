@@ -32,25 +32,10 @@ class HomeViewModel @Inject constructor(
 
     fun onEvent(event: HomeEvent) {
         when (event) {
-            is HomeEvent.OnAddClicked -> {
+            is HomeEvent.TaskListSwiped -> {
                 _state.value = _state.value.copy(
-                    isNoteFieldVisible = !_state.value.isNoteFieldVisible
+                    taskListOffset = event.offset
                 )
-            }
-            is HomeEvent.OnNoteFieldChange -> {
-                _state.value = _state.value.copy(
-                    isAddNoteAnimationPlaying = true,
-                    addNoteAnimationSpeed = when {
-                        event.text.length > 2 && (event.text.length - _state.value.noteFieldText.length) > 0 -> 1f
-                        event.text.length < 3 -> -1.5f
-                        else -> 0f
-                    },
-                    noteFieldText = event.text
-                )
-            }
-            is HomeEvent.OnSaveNoteClicked -> {}
-            is HomeEvent.CloseNoteField -> {
-                _state.value = _state.value.copy(isNoteFieldVisible = false)
             }
         }
     }

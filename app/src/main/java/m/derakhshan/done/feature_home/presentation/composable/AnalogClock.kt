@@ -20,7 +20,7 @@ import java.util.*
 @Composable
 fun AnalogClock(
     modifier: Modifier = Modifier,
-    clockBackgroundColor: Color = MaterialTheme.colors.secondary,
+    clockBackgroundColor: Color = MaterialTheme.colors.primary,
     clockSmallDotBackgroundColor: Color = MaterialTheme.colors.onSecondary,
     secondHandColor: Color = MaterialTheme.colors.error,
     minuteHandColor: Color = MaterialTheme.colors.onSecondary

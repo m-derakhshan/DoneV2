@@ -1,25 +1,19 @@
 package m.derakhshan.done.feature_home.presentation.composable
 
-import androidx.activity.compose.BackHandler
-import androidx.compose.animation.*
+
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.draggable
 import androidx.compose.foundation.gestures.rememberDraggableState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
@@ -30,14 +24,9 @@ import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.airbnb.lottie.compose.*
-import m.derakhshan.done.R
 import m.derakhshan.done.feature_home.presentation.HomeEvent
 import m.derakhshan.done.feature_home.presentation.HomeViewModel
-import m.derakhshan.done.ui.theme.LightGray
-import m.derakhshan.done.ui.theme.VeryLightBlue
-import m.derakhshan.done.ui.theme.White
-import m.derakhshan.done.ui.theme.spacing
+import m.derakhshan.done.ui.theme.*
 
 
 @OptIn(ExperimentalUnitApi::class)
@@ -47,26 +36,9 @@ fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel(),
     paddingValues: PaddingValues
 ) {
-    var taskHeight by remember {
-        mutableStateOf(150f)
-    }
-    val focusRequest = remember { FocusRequester() }
-    var enableBackHandler by remember { mutableStateOf(false) }
+
     val state = viewModel.state.value
-    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.add_note_lottie))
-    val progress by animateLottieCompositionAsState(
-        composition,
-        isPlaying = state.isAddNoteAnimationPlaying,
-        speed = state.addNoteAnimationSpeed,
-        restartOnPlay = false,
-        clipSpec = LottieClipSpec.Frame(max = 45)
-    )
-    BackHandler(enabled = enableBackHandler) {
-        if (state.isNoteFieldVisible)
-            viewModel.onEvent(HomeEvent.CloseNoteField).also {
-                enableBackHandler = false
-            }
-    }
+    val offset by animateDpAsState(targetValue = state.taskListOffset.dp)
 
 
     Box(
@@ -94,33 +66,20 @@ fun HomeScreen(
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
-                        .shadow(2.dp, shape = RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp))
+                        .offset(y = ((-state.taskListOffset + 400) * 0.1).dp)
+                        .shadow(2.dp, shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp))
                         .background(
                             VeryLightBlue,
-                            shape = RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp)
+                            shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp)
                         )
                         .padding(MaterialTheme.spacing.small),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     //--------------------(analog clock)--------------------//
-                    AnalogClock(modifier = Modifier.size(150.dp))
-
-                    //--------------------(add new note)--------------------//
-                    Button(
-                        onClick = {
-                            viewModel.onEvent(HomeEvent.OnAddClicked)
-                            enableBackHandler = true
-                        },
-                        modifier = Modifier
-                            .padding(MaterialTheme.spacing.small)
-                            .size(50.dp)
-                            .align(Alignment.End)
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Add,
-                            contentDescription = "add note",
-                        )
-                    }
+                    AnalogClock(
+                        modifier = Modifier.size(150.dp),
+                        clockBackgroundColor = LightBlue
+                    )
 
                     //--------------------(inspiration quote)--------------------//
                     Box(
@@ -200,78 +159,34 @@ fun HomeScreen(
                             )
                         }
                     }
-
                 }
 
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
-                        .offset(y = taskHeight.dp)
-                        .background(LightGray)
+                        .offset(y = offset)
+                        .background(
+                            White,
+                            shape = RoundedCornerShape(topEnd = 20.dp, topStart = 20.dp)
+                        )
+                        .shadow(2.dp, shape = RoundedCornerShape(topEnd = 20.dp, topStart = 20.dp))
                         .draggable(
                             orientation = Orientation.Vertical,
                             state = rememberDraggableState { offset ->
-                                // TODO: complete the today task list
-                                if (taskHeight + offset > 0)
-                                    taskHeight += offset * 0.35f
-                                if (taskHeight > 450)
-                                    taskHeight = 450f
+                                if (state.taskListOffset + offset > 0 && state.taskListOffset + offset < 400)
+                                    viewModel.onEvent(HomeEvent.TaskListSwiped(state.taskListOffset + offset * 0.35f))
+                            },
+                            onDragStopped = {
+                                if (offset > 250.dp)
+                                    viewModel.onEvent(HomeEvent.TaskListSwiped(400f))
+                                else
+                                    viewModel.onEvent(HomeEvent.TaskListSwiped(0f))
                             }
                         )
                 ) {
 
                 }
             }
-
-
-        }
-
-
-        AnimatedVisibility(
-            visible = state.isNoteFieldVisible,
-            modifier = Modifier.align(Alignment.BottomCenter),
-            enter = slideInVertically(initialOffsetY = { it / 2 }) + fadeIn(),
-            exit = slideOutVertically(targetOffsetY = { it / 2 }) + fadeOut()
-        ) {
-
-            LaunchedEffect(true) {
-                focusRequest.requestFocus()
-            }
-
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .shadow(3.dp)
-                    .background(White)
-            ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-
-                    OutlinedTextField(
-                        value = state.noteFieldText,
-                        onValueChange = { viewModel.onEvent(HomeEvent.OnNoteFieldChange(it)) },
-                        modifier = Modifier
-                            .weight(1f)
-                            .padding(8.dp)
-                            .focusRequester(focusRequest),
-                        label = {
-                            Text(text = stringResource(id = R.string.write_something))
-                        })
-                    LottieAnimation(
-                        composition = composition,
-                        progress = progress,
-                        modifier = Modifier
-                            .clickable {
-                                if (progress > 0.7f)
-                                    viewModel.onEvent(HomeEvent.OnSaveNoteClicked)
-                            }
-                            .size(50.dp)
-                    )
-                }
-            }
-
         }
     }
 }
