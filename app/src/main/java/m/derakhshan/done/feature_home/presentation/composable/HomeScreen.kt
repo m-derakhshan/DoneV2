@@ -14,6 +14,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -25,6 +26,7 @@ import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import m.derakhshan.done.R
 import m.derakhshan.done.feature_home.presentation.HomeEvent
 import m.derakhshan.done.feature_home.presentation.HomeViewModel
 import m.derakhshan.done.ui.theme.*
@@ -114,7 +116,7 @@ fun HomeScreen(
                                 .matchParentSize()
                                 .border(
                                     3.dp,
-                                    color = MaterialTheme.colors.onBackground,
+                                    color = Blue,
                                     shape = RoundedCornerShape(topStart = 20.dp, bottomEnd = 20.dp)
                                 )
                         )
@@ -181,6 +183,15 @@ fun HomeScreen(
                             )
                         }
                     }
+
+                    //--------------------(today task)--------------------//
+                    Text(
+                        text = stringResource(id = R.string.today_tasks),
+                        textAlign = TextAlign.Start,
+                        modifier = Modifier.fillMaxWidth(),
+                        style = MaterialTheme.typography.h5,
+                    )
+
                 }
 
                 Column(
@@ -205,7 +216,14 @@ fun HomeScreen(
                                     viewModel.onEvent(HomeEvent.TaskListSwiped(0f))
                             }
                         )
+                        .padding(MaterialTheme.spacing.small),
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
+                    Box(
+                        modifier = Modifier
+                            .size(width = 100.dp, height = 2.dp)
+                            .background(DarkBlue)
+                    )
 
                 }
             }

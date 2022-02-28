@@ -26,6 +26,7 @@ import m.derakhshan.done.feature_home.presentation.HomeNavGraph
 import m.derakhshan.done.feature_note.presentation.composable.NoteScreen
 import m.derakhshan.done.feature_profile.presentation.composable.ProfileScreen
 import m.derakhshan.done.feature_task.presentation.composable.TaskScreen
+import m.derakhshan.done.ui.theme.DarkBlue
 
 @Composable
 fun HomeRouteScreen(
@@ -59,7 +60,7 @@ fun HomeRouteScreen(
                                         .size(30.dp)
                                         .border(
                                             2.dp,
-                                            color = MaterialTheme.colors.onPrimary,
+                                            color = DarkBlue,
                                             shape = CircleShape
                                         )
                                         .padding(2.dp)
