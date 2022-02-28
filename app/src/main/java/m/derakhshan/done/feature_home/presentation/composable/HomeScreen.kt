@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.ExperimentalUnitApi
@@ -54,7 +55,28 @@ fun HomeScreen(
         ) {
             //--------------------(greetings)--------------------//
             Text(
-                text = state.greetings,
+                buildAnnotatedString {
+                    this.withStyle(
+                        style = SpanStyle(
+                            color = Blue, fontSize = TextUnit(
+                                20f,
+                                TextUnitType.Sp
+                            )
+                        )
+                    ) {
+                        append(state.greetings.keys.first())
+                    }
+                    this.withStyle(
+                        style = SpanStyle(
+                            color = Black, fontSize = TextUnit(
+                                18f,
+                                TextUnitType.Sp
+                            ), fontWeight = FontWeight.Normal
+                        )
+                    ) {
+                        append(state.greetings.values.first())
+                    }
+                },
                 style = MaterialTheme.typography.h6,
                 textAlign = TextAlign.Start,
                 modifier = Modifier

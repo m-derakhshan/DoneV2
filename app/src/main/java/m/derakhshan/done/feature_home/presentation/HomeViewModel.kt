@@ -24,7 +24,9 @@ class HomeViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            _state.value = _state.value.copy(greetings = useCases.greetingsUseCase())
+            _state.value = _state.value.copy(
+                greetings = useCases.greetingsUseCase()
+            )
             useCases.updateInspirationQuotesUseCase()
         }
         getTodayQuote()

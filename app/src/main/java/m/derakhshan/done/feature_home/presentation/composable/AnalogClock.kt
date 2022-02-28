@@ -65,7 +65,6 @@ fun AnalogClock(
                         size = Size(width = 5f, height = 35f),
                     )
                 }
-
             //--------------------(second hand)--------------------//
             rotate(second * 6f, Offset(width / 2, height / 2)) {
                 drawRoundRect(
