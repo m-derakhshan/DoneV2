@@ -88,7 +88,7 @@ fun HomeRouteScreen() {
                 HomeScreen(navController = navController, paddingValues = padding)
             }
             composable(HomeNavGraph.ProfileScreen.route) {
-                ProfileScreen(navController = navController)
+                ProfileScreen(paddingValues = padding)
             }
             composable(HomeNavGraph.TasksScreen.route) {
                 TaskScreen(navController = navController, paddingValues = padding)

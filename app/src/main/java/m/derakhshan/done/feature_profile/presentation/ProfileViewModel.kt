@@ -7,7 +7,6 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import m.derakhshan.done.core.data.data_source.Setting
 import m.derakhshan.done.feature_profile.domain.use_case.ProfileUseCases
 import javax.inject.Inject
 
@@ -41,9 +40,19 @@ class ProfileViewModel @Inject constructor(
             is ProfileEvent.OnPasswordChangeClicked -> {}
             is ProfileEvent.ApplyChanges -> {}
             is ProfileEvent.Logout -> {
-                viewModelScope.launch {
-                    useCases.logOutUser()
-                }
+                viewModelScope.launch { useCases.logOutUser() }
+            }
+            is ProfileEvent.ImageSelected -> {
+                _state.value = _state.value.copy(
+                    profileImage = event.uri.toString(),
+                    isImagePickerOpen = false
+                )
+            }
+            is ProfileEvent.ImageSelectionClose -> {
+                _state.value = _state.value.copy(isImagePickerOpen = false)
+            }
+            is ProfileEvent.ImageSelectionOpen -> {
+                _state.value = _state.value.copy(isImagePickerOpen = true)
             }
         }
     }

@@ -109,7 +109,11 @@ fun HomeScreen(
 
                     //--------------------(inspiration quote)--------------------//
                     Box(
-                        modifier = Modifier.padding(MaterialTheme.spacing.medium)
+                        modifier = Modifier.padding(
+                            top = MaterialTheme.spacing.medium,
+                            start = MaterialTheme.spacing.medium,
+                            end = MaterialTheme.spacing.medium,
+                            )
                     ) {
 
                         Box(

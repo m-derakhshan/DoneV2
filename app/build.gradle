@@ -107,7 +107,6 @@ dependencies {
 }
 
 
-//---------------------------Room library---------------------------//
 dependencies {
     def roomVersion = "2.4.2"
     implementation("androidx.room:room-runtime:$roomVersion")
@@ -124,4 +123,8 @@ dependencies {
 
 dependencies {
     implementation "io.coil-kt:coil-compose:1.4.0"
+}
+dependencies {
+    def accompanist_version = "0.24.3-alpha"
+    implementation "com.google.accompanist:accompanist-permissions:$accompanist_version"
 }
