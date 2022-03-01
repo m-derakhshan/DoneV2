@@ -1,14 +1,17 @@
 package m.derakhshan.done.feature_profile.presentation.composable
 
 import androidx.compose.foundation.*
+import androidx.compose.foundation.gestures.DraggableState
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.draggable
+import androidx.compose.foundation.gestures.rememberDraggableState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -23,24 +26,26 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import coil.transform.CircleCropTransformation
 import kotlinx.coroutines.flow.collectLatest
 import m.derakhshan.done.R
+import m.derakhshan.done.core.presentation.composable.BackSwipeGesture
 import m.derakhshan.done.core.presentation.composable.ImagePicker
 import m.derakhshan.done.feature_profile.presentation.ProfileEvent
 import m.derakhshan.done.feature_profile.presentation.ProfileViewModel
-import m.derakhshan.done.ui.theme.Blue
-import m.derakhshan.done.ui.theme.DarkBlue
-import m.derakhshan.done.ui.theme.White
-import m.derakhshan.done.ui.theme.spacing
+import m.derakhshan.done.ui.theme.*
 
 @Composable
 fun ProfileScreen(
     viewModel: ProfileViewModel = hiltViewModel(),
-    paddingValues: PaddingValues
+    paddingValues: PaddingValues,
+    navController: NavController
 ) {
-
+    var swipeOffset by remember {
+        mutableStateOf(0f)
+    }
     val state = viewModel.state.value
     val scaffoldState = rememberScaffoldState()
 
@@ -58,8 +63,23 @@ fun ProfileScreen(
         modifier = Modifier.padding(paddingValues)
     ) {
 
-        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.BottomCenter) {
-
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .draggable(
+                    orientation = Orientation.Horizontal,
+                    state = rememberDraggableState(onDelta = { delta ->
+                        swipeOffset += (delta * 0.2f)
+                    }),
+                    onDragStopped = {
+                        if (swipeOffset > 90)
+                            navController.navigateUp()
+                        swipeOffset = 0f
+                    }
+                ),
+            contentAlignment = Alignment.BottomCenter
+        )
+        {
             //--------------------(profile image and profile form)--------------------//
             Column(
                 modifier = Modifier.fillMaxSize(),
@@ -207,8 +227,13 @@ fun ProfileScreen(
                 onCloseListener = { viewModel.onEvent(ProfileEvent.ImageSelectionClose) }) { uri ->
                 viewModel.onEvent(ProfileEvent.ImageSelected(uri = uri))
             }
-
         }
+
+        //--------------------(swipe back gesture)--------------------//
+        BackSwipeGesture(
+            offset = swipeOffset,
+            arcColor = LightBlue
+        )
 
     }
 
