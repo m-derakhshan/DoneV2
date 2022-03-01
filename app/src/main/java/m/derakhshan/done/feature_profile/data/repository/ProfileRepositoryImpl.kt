@@ -2,10 +2,14 @@ package m.derakhshan.done.feature_profile.data.repository
 
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.tasks.await
 import m.derakhshan.done.core.data.data_source.Setting
 import m.derakhshan.done.feature_authentication.data.data_source.dao.UserDao
 import m.derakhshan.done.feature_authentication.domain.model.UserModel
+import m.derakhshan.done.feature_authentication.utils.credentialValidityChecker
 import m.derakhshan.done.feature_profile.domain.repository.ProfileRepository
+import java.util.concurrent.CancellationException
 import javax.inject.Inject
 
 class ProfileRepositoryImpl @Inject constructor(
@@ -29,5 +33,16 @@ class ProfileRepositoryImpl @Inject constructor(
 
     override suspend fun updateUserInfo(userModel: UserModel) {
         TODO("Not yet implemented")
+    }
+
+    override suspend fun resetPasswordRequest(email: String): String {
+        return try {
+            authentication.sendPasswordResetEmail(email).await()
+            "Reset linked has been sent to your email."
+        } catch (e: Exception) {
+            if (e is CancellationException)
+                throw e
+            e.message ?: "Unknown Error."
+        }
     }
 }

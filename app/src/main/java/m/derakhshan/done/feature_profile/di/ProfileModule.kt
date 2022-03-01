@@ -9,10 +9,7 @@ import m.derakhshan.done.core.data.data_source.DoneDatabase
 import m.derakhshan.done.core.data.data_source.Setting
 import m.derakhshan.done.feature_profile.data.repository.ProfileRepositoryImpl
 import m.derakhshan.done.feature_profile.domain.repository.ProfileRepository
-import m.derakhshan.done.feature_profile.domain.use_case.GetUserInfoUseCase
-import m.derakhshan.done.feature_profile.domain.use_case.LogoutUseCase
-import m.derakhshan.done.feature_profile.domain.use_case.ProfileUseCases
-import m.derakhshan.done.feature_profile.domain.use_case.UpdateUserInfoUseCase
+import m.derakhshan.done.feature_profile.domain.use_case.*
 import javax.inject.Singleton
 
 
@@ -40,7 +37,8 @@ object ProfileModule {
         return ProfileUseCases(
             getUserInfo = GetUserInfoUseCase(repository = repository),
             logOutUser = LogoutUseCase(repository = repository),
-            updateUserInfo = UpdateUserInfoUseCase(repository = repository)
+            updateUserInfo = UpdateUserInfoUseCase(repository = repository),
+            resetPassword = ResetPasswordUseCase(repository = repository)
         )
     }
 

@@ -7,4 +7,5 @@ interface ProfileRepository {
     suspend fun getUserInfo(): Flow<UserModel>
     suspend fun logoutUser()
     suspend fun updateUserInfo(userModel: UserModel)
+    suspend fun resetPasswordRequest(email: String): String
 }

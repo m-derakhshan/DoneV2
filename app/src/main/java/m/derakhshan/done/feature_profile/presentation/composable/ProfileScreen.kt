@@ -8,6 +8,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -24,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberImagePainter
 import coil.transform.CircleCropTransformation
+import kotlinx.coroutines.flow.collectLatest
 import m.derakhshan.done.R
 import m.derakhshan.done.core.presentation.composable.ImagePicker
 import m.derakhshan.done.feature_profile.presentation.ProfileEvent
@@ -40,8 +42,21 @@ fun ProfileScreen(
 ) {
 
     val state = viewModel.state.value
+    val scaffoldState = rememberScaffoldState()
 
-    Scaffold {
+    LaunchedEffect(true) {
+        viewModel.snackBar.collectLatest { message ->
+            if (message.isNotBlank()) {
+                scaffoldState.snackbarHostState.currentSnackbarData?.dismiss()
+                scaffoldState.snackbarHostState.showSnackbar(message)
+            }
+        }
+    }
+
+    Scaffold(
+        scaffoldState = scaffoldState,
+        modifier = Modifier.padding(paddingValues)
+    ) {
 
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.BottomCenter) {
 
@@ -180,7 +195,6 @@ fun ProfileScreen(
             //--------------------(Image picker)--------------------//
             ImagePicker(
                 modifier = Modifier
-                    .padding(paddingValues)
                     .background(
                         MaterialTheme.colors.background,
                         shape = RoundedCornerShape(topEnd = 20.dp, topStart = 20.dp)

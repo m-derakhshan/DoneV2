@@ -5,6 +5,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import m.derakhshan.done.feature_profile.domain.use_case.ProfileUseCases
@@ -14,6 +16,10 @@ import javax.inject.Inject
 class ProfileViewModel @Inject constructor(
     private val useCases: ProfileUseCases
 ) : ViewModel() {
+
+    private val _snackBar = MutableSharedFlow<String>()
+    val snackBar = _snackBar.asSharedFlow()
+
 
     private val _state = mutableStateOf(ProfileState())
     val state: State<ProfileState> = _state
@@ -37,7 +43,11 @@ class ProfileViewModel @Inject constructor(
                     name = event.name.replace("\n", "")
                 )
             }
-            is ProfileEvent.OnPasswordChangeClicked -> {}
+            is ProfileEvent.OnPasswordChangeClicked -> {
+                viewModelScope.launch {
+                    _snackBar.emit(useCases.resetPassword(email = _state.value.email))
+                }
+            }
             is ProfileEvent.ApplyChanges -> {}
             is ProfileEvent.Logout -> {
                 viewModelScope.launch { useCases.logOutUser() }
