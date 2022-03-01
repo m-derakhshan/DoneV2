@@ -35,7 +35,6 @@ class AuthenticationRepositoryImpl @Inject constructor(
                     val newUser = UserModel(
                         uid = info.uid,
                         email = email,
-                        password = password,
                         name = userInformation.data?.get("name").toString()
                     )
                     databaseDao.insert(newUser)
@@ -76,7 +75,6 @@ class AuthenticationRepositoryImpl @Inject constructor(
                     val newUser = UserModel(
                         uid = info.uid,
                         email = email,
-                        password = password,
                         name = name
                     )
                     databaseDao.insert(newUser)

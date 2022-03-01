@@ -25,18 +25,6 @@ object AuthenticationModule {
 
     @Singleton
     @Provides
-    fun provideAuthenticationFirebaseInstant(): FirebaseAuth {
-        return Firebase.auth
-    }
-
-    @Singleton
-    @Provides
-    fun provideFirestore(): FirebaseFirestore {
-        return Firebase.firestore
-    }
-
-    @Singleton
-    @Provides
     fun provideAuthenticationUseCase(repository: AuthenticationRepository): AuthenticationUseCase {
         return AuthenticationUseCase(
             loginUseCase = LoginUseCase(repository = repository),

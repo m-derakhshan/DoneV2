@@ -9,7 +9,7 @@ sealed class ProfileEvent {
     object ImageSelectionClose : ProfileEvent()
     object ImageSelectionOpen : ProfileEvent()
 
-    object OnEditProfileClicked : ProfileEvent()
+
     object OnPasswordChangeClicked : ProfileEvent()
     object ApplyChanges : ProfileEvent()
     object Logout : ProfileEvent()

@@ -1,7 +1,6 @@
 package m.derakhshan.done.feature_profile.presentation.composable
 
 import androidx.compose.foundation.*
-import androidx.compose.foundation.gestures.DraggableState
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.draggable
 import androidx.compose.foundation.gestures.rememberDraggableState
@@ -33,6 +32,7 @@ import kotlinx.coroutines.flow.collectLatest
 import m.derakhshan.done.R
 import m.derakhshan.done.core.presentation.composable.BackSwipeGesture
 import m.derakhshan.done.core.presentation.composable.ImagePicker
+import m.derakhshan.done.core.presentation.composable.LoadingButton
 import m.derakhshan.done.feature_profile.presentation.ProfileEvent
 import m.derakhshan.done.feature_profile.presentation.ProfileViewModel
 import m.derakhshan.done.ui.theme.*
@@ -182,7 +182,8 @@ fun ProfileScreen(
                             .padding(
                                 vertical = MaterialTheme.spacing.large,
                                 horizontal = MaterialTheme.spacing.small
-                            )
+                            ),
+                        horizontalArrangement = Arrangement.Center
                     ) {
 
                         Button(
@@ -197,15 +198,14 @@ fun ProfileScreen(
 
                         Spacer(modifier = Modifier.padding(MaterialTheme.spacing.small))
 
-                        Button(
-                            onClick = { viewModel.onEvent(ProfileEvent.ApplyChanges) },
-                            modifier = Modifier.weight(0.75f),
+                        LoadingButton(
+                            buttonText = stringResource(id = R.string.apply_changes),
+                            isExpanded = state.isApplyChangesExpanded,
+                            modifier = Modifier.align(Alignment.CenterVertically)
                         ) {
-                            Text(
-                                text = stringResource(id = R.string.apply_changes),
-                                modifier = Modifier.padding(MaterialTheme.spacing.small)
-                            )
+                            viewModel.onEvent(ProfileEvent.ApplyChanges)
                         }
+
                     }
 
                 }

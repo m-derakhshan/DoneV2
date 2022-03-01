@@ -22,7 +22,7 @@ class HomeRepositoryImpl @Inject constructor(
         return inspirationQuoteDao.getQuote(1)
     }
 
-    override suspend fun getUserName(): String {
+    override fun getUserName(): Flow<String> {
         return userDao.getUserName()
     }
 

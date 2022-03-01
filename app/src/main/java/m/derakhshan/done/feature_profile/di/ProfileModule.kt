@@ -1,6 +1,7 @@
 package m.derakhshan.done.feature_profile.di
 
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -22,12 +23,14 @@ object ProfileModule {
     fun provideProfileRepository(
         database: DoneDatabase,
         setting: Setting,
-        authentication: FirebaseAuth
+        authentication: FirebaseAuth,
+        fireStore: FirebaseFirestore
     ): ProfileRepository {
         return ProfileRepositoryImpl(
             userDao = database.userDao,
             setting = setting,
-            authentication = authentication
+            authentication = authentication,
+            fireStore = fireStore
         )
     }
 

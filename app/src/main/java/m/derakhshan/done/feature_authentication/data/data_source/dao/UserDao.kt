@@ -20,6 +20,6 @@ interface UserDao {
     fun getInfo(): Flow<UserModel>
 
     @Query("SELECT name FROM UserModel Limit 1")
-    suspend fun getUserName(): String
+    fun getUserName(): Flow<String>
 
 }

@@ -130,7 +130,7 @@ class HomeRouteViewModel @Inject constructor(
     private fun getUserImage() {
         job?.cancel()
         job = useCase().onEach {
-            _state.value = it.profile
+            _state.value = it.profileImage
         }.launchIn(viewModelScope)
     }
 }

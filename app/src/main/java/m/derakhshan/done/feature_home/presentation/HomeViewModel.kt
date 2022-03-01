@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -24,9 +25,12 @@ class HomeViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            _state.value = _state.value.copy(
-                greetings = useCases.greetingsUseCase()
-            )
+            val greeting = useCases.greetingsUseCase()
+            greeting.values.first().collectLatest { userName ->
+                _state.value = _state.value.copy(
+                    greetings = mapOf(Pair(greeting.keys.first(), userName))
+                )
+            }
             useCases.updateInspirationQuotesUseCase()
         }
         getTodayQuote()
