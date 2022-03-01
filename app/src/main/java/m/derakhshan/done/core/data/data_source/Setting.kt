@@ -18,6 +18,18 @@ class Setting @Inject constructor(
         }
         get() = share.getBoolean("isUserLoggedIn", false)
 
+    var lastNoteId: Int
+        set(value) {
+            edit.putInt("lastNoteId", value)
+            edit.apply()
+        }
+        get() {
+            val id = share.getInt("lastNoteId", 0)
+            edit.putInt("lastNoteId", id + 1)
+            edit.apply()
+            return id
+        }
+
     var userProfileImage: String
         set(value) {
             edit.putString("userProfileImage", value)

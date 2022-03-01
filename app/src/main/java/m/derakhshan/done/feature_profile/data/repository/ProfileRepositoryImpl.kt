@@ -37,7 +37,6 @@ class ProfileRepositoryImpl @Inject constructor(
 
     override suspend fun updateUserInfo(userModel: UserModel): Response<String> {
         return try {
-
             fireStore.collection("users")
                 .document(userModel.uid)
                 .update(mapOf(Pair("name", userModel.name))).await()
