@@ -12,6 +12,7 @@ import m.derakhshan.done.feature_profile.domain.repository.ProfileRepository
 import m.derakhshan.done.feature_profile.domain.use_case.GetUserInfoUseCase
 import m.derakhshan.done.feature_profile.domain.use_case.LogoutUseCase
 import m.derakhshan.done.feature_profile.domain.use_case.ProfileUseCases
+import m.derakhshan.done.feature_profile.domain.use_case.UpdateUserInfoUseCase
 import javax.inject.Singleton
 
 
@@ -38,7 +39,8 @@ object ProfileModule {
     fun provideProfileUseCases(repository: ProfileRepository): ProfileUseCases {
         return ProfileUseCases(
             getUserInfo = GetUserInfoUseCase(repository = repository),
-            logOutUser = LogoutUseCase(repository = repository)
+            logOutUser = LogoutUseCase(repository = repository),
+            updateUserInfo = UpdateUserInfoUseCase(repository = repository)
         )
     }
 

@@ -6,4 +6,5 @@ import m.derakhshan.done.feature_authentication.domain.model.UserModel
 interface ProfileRepository {
     suspend fun getUserInfo(): Flow<UserModel>
     suspend fun logoutUser()
+    suspend fun updateUserInfo(userModel: UserModel)
 }

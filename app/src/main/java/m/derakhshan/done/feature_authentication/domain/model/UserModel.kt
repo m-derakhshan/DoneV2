@@ -10,5 +10,6 @@ data class UserModel(
     val uid: String,
     val email: String,
     val password: String,
-    val name: String
+    val name: String,
+    val profile: String = "https://www.constrack.ng/uploads/icon-user-default.png",
 )

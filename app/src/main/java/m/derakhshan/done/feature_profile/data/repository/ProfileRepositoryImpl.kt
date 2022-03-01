@@ -26,4 +26,8 @@ class ProfileRepositoryImpl @Inject constructor(
         //--------------------(use this line after everything is deleted. it cause app close.)--------------------//
         authentication.signOut()
     }
+
+    override suspend fun updateUserInfo(userModel: UserModel) {
+        TODO("Not yet implemented")
+    }
 }
