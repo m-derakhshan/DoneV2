@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -70,7 +71,12 @@ class ProfileViewModel @Inject constructor(
                 }
             }
             is ProfileEvent.Logout -> {
-                viewModelScope.launch { useCases.logOutUser() }
+                viewModelScope.launch {
+                    _state.value = _state.value.copy(
+                        isLogoutExpanded = false
+                    )
+                    useCases.logOutUser()
+                }
             }
             is ProfileEvent.ImageSelected -> {
                 _state.value = _state.value.copy(

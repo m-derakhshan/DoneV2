@@ -186,22 +186,34 @@ fun ProfileScreen(
                         horizontalArrangement = Arrangement.Center
                     ) {
 
-                        Button(
-                            onClick = { viewModel.onEvent(ProfileEvent.Logout) },
-                            colors = ButtonDefaults.buttonColors(backgroundColor = White)
+
+                        LoadingButton(
+                            buttonText = stringResource(id = R.string.log_out),
+                            isExpanded = state.isLogoutExpanded,
+                            modifier =
+                            if (state.isLogoutExpanded)
+                                Modifier
+                                    .align(Alignment.CenterVertically)
+                                    .weight(0.35f)
+                            else
+                                Modifier.align(Alignment.CenterVertically),
+                            backgroundColor = White
                         ) {
-                            Text(
-                                text = stringResource(id = R.string.log_out),
-                                modifier = Modifier.padding(MaterialTheme.spacing.small)
-                            )
+                            viewModel.onEvent(ProfileEvent.Logout)
                         }
+
 
                         Spacer(modifier = Modifier.padding(MaterialTheme.spacing.small))
 
                         LoadingButton(
                             buttonText = stringResource(id = R.string.apply_changes),
                             isExpanded = state.isApplyChangesExpanded,
-                            modifier = Modifier.align(Alignment.CenterVertically)
+                            modifier =
+                            if (state.isApplyChangesExpanded)
+                                Modifier
+                                    .align(Alignment.CenterVertically)
+                                    .weight(0.65f)
+                            else Modifier.align(Alignment.CenterVertically)
                         ) {
                             viewModel.onEvent(ProfileEvent.ApplyChanges)
                         }

@@ -9,6 +9,7 @@ data class ProfileState(
     val uid: String = "",
     val profileImage: String = AppConstants.DEFAULT_PROFILE,
     val isImagePickerOpen: Boolean = false,
-    val isApplyChangesExpanded: Boolean = true
+    val isApplyChangesExpanded: Boolean = true,
+    val isLogoutExpanded: Boolean = true
 
 )
