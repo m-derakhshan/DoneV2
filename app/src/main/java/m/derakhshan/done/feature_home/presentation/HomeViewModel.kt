@@ -1,5 +1,6 @@
 package m.derakhshan.done.feature_home.presentation
 
+import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -21,9 +22,8 @@ class HomeViewModel @Inject constructor(
     private val _state = mutableStateOf(HomeState())
     val state: State<HomeState> = _state
 
-    private var job: Job? = null
-
     init {
+
         viewModelScope.launch {
             val greeting = useCases.greetingsUseCase()
             greeting.values.first().collectLatest { userName ->
@@ -31,9 +31,20 @@ class HomeViewModel @Inject constructor(
                     greetings = mapOf(Pair(greeting.keys.first(), userName))
                 )
             }
-            useCases.updateInspirationQuotesUseCase()
         }
-        getTodayQuote()
+
+        viewModelScope.launch {
+            useCases.updateInspirationQuotesUseCase()
+            useCases.getInsertInspirationQuoteUseCase().collectLatest {
+                it?.let { quote ->
+                    _state.value = _state.value.copy(
+                        inspirationQuote = quote.quote,
+                        inspirationQuoteAuthor = quote.author
+                    )
+                }
+            }
+        }
+
     }
 
     fun onEvent(event: HomeEvent) {
@@ -44,20 +55,6 @@ class HomeViewModel @Inject constructor(
                 )
             }
         }
-    }
-
-
-    private fun getTodayQuote() {
-        job?.cancel()
-        job = useCases.getInsertInspirationQuoteUseCase(
-        ).onEach {
-            it?.let { quote ->
-                _state.value = _state.value.copy(
-                    inspirationQuote = quote.quote,
-                    inspirationQuoteAuthor = quote.author
-                )
-            }
-        }.launchIn(viewModelScope)
     }
 
 }

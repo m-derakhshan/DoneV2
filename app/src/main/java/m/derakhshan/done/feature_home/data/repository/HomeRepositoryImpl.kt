@@ -19,7 +19,7 @@ class HomeRepositoryImpl @Inject constructor(
 ) : HomeRepository {
 
     override fun getInspirationQuote(): Flow<InspirationQuoteModel?> {
-        return inspirationQuoteDao.getQuote(1)
+        return inspirationQuoteDao.getQuote()
     }
 
     override fun getUserName(): Flow<String> {
@@ -28,8 +28,8 @@ class HomeRepositoryImpl @Inject constructor(
 
     override suspend fun updateInspirationQuotes() {
         try {
-            val quote = homeApi.getTodayQuote()
-            inspirationQuoteDao.insert(quote.map { it.toInspirationQuoteModel() })
+            val quote = homeApi.getTodayQuote().first()
+            inspirationQuoteDao.insert(quote.toInspirationQuoteModel())
         } catch (e: Exception) {
             if (e is CancellationException)
                 throw e

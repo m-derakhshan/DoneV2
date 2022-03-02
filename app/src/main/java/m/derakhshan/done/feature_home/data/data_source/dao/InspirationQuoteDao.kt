@@ -11,11 +11,11 @@ import m.derakhshan.done.feature_home.domain.model.InspirationQuoteModel
 interface InspirationQuoteDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(quote: List<InspirationQuoteModel>)
+    suspend fun insert(quote: InspirationQuoteModel)
 
     @Query("DELETE FROM InspirationQuoteModel")
     suspend fun deleteAll()
 
-    @Query("SELECT * FROM InspirationQuoteModel WHERE id=:id")
-    fun getQuote(id: Int): Flow<InspirationQuoteModel?>
+    @Query("SELECT * FROM InspirationQuoteModel Limit 1")
+    fun getQuote(): Flow<InspirationQuoteModel?>
 }
