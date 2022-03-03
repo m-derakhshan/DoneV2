@@ -8,7 +8,9 @@ import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.draggable
 import androidx.compose.foundation.gestures.rememberDraggableState
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -44,7 +46,7 @@ fun HomeScreen(
 
     val state = viewModel.state.value
     val offset by animateDpAsState(targetValue = state.taskListOffset.dp)
-
+    val scroll = rememberScrollState()
 
     Box(
         modifier = Modifier
@@ -89,6 +91,7 @@ fun HomeScreen(
             )
 
             Box(contentAlignment = Alignment.BottomCenter) {
+
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
@@ -98,7 +101,8 @@ fun HomeScreen(
                             VeryLightBlue,
                             shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp)
                         )
-                        .padding(MaterialTheme.spacing.small),
+                        .padding(MaterialTheme.spacing.small)
+                        .verticalScroll(scroll),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     //--------------------(analog clock)--------------------//
@@ -113,7 +117,7 @@ fun HomeScreen(
                             top = MaterialTheme.spacing.medium,
                             start = MaterialTheme.spacing.medium,
                             end = MaterialTheme.spacing.medium,
-                            )
+                        )
                     ) {
 
                         Box(
@@ -190,14 +194,7 @@ fun HomeScreen(
                         }
                     }
 
-                    //--------------------(today task)--------------------//
-                    Text(
-                        text = stringResource(id = R.string.today_tasks),
-                        textAlign = TextAlign.Start,
-                        modifier = Modifier.fillMaxWidth(),
-                        style = MaterialTheme.typography.h5,
-                    )
-
+                    Spacer(modifier = Modifier.height(250.dp))
                 }
 
                 Column(
