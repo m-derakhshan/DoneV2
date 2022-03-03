@@ -1,5 +1,6 @@
 package m.derakhshan.done.feature_profile.presentation.composable
 
+import android.app.Activity
 import androidx.compose.foundation.*
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.draggable
@@ -48,6 +49,12 @@ fun ProfileScreen(
     var swipeOffset by remember { mutableStateOf(0f) }
     val state = viewModel.state.value
     val scaffoldState = rememberScaffoldState()
+    val activity = LocalContext.current
+
+    LaunchedEffect(state.restartApplication) {
+        if (state.restartApplication)
+            (activity as? Activity)?.finish()
+    }
 
     LaunchedEffect(true) {
         viewModel.snackBar.collectLatest { message ->
@@ -143,7 +150,6 @@ fun ProfileScreen(
                         horizontal = MaterialTheme.spacing.small
                     )
                 ) {
-
                     TextField(
                         value = state.name,
                         onValueChange = { viewModel.onEvent(ProfileEvent.OnNameChanged(it)) },

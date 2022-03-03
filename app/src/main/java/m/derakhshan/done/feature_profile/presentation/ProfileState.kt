@@ -11,4 +11,5 @@ data class ProfileState(
     val isImagePickerOpen: Boolean = false,
     val isApplyChangesExpanded: Boolean = true,
     val isLogoutExpanded: Boolean = true,
+    val restartApplication: Boolean = false
 )

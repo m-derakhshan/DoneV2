@@ -73,11 +73,9 @@ class ProfileViewModel @Inject constructor(
             }
             is ProfileEvent.Logout -> {
                 viewModelScope.launch {
-                    _state.value = _state.value.copy(
-                        isLogoutExpanded = false
-                    )
-                    // TODO: close the application
+                    _state.value = _state.value.copy(isLogoutExpanded = false)
                     useCases.logOutUser()
+                    _state.value = _state.value.copy(restartApplication = true)
                 }
             }
             is ProfileEvent.ImageSelected -> {
