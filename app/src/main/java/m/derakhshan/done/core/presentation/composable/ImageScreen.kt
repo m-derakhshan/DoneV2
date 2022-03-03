@@ -3,10 +3,7 @@ package m.derakhshan.done.core.presentation.composable
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.gestures.*
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -15,6 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
@@ -39,11 +37,11 @@ fun ImageScreen(
     Scaffold(
         topBar = {
             TopAppBar {
-                Box(modifier = Modifier.fillMaxWidth()) {
+                Row(modifier = Modifier.fillMaxWidth()) {
 
                     IconButton(
                         onClick = { navController.navigateUp() }, modifier = Modifier.align(
-                            Alignment.CenterStart
+                            Alignment.CenterVertically
                         )
                     ) {
                         Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "back")
@@ -52,11 +50,12 @@ fun ImageScreen(
                     Text(
                         text = title,
                         style = MaterialTheme.typography.h5,
-                        modifier = Modifier.align(
-                            Alignment.Center
-                        ),
+                        modifier = Modifier
+                            .weight(1f)
+                            .align(Alignment.CenterVertically),
                         maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
+                        overflow = TextOverflow.Ellipsis,
+                        textAlign = TextAlign.Center
                     )
                 }
             }
