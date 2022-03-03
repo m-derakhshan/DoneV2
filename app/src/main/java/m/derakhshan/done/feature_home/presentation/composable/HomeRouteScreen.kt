@@ -102,7 +102,7 @@ fun HomeRouteScreen(
     ) { padding ->
         NavHost(navController = navController, startDestination = HomeNavGraph.HomeScreen.route) {
             composable(HomeNavGraph.HomeScreen.route) {
-                HomeScreen(navController = navController, paddingValues = padding)
+                HomeScreen(paddingValues = padding)
             }
             composable(HomeNavGraph.ProfileScreen.route) {
                 ProfileScreen(paddingValues = padding, navController = navController)

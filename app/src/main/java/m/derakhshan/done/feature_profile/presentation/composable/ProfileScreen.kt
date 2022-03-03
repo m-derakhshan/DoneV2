@@ -1,6 +1,5 @@
 package m.derakhshan.done.feature_profile.presentation.composable
 
-import android.util.Log
 import androidx.compose.foundation.*
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.draggable

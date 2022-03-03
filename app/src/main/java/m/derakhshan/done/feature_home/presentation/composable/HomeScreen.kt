@@ -18,7 +18,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -30,7 +29,6 @@ import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import m.derakhshan.done.R
 import m.derakhshan.done.feature_home.presentation.HomeEvent
 import m.derakhshan.done.feature_home.presentation.HomeViewModel
 import m.derakhshan.done.ui.theme.*
@@ -39,7 +37,6 @@ import m.derakhshan.done.ui.theme.*
 @OptIn(ExperimentalUnitApi::class)
 @Composable
 fun HomeScreen(
-    navController: NavController,
     viewModel: HomeViewModel = hiltViewModel(),
     paddingValues: PaddingValues
 ) {
