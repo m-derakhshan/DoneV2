@@ -34,8 +34,9 @@ I want to develop this project using Kotlin. also, I'm learning TDD; so it is a 
  - [x] Add Home Feature Structure.
  - [x] Design Home Screen compose.
  - [x] Implement Daily inspiration quote.
- - [ ] Design Profile Screen.
+ - [x] Design Profile Screen.
  - [ ] Implement Updating Profile Logic.
+ - [ ] Implementing picture zoomable screen.
  - [ ] Design Note Screen.
  - [ ] Implement Add Note logic.
  - [ ] Implement Edit Note logic.
