@@ -52,7 +52,8 @@ fun HomeScreen(
     val lottieProgress by animateLottieCompositionAsState(
         lottieComposition,
         restartOnPlay = false,
-        iterations = LottieConstants.IterateForever
+        iterations = LottieConstants.IterateForever,
+        clipSpec = LottieClipSpec.Progress(min = 0.1f)
     )
 
     Box(

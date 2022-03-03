@@ -20,4 +20,14 @@
 
     <string name="apply_changes">Apply Changes</string>
     <string name="log_out">Log Out</string>
+
+    <string name="date">Date</string>
+    <string name="title">Title</string>
+    <string name="color">Color</string>
+
+    <string name="ascending">Ascending</string>
+    <string name="descending">Descending</string>
+    <string name="order_notes_by">Order Notes by:</string>
+
+
 </resources>
