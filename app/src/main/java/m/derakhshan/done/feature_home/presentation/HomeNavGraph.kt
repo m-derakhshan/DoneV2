@@ -46,4 +46,7 @@ sealed class HomeNavGraph(
     object NoteScreen :
         HomeNavGraph(route = "NoteScreen", icon = Icons.Default.Notes, label = R.string.notes)
 
+    object ImageScreen :
+        HomeNavGraph(route = "ImageScreen")
+
 }

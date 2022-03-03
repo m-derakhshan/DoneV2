@@ -9,7 +9,7 @@ class HomeRouteUseCase @Inject constructor(
     private val repository: HomeRepository
 ) {
 
-    operator fun invoke(): Flow<UserModel> {
+    operator fun invoke(): Flow<UserModel?> {
         return repository.userInfo()
     }
 }

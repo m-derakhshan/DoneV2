@@ -20,16 +20,19 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import coil.compose.rememberImagePainter
 import coil.transform.CircleCropTransformation
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import m.derakhshan.done.core.presentation.composable.ImageScreen
 import m.derakhshan.done.feature_home.domain.use_case.HomeRouteUseCase
 import m.derakhshan.done.feature_home.presentation.HomeNavGraph
 import m.derakhshan.done.feature_note.presentation.composable.NoteScreen
@@ -110,6 +113,23 @@ fun HomeRouteScreen(
             composable(HomeNavGraph.NoteScreen.route) {
                 NoteScreen(navController = navController, paddingValues = padding)
             }
+            composable(
+                HomeNavGraph.ImageScreen.route +
+                        "?uri={uri}&title={title}",
+                arguments = listOf(
+                    navArgument(name = "uri") { this.type = NavType.StringType },
+                    navArgument(name = "title") { this.type = NavType.StringType }
+                )
+            ) { backStack ->
+                val uri = backStack.arguments?.getString("uri") ?: ""
+                val title = backStack.arguments?.getString("title") ?: ""
+                ImageScreen(
+                    uri = uri,
+                    paddingValues = padding,
+                    navController = navController,
+                    title = title
+                )
+            }
         }
     }
 }
@@ -130,7 +150,9 @@ class HomeRouteViewModel @Inject constructor(
     private fun getUserImage() {
         job?.cancel()
         job = useCase().onEach {
-            _state.value = it.profileImage
+            it?.let {
+                _state.value = it.profileImage
+            }
         }.launchIn(viewModelScope)
     }
 }

@@ -8,7 +8,7 @@ class GetUserInfoUseCase(
     private val repository: ProfileRepository
 ) {
 
-    suspend operator fun invoke(): Flow<UserModel> {
+    suspend operator fun invoke(): Flow<UserModel?> {
         return repository.getUserInfo()
     }
 }

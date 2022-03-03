@@ -17,7 +17,7 @@ interface UserDao {
     suspend fun delete()
 
     @Query("SELECT * FROM UserModel Limit 1")
-    fun getInfo(): Flow<UserModel>
+    fun getInfo(): Flow<UserModel?>
 
     @Query("SELECT name FROM UserModel Limit 1")
     fun getUserName(): Flow<String>

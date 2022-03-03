@@ -22,7 +22,7 @@ class HomeRepositoryImpl @Inject constructor(
         return inspirationQuoteDao.getQuote()
     }
 
-    override fun getUserName(): Flow<String> {
+    override fun getUserName(): Flow<String?> {
         return userDao.getUserName()
     }
 
@@ -37,7 +37,7 @@ class HomeRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun userInfo(): Flow<UserModel> {
+    override fun userInfo(): Flow<UserModel?> {
         return userDao.getInfo()
     }
 }

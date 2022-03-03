@@ -1,16 +1,13 @@
 package m.derakhshan.done.feature_profile.data.repository
 
-import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.tasks.await
 import m.derakhshan.done.core.data.data_source.Setting
 import m.derakhshan.done.core.domain.model.Response
 import m.derakhshan.done.feature_authentication.data.data_source.dao.UserDao
 import m.derakhshan.done.feature_authentication.domain.model.UserModel
-import m.derakhshan.done.feature_authentication.utils.credentialValidityChecker
 import m.derakhshan.done.feature_profile.domain.repository.ProfileRepository
 import java.util.concurrent.CancellationException
 import javax.inject.Inject
@@ -21,7 +18,7 @@ class ProfileRepositoryImpl @Inject constructor(
     private val authentication: FirebaseAuth,
     private val fireStore: FirebaseFirestore
 ) : ProfileRepository {
-    override suspend fun getUserInfo(): Flow<UserModel> {
+    override suspend fun getUserInfo(): Flow<UserModel?> {
         return userDao.getInfo()
     }
 
@@ -49,7 +46,6 @@ class ProfileRepositoryImpl @Inject constructor(
                 throw e
             Response.Error(message = e.message ?: "Unknown Error.", responseCode = 0)
         }
-
 
     }
 

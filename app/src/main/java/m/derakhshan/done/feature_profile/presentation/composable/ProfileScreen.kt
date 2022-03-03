@@ -1,5 +1,6 @@
 package m.derakhshan.done.feature_profile.presentation.composable
 
+import android.util.Log
 import androidx.compose.foundation.*
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.draggable
@@ -33,6 +34,7 @@ import m.derakhshan.done.R
 import m.derakhshan.done.core.presentation.composable.BackSwipeGesture
 import m.derakhshan.done.core.presentation.composable.ImagePicker
 import m.derakhshan.done.core.presentation.composable.LoadingButton
+import m.derakhshan.done.feature_home.presentation.HomeNavGraph
 import m.derakhshan.done.feature_profile.presentation.ProfileEvent
 import m.derakhshan.done.feature_profile.presentation.ProfileViewModel
 import m.derakhshan.done.ui.theme.*
@@ -43,9 +45,8 @@ fun ProfileScreen(
     paddingValues: PaddingValues,
     navController: NavController
 ) {
-    var swipeOffset by remember {
-        mutableStateOf(0f)
-    }
+
+    var swipeOffset by remember { mutableStateOf(0f) }
     val state = viewModel.state.value
     val scaffoldState = rememberScaffoldState()
 
@@ -107,6 +108,12 @@ fun ProfileScreen(
                                 .size(120.dp)
                                 .border(2.dp, color = DarkBlue, shape = CircleShape)
                                 .padding(2.dp)
+                                .clickable {
+                                    navController.navigate(
+                                        HomeNavGraph.ImageScreen.route
+                                                + "?uri=${state.profileImage}&title=${state.name}"
+                                    )
+                                }
                         )
                         IconButton(
                             onClick = { viewModel.onEvent(ProfileEvent.ImageSelectionOpen) },

@@ -7,8 +7,8 @@ import m.derakhshan.done.feature_home.domain.model.InspirationQuoteModel
 interface HomeRepository {
 
     fun getInspirationQuote(): Flow<InspirationQuoteModel?>
-    fun getUserName(): Flow<String>
+    fun getUserName(): Flow<String?>
     suspend fun updateInspirationQuotes()
-    fun userInfo(): Flow<UserModel>
+    fun userInfo(): Flow<UserModel?>
 
 }
