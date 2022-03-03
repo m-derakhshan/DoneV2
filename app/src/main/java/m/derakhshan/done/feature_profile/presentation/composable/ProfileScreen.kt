@@ -107,6 +107,7 @@ fun ProfileScreen(
                                 .size(120.dp)
                                 .border(2.dp, color = DarkBlue, shape = CircleShape)
                                 .padding(2.dp)
+                                .clip(CircleShape)
                                 .clickable {
                                     navController.navigate(
                                         HomeNavGraph.ImageScreen.route
