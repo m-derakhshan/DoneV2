@@ -113,6 +113,10 @@ fun ProfileScreen(
                                                 + "?uri=${state.profileImage}&title=${state.name}"
                                     )
                                 }
+                                .background(
+                                    color = MaterialTheme.colors.background,
+                                    shape = CircleShape
+                                )
                         )
                         IconButton(
                             onClick = { viewModel.onEvent(ProfileEvent.ImageSelectionOpen) },

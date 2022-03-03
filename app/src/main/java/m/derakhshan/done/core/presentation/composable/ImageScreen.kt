@@ -15,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 
@@ -53,7 +54,9 @@ fun ImageScreen(
                         style = MaterialTheme.typography.h5,
                         modifier = Modifier.align(
                             Alignment.Center
-                        )
+                        ),
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
                     )
                 }
             }
