@@ -35,8 +35,9 @@ I want to develop this project using Kotlin. also, I'm learning TDD; so it is a 
  - [x] Design Home Screen compose.
  - [x] Implement Daily inspiration quote.
  - [x] Design Profile Screen.
- - [ ] Implement Updating Profile Logic.
- - [ ] Implementing picture zoomable screen.
+ - [x] Implement Updating Profile Logic.
+ - [x] Implementing picture zoomable screen.
+ - [ ] uploading and retrieving user image from firebase storage
  - [ ] Design Note Screen.
  - [ ] Implement Add Note logic.
  - [ ] Implement Edit Note logic.
