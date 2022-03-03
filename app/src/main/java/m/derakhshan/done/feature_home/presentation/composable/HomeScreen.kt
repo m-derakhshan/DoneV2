@@ -1,6 +1,7 @@
 package m.derakhshan.done.feature_home.presentation.composable
 
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -18,6 +19,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -28,7 +30,8 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
+import com.airbnb.lottie.compose.*
+import m.derakhshan.done.R
 import m.derakhshan.done.feature_home.presentation.HomeEvent
 import m.derakhshan.done.feature_home.presentation.HomeViewModel
 import m.derakhshan.done.ui.theme.*
@@ -44,6 +47,13 @@ fun HomeScreen(
     val state = viewModel.state.value
     val offset by animateDpAsState(targetValue = state.taskListOffset.dp)
     val scroll = rememberScrollState()
+
+    val lottieComposition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.no_task))
+    val lottieProgress by animateLottieCompositionAsState(
+        lottieComposition,
+        restartOnPlay = false,
+        iterations = LottieConstants.IterateForever
+    )
 
     Box(
         modifier = Modifier
@@ -194,6 +204,8 @@ fun HomeScreen(
                     Spacer(modifier = Modifier.height(270.dp))
                 }
 
+
+                //--------------------(today task list)--------------------//
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
@@ -225,6 +237,24 @@ fun HomeScreen(
                             .background(DarkBlue)
                     )
 
+
+                    // TODO: show or hide this section based on that today we have task to do or not.
+
+                    AnimatedVisibility(visible = true) {
+                        Column(modifier = Modifier.padding(MaterialTheme.spacing.medium)) {
+                            Text(
+                                text = stringResource(id = R.string.today_no_task),
+                                style = MaterialTheme.typography.h5,
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier.fillMaxWidth()
+                            )
+                            LottieAnimation(
+                                composition = lottieComposition,
+                                progress = lottieProgress,
+                                alignment = Alignment.TopCenter
+                            )
+                        }
+                    }
                 }
             }
         }

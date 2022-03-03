@@ -16,6 +16,7 @@
 
     <string name="write_something">Write Something…</string>
     <string name="today_tasks">Today\'s Tasks:</string>
+    <string name="today_no_task">There is not task for today!</string>
 
     <string name="apply_changes">Apply Changes</string>
     <string name="log_out">Log Out</string>
