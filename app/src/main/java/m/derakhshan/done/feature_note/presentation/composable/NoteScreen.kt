@@ -1,14 +1,15 @@
 package m.derakhshan.done.feature_note.presentation.composable
 
 import androidx.compose.animation.*
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Filter
 import androidx.compose.material.icons.filled.Sort
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -25,6 +26,10 @@ import m.derakhshan.done.feature_note.domain.model.NoteOrderType
 import m.derakhshan.done.feature_note.presentation.NoteEvent
 import m.derakhshan.done.feature_note.presentation.NoteViewModel
 import m.derakhshan.done.ui.theme.spacing
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.runtime.*
+import kotlinx.coroutines.launch
 
 @Composable
 fun NoteScreen(
@@ -34,8 +39,14 @@ fun NoteScreen(
 ) {
 
     val state = viewModel.state.value
+    val coroutineScope = rememberCoroutineScope()
+    val scaffoldState = rememberScaffoldState()
+    val lazyState = rememberLazyListState()
+    val noteIsDeleted = stringResource(id = R.string.note_is_deleted)
+    val undo = stringResource(id = R.string.undo)
 
     Scaffold(
+        scaffoldState = scaffoldState,
         modifier = Modifier.padding(paddingValues),
         topBar = {
             TopAppBar {
@@ -55,7 +66,6 @@ fun NoteScreen(
             }
         }
     ) {
-
         //--------------------(order section)--------------------//
         Column(
             modifier = Modifier
@@ -90,7 +100,6 @@ fun NoteScreen(
                 enter = slideInVertically() + fadeIn(),
                 exit = slideOutVertically() + fadeOut()
             ) {
-
                 Column(modifier = Modifier.padding(MaterialTheme.spacing.small)) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
@@ -139,10 +148,61 @@ fun NoteScreen(
 
                     }
                 }
-
             }
         }
 
+        //--------------------(hide or show add button)--------------------//
+        if (lazyState.isScrollingUp())
+            viewModel.onEvent(NoteEvent.ListScrollUp)
+        else
+            viewModel.onEvent(NoteEvent.ListScrollDown)
 
+        LazyColumn(
+            modifier = Modifier.fillMaxSize(),
+            state = lazyState
+        ) {
+            items(state.notes) { note ->
+                NoteItem(
+                    note = note,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(MaterialTheme.spacing.medium)
+                        .clickable {
+                            // TODO:  implement navigate to edit/add screen
+                        }
+                ) {
+                    viewModel.onEvent(NoteEvent.OnDeleteNoteClicked(note = note))
+                    coroutineScope.launch {
+                        scaffoldState.snackbarHostState.currentSnackbarData?.dismiss()
+                        val result = scaffoldState.snackbarHostState.showSnackbar(
+                            message = noteIsDeleted,
+                            actionLabel = undo
+                        )
+                        if (result == SnackbarResult.ActionPerformed)
+                            viewModel.onEvent(NoteEvent.RestoreNote)
+                    }
+                }
+            }
+        }
     }
+}
+
+
+@Composable
+private fun LazyListState.isScrollingUp(): Boolean {
+    var previousItemIndex by remember(this) { mutableStateOf(firstVisibleItemIndex) }
+    var previousScrollOffset by remember(this) { mutableStateOf(firstVisibleItemScrollOffset) }
+    return remember(this) {
+        derivedStateOf {
+            if (previousItemIndex != firstVisibleItemIndex)
+                previousItemIndex > firstVisibleItemIndex
+            else {
+                previousScrollOffset >= firstVisibleItemScrollOffset
+            }.also {
+                previousItemIndex = firstVisibleItemIndex
+                previousScrollOffset = firstVisibleItemScrollOffset
+            }
+        }
+    }.value
+
 }
