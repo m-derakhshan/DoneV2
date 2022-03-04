@@ -4,6 +4,8 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import m.derakhshan.done.core.data.data_source.DoneDatabase
+import m.derakhshan.done.feature_note.data.repository.NoteRepositoryImpl
 import m.derakhshan.done.feature_note.domain.repository.NoteRepository
 import m.derakhshan.done.feature_note.domain.use_case.DeleteNoteUseCase
 import m.derakhshan.done.feature_note.domain.use_case.GetNotesUseCase
@@ -24,6 +26,12 @@ object NoteModule {
             getNotes = GetNotesUseCase(repository = repository),
             restoreNote = RestoreNoteUseCase(repository = repository)
         )
+    }
+
+    @Provides
+    @Singleton
+    fun provideNoteRepository(database: DoneDatabase): NoteRepository {
+        return NoteRepositoryImpl(noteDao = database.noteDao)
     }
 
 }

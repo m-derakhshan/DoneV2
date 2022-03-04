@@ -1,4 +1,4 @@
-package m.derakhshan.done.feature_note.presentation.composable
+package m.derakhshan.done.feature_note.presentation.note_screen.composable
 
 import androidx.compose.animation.*
 import androidx.compose.animation.core.animateDpAsState
@@ -24,13 +24,14 @@ import m.derakhshan.done.R
 import m.derakhshan.done.core.presentation.composable.DefaultRadioButton
 import m.derakhshan.done.feature_note.domain.model.NoteOrderSortType
 import m.derakhshan.done.feature_note.domain.model.NoteOrderType
-import m.derakhshan.done.feature_note.presentation.NoteEvent
-import m.derakhshan.done.feature_note.presentation.NoteViewModel
+import m.derakhshan.done.feature_note.presentation.note_screen.NoteEvent
+import m.derakhshan.done.feature_note.presentation.note_screen.NoteViewModel
 import m.derakhshan.done.ui.theme.spacing
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.*
 import kotlinx.coroutines.launch
+import m.derakhshan.done.feature_home.presentation.HomeNavGraph
 
 @Composable
 fun NoteScreen(
@@ -62,7 +63,7 @@ fun NoteScreen(
         },
         floatingActionButton = {
             FloatingActionButton(onClick = {
-                // TODO: navigate to add or edit note screen
+                navController.navigate(HomeNavGraph.AddEditNoteScreen.route)
             }, modifier = Modifier.offset(y = fabOffset)) {
                 Icon(imageVector = Icons.Default.Add, contentDescription = "add note")
             }
@@ -186,7 +187,10 @@ fun NoteScreen(
                             .fillMaxWidth()
                             .padding(MaterialTheme.spacing.medium)
                             .clickable {
-                                // TODO:  implement navigate to edit/add screen
+                                navController.navigate(
+                                    HomeNavGraph.AddEditNoteScreen.route +
+                                            "?noteId=${note.id}&noteColor=${note.color}"
+                                )
                             }
                     ) {
                         viewModel.onEvent(NoteEvent.OnDeleteNoteClicked(note = note))

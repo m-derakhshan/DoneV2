@@ -30,7 +30,7 @@ fun NavGraphBuilder.home() {
 sealed class HomeNavGraph(
     val route: String,
     val icon: ImageVector? = null,
-    val label: Int? = null
+    val label: Int? = null,
 ) {
 
     object HomeRoute : HomeNavGraph("HomeRoute")
@@ -46,7 +46,7 @@ sealed class HomeNavGraph(
     object NoteScreen :
         HomeNavGraph(route = "NoteScreen", icon = Icons.Default.Notes, label = R.string.notes)
 
-    object ImageScreen :
-        HomeNavGraph(route = "ImageScreen")
+    object ImageScreen : HomeNavGraph(route = "ImageScreen")
+    object AddEditNoteScreen : HomeNavGraph(route = "AddEditNoteScreen")
 
 }

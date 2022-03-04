@@ -35,7 +35,8 @@ import kotlinx.coroutines.flow.onEach
 import m.derakhshan.done.core.presentation.composable.ImageScreen
 import m.derakhshan.done.feature_home.domain.use_case.HomeRouteUseCase
 import m.derakhshan.done.feature_home.presentation.HomeNavGraph
-import m.derakhshan.done.feature_note.presentation.composable.NoteScreen
+import m.derakhshan.done.feature_note.presentation.add_edit_note_screen.composable.AddEditNoteScreen
+import m.derakhshan.done.feature_note.presentation.note_screen.composable.NoteScreen
 import m.derakhshan.done.feature_profile.presentation.composable.ProfileScreen
 import m.derakhshan.done.feature_task.presentation.composable.TaskScreen
 import m.derakhshan.done.ui.theme.DarkBlue
@@ -128,6 +129,26 @@ fun HomeRouteScreen(
                     paddingValues = padding,
                     navController = navController,
                     title = title
+                )
+            }
+
+            composable(route = HomeNavGraph.AddEditNoteScreen.route +
+                    "?noteId={noteId}&noteColor={noteColor}",
+                arguments = listOf(
+                    navArgument(name = "noteId") {
+                        type = NavType.IntType
+                        defaultValue = -1
+                    },
+                    navArgument(name = "noteColor") {
+                        type = NavType.IntType
+                        defaultValue = -1
+                    }
+                )) { backStack ->
+                val color = backStack.arguments?.getInt("noteColor")
+                AddEditNoteScreen(
+                    navController = navController,
+                    noteColor = color,
+                    paddingValues = padding
                 )
             }
         }

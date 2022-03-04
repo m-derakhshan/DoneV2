@@ -1,4 +1,4 @@
-package m.derakhshan.done.feature_note.presentation
+package m.derakhshan.done.feature_note.presentation.note_screen
 
 
 import androidx.compose.runtime.State
@@ -75,9 +75,11 @@ class NoteViewModel @Inject constructor(
             orderType = _state.value.selectedOrderType,
             sortType = _state.value.selectedOrderSortType
         ).onEach {
-            _state.value = _state.value.copy(
-                notes = it
-            )
+            it?.let { notes->
+                _state.value = _state.value.copy(
+                    notes = notes
+                )
+            }
         }.launchIn(viewModelScope)
     }
 

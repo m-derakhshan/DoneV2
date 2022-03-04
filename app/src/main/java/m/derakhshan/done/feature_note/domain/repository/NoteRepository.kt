@@ -6,7 +6,9 @@ import m.derakhshan.done.feature_note.domain.model.NoteOrderSortType
 import m.derakhshan.done.feature_note.domain.model.NoteOrderType
 
 interface NoteRepository {
-    fun getNotes(orderType: NoteOrderType, sortType: NoteOrderSortType): Flow<List<NoteModel>>
+    fun getNotes(orderType: NoteOrderType, sortType: NoteOrderSortType): Flow<List<NoteModel>?>
     suspend fun deleteNote(note: NoteModel)
     suspend fun restoreNote(note: NoteModel)
+    suspend fun insertNote(note: NoteModel)
+    suspend fun insertNote(notes: List<NoteModel>)
 }

@@ -1,4 +1,4 @@
-package m.derakhshan.done.feature_note.presentation
+package m.derakhshan.done.feature_note.presentation.note_screen
 
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp

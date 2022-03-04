@@ -1,4 +1,4 @@
-package m.derakhshan.done.feature_note.presentation
+package m.derakhshan.done.feature_note.presentation.note_screen
 
 import m.derakhshan.done.feature_note.domain.model.NoteModel
 import m.derakhshan.done.feature_note.domain.model.NoteOrderSortType
