@@ -89,7 +89,7 @@ fun NoteScreen(
                 ) {
 
                     Text(
-                        text = stringResource(id = R.string.order_notes),
+                        text = stringResource(id = R.string.your_notes),
                         style = MaterialTheme.typography.h5
                     )
 
@@ -179,7 +179,7 @@ fun NoteScreen(
                 ) {
                 items(
                     items = state.notes,
-                    key = { it.id }
+                    key = { it.id },
                 ) { note ->
                     NoteItem(
                         note = note,

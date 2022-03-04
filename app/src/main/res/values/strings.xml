@@ -27,7 +27,7 @@
 
     <string name="ascending">Ascending</string>
     <string name="descending">Descending</string>
-    <string name="order_notes">Order Notes</string>
+    <string name="your_notes">Your Notes</string>
 
     <string name="note_is_deleted">Note is deleted.</string>
     <string name="undo">Undo</string>
