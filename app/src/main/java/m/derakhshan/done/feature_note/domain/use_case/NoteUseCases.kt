@@ -1,7 +1,8 @@
 package m.derakhshan.done.feature_note.domain.use_case
 
-import javax.inject.Inject
 
-
-class NoteUseCases @Inject constructor() {
-}
+data class NoteUseCases(
+    val deleteNote: DeleteNoteUseCase,
+    val getNotes: GetNotesUseCase,
+    val restoreNote: RestoreNoteUseCase
+)

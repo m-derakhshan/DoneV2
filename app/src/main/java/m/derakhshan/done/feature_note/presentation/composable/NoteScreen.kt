@@ -1,6 +1,7 @@
 package m.derakhshan.done.feature_note.presentation.composable
 
 import androidx.compose.animation.*
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -44,6 +45,7 @@ fun NoteScreen(
     val lazyState = rememberLazyListState()
     val noteIsDeleted = stringResource(id = R.string.note_is_deleted)
     val undo = stringResource(id = R.string.undo)
+    val fabOffset by animateDpAsState(targetValue = state.fabOffset)
 
     Scaffold(
         scaffoldState = scaffoldState,
@@ -61,125 +63,142 @@ fun NoteScreen(
         floatingActionButton = {
             FloatingActionButton(onClick = {
                 // TODO: navigate to add or edit note screen
-            }) {
+            }, modifier = Modifier.offset(y = fabOffset)) {
                 Icon(imageVector = Icons.Default.Add, contentDescription = "add note")
             }
         }
     ) {
-        //--------------------(order section)--------------------//
-        Column(
-            modifier = Modifier
-                .shadow(
-                    elevation = 1.dp,
-                    shape = RoundedCornerShape(bottomEnd = 20.dp, bottomStart = 20.dp)
-                )
-                .clip(shape = RoundedCornerShape(bottomEnd = 20.dp, bottomStart = 20.dp))
-                .padding(MaterialTheme.spacing.small),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-
-            Row(
-                horizontalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier.fillMaxWidth()
+        Column {
+            //--------------------(order section)--------------------//
+            Column(
+                modifier = Modifier
+                    .shadow(
+                        elevation = 1.dp,
+                        shape = RoundedCornerShape(bottomEnd = 20.dp, bottomStart = 20.dp)
+                    )
+                    .clip(shape = RoundedCornerShape(bottomEnd = 20.dp, bottomStart = 20.dp))
+                    .padding(MaterialTheme.spacing.small),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
 
-                Text(
-                    text = stringResource(id = R.string.order_notes),
-                    style = MaterialTheme.typography.h5
-                )
-
-                IconButton(
-                    onClick = { viewModel.onEvent(NoteEvent.ToggleOrderSectionVisibility) },
+                Row(
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Icon(imageVector = Icons.Default.Sort, contentDescription = "sort")
+
+                    Text(
+                        text = stringResource(id = R.string.order_notes),
+                        style = MaterialTheme.typography.h5
+                    )
+
+                    IconButton(
+                        onClick = { viewModel.onEvent(NoteEvent.ToggleOrderSectionVisibility) },
+                    ) {
+                        Icon(imageVector = Icons.Default.Sort, contentDescription = "sort")
+                    }
+                }
+
+                AnimatedVisibility(
+                    visible = state.isOrderSectionVisible,
+                    enter = slideInVertically() + fadeIn(),
+                    exit = slideOutVertically() + fadeOut()
+                ) {
+                    Column(modifier = Modifier.padding(MaterialTheme.spacing.small)) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            DefaultRadioButton(
+                                selected = state.selectedOrderType is NoteOrderType.Date,
+                                text = stringResource(id = R.string.date)
+                            ) {
+                                viewModel.onEvent(
+                                    NoteEvent.OnNoteOrderTypeChange(NoteOrderType.Date)
+                                )
+                            }
+                            DefaultRadioButton(
+                                selected = state.selectedOrderType is NoteOrderType.Title,
+                                text = stringResource(id = R.string.title)
+                            ) {
+                                viewModel.onEvent(NoteEvent.OnNoteOrderTypeChange(NoteOrderType.Title))
+                            }
+                            DefaultRadioButton(
+                                selected = state.selectedOrderType is NoteOrderType.Color,
+                                text = stringResource(id = R.string.color)
+                            ) {
+                                viewModel.onEvent(NoteEvent.OnNoteOrderTypeChange(NoteOrderType.Color))
+                            }
+                        }
+
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+
+                            DefaultRadioButton(
+                                textStyle = MaterialTheme.typography.body2,
+                                selected = state.selectedOrderSortType == NoteOrderSortType.Ascending,
+                                text = stringResource(id = R.string.ascending)
+                            ) {
+                                viewModel.onEvent(
+                                    NoteEvent.OnNoteOrderSortTypeChange(
+                                        NoteOrderSortType.Ascending
+                                    )
+                                )
+                            }
+
+                            DefaultRadioButton(
+                                textStyle = MaterialTheme.typography.body2,
+                                selected = state.selectedOrderSortType == NoteOrderSortType.Descending,
+                                text = stringResource(id = R.string.descending)
+                            ) {
+                                viewModel.onEvent(
+                                    NoteEvent.OnNoteOrderSortTypeChange(
+                                        NoteOrderSortType.Descending
+                                    )
+                                )
+                            }
+
+                        }
+                    }
                 }
             }
 
-            AnimatedVisibility(
-                visible = state.isOrderSectionVisible,
-                enter = slideInVertically() + fadeIn(),
-                exit = slideOutVertically() + fadeOut()
-            ) {
-                Column(modifier = Modifier.padding(MaterialTheme.spacing.small)) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        DefaultRadioButton(
-                            selected = state.selectedOrderType == NoteOrderType.Date,
-                            text = stringResource(id = R.string.date)
-                        ) {
-                            viewModel.onEvent(NoteEvent.OnNoteOrderTypeChange(NoteOrderType.Date))
-                        }
-                        DefaultRadioButton(
-                            selected = state.selectedOrderType == NoteOrderType.Title,
-                            text = stringResource(id = R.string.title)
-                        ) {
-                            viewModel.onEvent(NoteEvent.OnNoteOrderTypeChange(NoteOrderType.Title))
-                        }
-                        DefaultRadioButton(
-                            selected = state.selectedOrderType == NoteOrderType.Color,
-                            text = stringResource(id = R.string.color)
-                        ) {
-                            viewModel.onEvent(NoteEvent.OnNoteOrderTypeChange(NoteOrderType.Color))
-                        }
-                    }
+            //--------------------(hide or show add button)--------------------//
+            if (lazyState.isScrollingUp())
+                viewModel.onEvent(NoteEvent.ListScrollUp)
+            else
+                viewModel.onEvent(NoteEvent.ListScrollDown)
 
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
+            LazyColumn(
+                modifier = Modifier.fillMaxSize(),
+                state = lazyState,
 
-                        DefaultRadioButton(
-                            textStyle = MaterialTheme.typography.body2,
-                            selected = state.selectedOrderSortType == NoteOrderSortType.Ascending,
-                            text = stringResource(id = R.string.ascending)
-                        ) {
-                            viewModel.onEvent(NoteEvent.OnNoteOrderSortTypeChange(NoteOrderSortType.Ascending))
-                        }
-
-                        DefaultRadioButton(
-                            textStyle = MaterialTheme.typography.body2,
-                            selected = state.selectedOrderSortType == NoteOrderSortType.Descending,
-                            text = stringResource(id = R.string.descending)
-                        ) {
-                            viewModel.onEvent(NoteEvent.OnNoteOrderSortTypeChange(NoteOrderSortType.Descending))
-                        }
-
-                    }
-                }
-            }
-        }
-
-        //--------------------(hide or show add button)--------------------//
-        if (lazyState.isScrollingUp())
-            viewModel.onEvent(NoteEvent.ListScrollUp)
-        else
-            viewModel.onEvent(NoteEvent.ListScrollDown)
-
-        LazyColumn(
-            modifier = Modifier.fillMaxSize(),
-            state = lazyState
-        ) {
-            items(state.notes) { note ->
-                NoteItem(
-                    note = note,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(MaterialTheme.spacing.medium)
-                        .clickable {
-                            // TODO:  implement navigate to edit/add screen
-                        }
                 ) {
-                    viewModel.onEvent(NoteEvent.OnDeleteNoteClicked(note = note))
-                    coroutineScope.launch {
-                        scaffoldState.snackbarHostState.currentSnackbarData?.dismiss()
-                        val result = scaffoldState.snackbarHostState.showSnackbar(
-                            message = noteIsDeleted,
-                            actionLabel = undo
-                        )
-                        if (result == SnackbarResult.ActionPerformed)
-                            viewModel.onEvent(NoteEvent.RestoreNote)
+                items(
+                    items = state.notes,
+                    key = { it.id }
+                ) { note ->
+                    NoteItem(
+                        note = note,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(MaterialTheme.spacing.medium)
+                            .clickable {
+                                // TODO:  implement navigate to edit/add screen
+                            }
+                    ) {
+                        viewModel.onEvent(NoteEvent.OnDeleteNoteClicked(note = note))
+                        coroutineScope.launch {
+                            scaffoldState.snackbarHostState.currentSnackbarData?.dismiss()
+                            val result = scaffoldState.snackbarHostState.showSnackbar(
+                                message = noteIsDeleted,
+                                actionLabel = undo
+                            )
+                            if (result == SnackbarResult.ActionPerformed)
+                                viewModel.onEvent(NoteEvent.RestoreNote)
+                        }
                     }
                 }
             }
