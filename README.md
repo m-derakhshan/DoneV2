@@ -38,11 +38,11 @@ I want to develop this project using Kotlin. also, I'm learning TDD; so it is a 
  - [x] Implement Updating Profile Logic.
  - [x] Implementing picture zoomable screen.
  - [ ] uploading and retrieving user image from firebase storage
- - [ ] Design Note Screen.
- - [ ] Implement Add Note logic.
- - [ ] Implement Edit Note logic.
- - [ ] Implement Delete and Restore Note logic.
+ - [x] Design Note Screen.
+ - [x] Implement Add Note logic.
+ - [x] Implement Edit Note logic.
+ - [x] Implement Delete and Restore Note logic.
  - [ ] Implemen Search Note
- - [ ] Implement Sort Note Screen Notes based on : Title, Date
+ - [x] Implement Sort Note Screen Notes based on : Title, Date,Color in both ASC and DESC order.
  - [ ] Design Task Screen.
  - [ ] ...
