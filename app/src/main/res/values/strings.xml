@@ -27,7 +27,7 @@
 
     <string name="ascending">Ascending</string>
     <string name="descending">Descending</string>
-    <string name="order_notes_by">Order Notes by:</string>
+    <string name="order_notes">Order Notes</string>
 
 
 </resources>

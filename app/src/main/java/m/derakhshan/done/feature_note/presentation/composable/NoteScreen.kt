@@ -2,6 +2,7 @@ package m.derakhshan.done.feature_note.presentation.composable
 
 import androidx.compose.animation.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -10,8 +11,11 @@ import androidx.compose.material.icons.filled.Sort
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import m.derakhshan.done.R
@@ -51,31 +55,43 @@ fun NoteScreen(
             }
         }
     ) {
+
+        //--------------------(order section)--------------------//
         Column(
             modifier = Modifier
-                .padding(MaterialTheme.spacing.small)
-                .fillMaxSize(),
+                .shadow(
+                    elevation = 1.dp,
+                    shape = RoundedCornerShape(bottomEnd = 20.dp, bottomStart = 20.dp)
+                )
+                .clip(shape = RoundedCornerShape(bottomEnd = 20.dp, bottomStart = 20.dp))
+                .padding(MaterialTheme.spacing.small),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            IconButton(
-                onClick = { viewModel.onEvent(NoteEvent.ToggleOrderSectionVisibility) },
-                modifier = Modifier.align(Alignment.End)
+
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.fillMaxWidth()
             ) {
-                Icon(imageVector = Icons.Default.Sort, contentDescription = "sort")
+
+                Text(
+                    text = stringResource(id = R.string.order_notes),
+                    style = MaterialTheme.typography.h5
+                )
+
+                IconButton(
+                    onClick = { viewModel.onEvent(NoteEvent.ToggleOrderSectionVisibility) },
+                ) {
+                    Icon(imageVector = Icons.Default.Sort, contentDescription = "sort")
+                }
             }
+
             AnimatedVisibility(
                 visible = state.isOrderSectionVisible,
                 enter = slideInVertically() + fadeIn(),
                 exit = slideOutVertically() + fadeOut()
             ) {
 
-                Column {
-
-                    Text(
-                        text = stringResource(id = R.string.order_notes_by),
-                        style = MaterialTheme.typography.h5
-                    )
-
+                Column(modifier = Modifier.padding(MaterialTheme.spacing.small)) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween
@@ -126,6 +142,7 @@ fun NoteScreen(
 
             }
         }
+
 
     }
 }
