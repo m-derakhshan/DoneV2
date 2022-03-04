@@ -29,15 +29,4 @@ class Setting @Inject constructor(
             edit.apply()
             return id
         }
-
-    var userProfileImage: String
-        set(value) {
-            edit.putString("userProfileImage", value)
-            edit.apply()
-        }
-        get() = share.getString(
-            "userProfileImage",
-            "https://www.constrack.ng/uploads/icon-user-default.png"
-        ) ?: "https://www.constrack.ng/uploads/icon-user-default.png"
-
 }

@@ -21,3 +21,6 @@ data class NoteModel(
         )
     }
 }
+
+
+class InvalidNoteException(message: String) : Exception(message)

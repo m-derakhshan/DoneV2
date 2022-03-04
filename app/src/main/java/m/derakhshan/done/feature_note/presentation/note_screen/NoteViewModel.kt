@@ -75,7 +75,7 @@ class NoteViewModel @Inject constructor(
             orderType = _state.value.selectedOrderType,
             sortType = _state.value.selectedOrderSortType
         ).onEach {
-            it?.let { notes->
+            it?.let { notes ->
                 _state.value = _state.value.copy(
                     notes = notes
                 )

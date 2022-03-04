@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.graphics.ColorUtils
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import m.derakhshan.done.core.presentation.composable.BackSwipeGesture
 import m.derakhshan.done.feature_note.domain.model.NoteModel
@@ -43,8 +44,15 @@ fun AddEditNoteScreen(
     val scaffoldState = rememberScaffoldState()
     val scope = rememberCoroutineScope()
     val scrollState = rememberScrollState()
-    var offset by remember {
-        mutableStateOf(0f)
+    var offset by remember { mutableStateOf(0f) }
+
+    LaunchedEffect(Unit) {
+        viewModel.snackBar.collectLatest { message ->
+            if (message.isNotEmpty()) {
+                scaffoldState.snackbarHostState.currentSnackbarData?.dismiss()
+                scaffoldState.snackbarHostState.showSnackbar(message = message)
+            }
+        }
     }
 
     val backgroundAnimation = remember {

@@ -29,7 +29,8 @@ object NoteModule {
     @Singleton
     fun provideAddEditNoteUseCase(repository: NoteRepository): AddEditNoteUseCases {
         return AddEditNoteUseCases(
-            insertNoteUseCase = InsertNoteUseCase(repository = repository)
+            insertNoteUseCase = InsertNoteUseCase(repository = repository),
+            getNoteById = GetNoteById(repository = repository)
         )
     }
 
