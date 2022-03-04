@@ -10,12 +10,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.unit.dp
-import m.derakhshan.done.ui.theme.Blue
+import m.derakhshan.done.ui.theme.LightBlue
 import m.derakhshan.done.ui.theme.White
 
 
 @Composable
-fun BackSwipeGesture(offset: Float, arcColor: Color = Blue) {
+fun BackSwipeGesture(offset: Float, arcColor: Color = LightBlue) {
 
     Canvas(modifier = Modifier.fillMaxSize(), onDraw = {
         val path = Path().apply {
