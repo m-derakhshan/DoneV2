@@ -14,7 +14,7 @@ class GreetingsUseCase(
         return mapOf(
             Pair(
                 when {
-                    hour == 0 || hour == 24 && minute == 0 -> "Good midnight, "
+                    (hour == 0 || hour == 24) && (minute == 0) -> "Good midnight, "
                     hour < 12 -> "Good morning, "
                     hour == 12 && minute == 0 -> "Good noon, "
                     hour < 18 -> "Good afternoon, "
