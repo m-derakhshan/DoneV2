@@ -53,10 +53,10 @@ class NoteViewModel @Inject constructor(
                 )
             }
             NoteEvent.ListScrollDown -> {
-                _state.value = _state.value.copy(fabOffset = (-10).dp)
+                _state.value = _state.value.copy(fabOffset = (100).dp)
             }
             NoteEvent.ListScrollUp -> {
-                _state.value = _state.value.copy(fabOffset = 0.dp)
+                _state.value = _state.value.copy(fabOffset = (0).dp)
             }
             NoteEvent.RestoreNote -> {
                 viewModelScope.launch {
