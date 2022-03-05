@@ -11,13 +11,15 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import m.derakhshan.done.core.data.data_source.Setting
 import m.derakhshan.done.feature_note.domain.model.NoteModel
 import m.derakhshan.done.feature_note.domain.use_case.NoteUseCases
 import javax.inject.Inject
 
 @HiltViewModel
 class NoteViewModel @Inject constructor(
-    private val useCases: NoteUseCases
+    private val useCases: NoteUseCases,
+    private val setting: Setting
 ) : ViewModel() {
 
     private var job: Job? = null
@@ -27,6 +29,10 @@ class NoteViewModel @Inject constructor(
     private var lastNote: NoteModel? = null
 
     init {
+        _state.value = _state.value.copy(
+            selectedOrderType = setting.noteOrderType,
+            selectedOrderSortType = setting.noteOrderSortType
+        )
         getNotes()
     }
 
@@ -40,10 +46,12 @@ class NoteViewModel @Inject constructor(
             }
             is NoteEvent.OnNoteOrderTypeChange -> {
                 _state.value = _state.value.copy(selectedOrderType = event.orderType)
+                setting.noteOrderType = event.orderType
                 getNotes()
             }
             is NoteEvent.OnNoteOrderSortTypeChange -> {
                 _state.value = _state.value.copy(selectedOrderSortType = event.sortType)
+                setting.noteOrderSortType = event.sortType
                 getNotes()
             }
 

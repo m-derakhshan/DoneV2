@@ -2,6 +2,8 @@ package m.derakhshan.done.core.data.data_source
 
 import android.content.Context
 import dagger.hilt.android.qualifiers.ApplicationContext
+import m.derakhshan.done.feature_note.domain.model.NoteOrderSortType
+import m.derakhshan.done.feature_note.domain.model.NoteOrderType
 import javax.inject.Inject
 
 class Setting @Inject constructor(
@@ -28,5 +30,42 @@ class Setting @Inject constructor(
             edit.putInt("lastNoteId", id + 1)
             edit.apply()
             return id
+        }
+
+    var noteOrderSortType: NoteOrderSortType
+        set(value) {
+            edit.putString(
+                "noteOrderSortType", when (value) {
+                    is NoteOrderSortType.Ascending -> "Ascending"
+                    is NoteOrderSortType.Descending -> "Descending"
+                }
+            )
+            edit.apply()
+        }
+        get() {
+            val type = share.getString("noteOrderSortType", "Ascending")
+            return if (type == "Ascending")
+                NoteOrderSortType.Ascending
+            else NoteOrderSortType.Descending
+        }
+
+    var noteOrderType: NoteOrderType
+        set(value) {
+            edit.putString(
+                "NoteOrderType", when (value) {
+                    is NoteOrderType.Color -> "Color"
+                    is NoteOrderType.Date -> "Date"
+                    is NoteOrderType.Title -> "Title"
+
+                }
+            )
+            edit.apply()
+        }
+        get() {
+            return when (share.getString("NoteOrderType", "Date")) {
+                "Color" -> NoteOrderType.Color
+                "Title" -> NoteOrderType.Title
+                else -> NoteOrderType.Date
+            }
         }
 }
