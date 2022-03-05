@@ -1,6 +1,10 @@
 package m.derakhshan.done.feature_note.presentation.note_screen
 
 
+import android.util.Log
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Sync
+import androidx.compose.material.icons.filled.SyncDisabled
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.unit.dp
@@ -13,6 +17,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import m.derakhshan.done.core.data.data_source.Setting
 import m.derakhshan.done.feature_note.domain.model.NoteModel
+import m.derakhshan.done.feature_note.domain.model.NoteSyncModel
 import m.derakhshan.done.feature_note.domain.use_case.NoteUseCases
 import javax.inject.Inject
 
@@ -23,6 +28,10 @@ class NoteViewModel @Inject constructor(
 ) : ViewModel() {
 
     private var job: Job? = null
+    private var syncJob: Job? = null
+
+    private var noteToSyncList = ArrayList<NoteSyncModel>()
+
     private val _state = mutableStateOf(NoteState())
     val state: State<NoteState> = _state
 
@@ -87,8 +96,20 @@ class NoteViewModel @Inject constructor(
                 )
                 getNotes()
             }
+            NoteEvent.OnNoteSyncClicked -> {
+                viewModelScope.launch {
+                    _state.value = _state.value.copy(
+                        isSyncIconRotating = true
+                    )
+                    useCases.syncNotes(notes = noteToSyncList)
+                    _state.value = _state.value.copy(
+                        isSyncIconRotating = false
+                    )
+                }
+            }
         }
     }
+
 
     private fun getNotes() {
         job?.cancel()
@@ -102,12 +123,29 @@ class NoteViewModel @Inject constructor(
                     notes = notes
                 )
             }
+            getSyncNotes()
         }.launchIn(viewModelScope)
+    }
+
+
+    private fun getSyncNotes() {
+        syncJob?.cancel()
+        syncJob = useCases.getNotesToSync().onEach {
+            _state.value = _state.value.copy(
+                syncNumber = it?.size ?: 0,
+                syncIcon = if (it != null && it.isNotEmpty()) Icons.Default.Sync else Icons.Default.SyncDisabled
+            )
+            it?.let { notes ->
+                noteToSyncList.addAll(notes)
+            }
+        }.launchIn(viewModelScope)
+
     }
 
 
     override fun onCleared() {
         job?.cancel()
+        syncJob?.cancel()
         super.onCleared()
     }
 }

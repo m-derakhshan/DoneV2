@@ -2,6 +2,8 @@ package m.derakhshan.done.feature_note.presentation.note_screen.composable
 
 import androidx.compose.animation.*
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.Orientation
@@ -12,6 +14,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.*
@@ -23,6 +26,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
@@ -40,8 +44,7 @@ import m.derakhshan.done.feature_note.domain.model.NoteOrderSortType
 import m.derakhshan.done.feature_note.domain.model.NoteOrderType
 import m.derakhshan.done.feature_note.presentation.note_screen.NoteEvent
 import m.derakhshan.done.feature_note.presentation.note_screen.NoteViewModel
-import m.derakhshan.done.ui.theme.LightGray
-import m.derakhshan.done.ui.theme.spacing
+import m.derakhshan.done.ui.theme.*
 
 @Composable
 fun NoteScreen(
@@ -59,6 +62,10 @@ fun NoteScreen(
     val fabOffset by animateDpAsState(targetValue = state.fabOffset)
     val searchFocusRequest = remember { FocusRequester() }
     var offset by remember { mutableStateOf(0f) }
+    val syncRotation by animateFloatAsState(
+        targetValue = if (state.isSyncIconRotating && state.syncNumber > 0) 360000f else 0f,
+        animationSpec = tween(60000)
+    )
 
     //--------------------(request focus for opening the keyboard for searching)--------------------//
     LaunchedEffect(state.isSearchSectionVisible) {
@@ -81,12 +88,46 @@ fun NoteScreen(
             ),
         topBar = {
             TopAppBar {
-                Text(
-                    text = stringResource(id = R.string.notes),
-                    style = MaterialTheme.typography.h6,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.fillMaxWidth()
-                )
+                Box {
+
+                    if (state.syncNumber > 0)
+                        Box(
+                            modifier = Modifier
+                                .size(21.dp)
+                                .clip(shape = CircleShape)
+                                .background(color = Red, shape = CircleShape)
+                        ) {
+                            Text(
+                                text = state.syncNumber.toString(),
+                                color = White,
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier.align(Alignment.Center),
+                                style = MaterialTheme.typography.body2
+                            )
+                        }
+
+
+
+                    IconButton(
+                        onClick = { viewModel.onEvent(NoteEvent.OnNoteSyncClicked) },
+                        enabled = state.syncNumber > 0
+                    ) {
+                        Icon(
+                            imageVector = state.syncIcon,
+                            contentDescription = "sync",
+                            modifier = Modifier.rotate(syncRotation)
+                        )
+                    }
+
+                    Text(
+                        text = stringResource(id = R.string.notes),
+                        style = MaterialTheme.typography.h6,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .align(Alignment.Center)
+                    )
+                }
             }
         },
         floatingActionButton = {

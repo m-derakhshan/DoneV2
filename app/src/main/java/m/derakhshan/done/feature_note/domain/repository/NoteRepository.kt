@@ -4,6 +4,7 @@ import kotlinx.coroutines.flow.Flow
 import m.derakhshan.done.feature_note.domain.model.NoteModel
 import m.derakhshan.done.feature_note.domain.model.NoteOrderSortType
 import m.derakhshan.done.feature_note.domain.model.NoteOrderType
+import m.derakhshan.done.feature_note.domain.model.NoteSyncModel
 
 interface NoteRepository {
     fun getNotes(
@@ -17,4 +18,6 @@ interface NoteRepository {
     suspend fun insertNote(note: NoteModel)
     suspend fun insertNote(notes: List<NoteModel>)
     suspend fun getNoteById(noteId: Int): NoteModel?
+    fun getNoteToSync(): Flow<List<NoteSyncModel>?>
+    suspend fun syncNotes(note: NoteSyncModel)
 }

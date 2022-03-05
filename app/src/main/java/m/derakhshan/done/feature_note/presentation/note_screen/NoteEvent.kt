@@ -15,4 +15,5 @@ sealed class NoteEvent {
     object RestoreNote : NoteEvent()
     object ListScrollUp : NoteEvent()
     object ListScrollDown : NoteEvent()
+    object OnNoteSyncClicked : NoteEvent()
 }

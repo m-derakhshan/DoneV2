@@ -22,4 +22,7 @@ interface UserDao {
     @Query("SELECT name FROM UserModel Limit 1")
     fun getUserName(): Flow<String>
 
+    @Query("SELECT uid FROM UserModel Limit 1")
+    suspend fun getUserId(): String
+
 }
