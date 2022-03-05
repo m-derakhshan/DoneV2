@@ -1,13 +1,12 @@
 package m.derakhshan.done.feature_authentication.data.repository
 
 
-
-
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
+import m.derakhshan.done.core.data.data_source.Setting
 import m.derakhshan.done.core.domain.model.Response
 import m.derakhshan.done.feature_authentication.data.data_source.dao.UserDao
 import m.derakhshan.done.feature_authentication.domain.model.UserModel
@@ -23,6 +22,7 @@ class AuthenticationRepositoryImpl @Inject constructor(
     private val storage: FirebaseFirestore,
     private val userDao: UserDao,
     private val noteDao: NoteDao,
+    private val setting: Setting
 ) : AuthenticationRepository {
     override suspend fun login(email: String, password: String): Response<UserModel> {
 
@@ -49,8 +49,14 @@ class AuthenticationRepositoryImpl @Inject constructor(
                         .collection("notes").get().await()
 
                     val notes = ArrayList<NoteModel>()
+                    var maxNoteId = 0
                     for (item in noteInfo.documents.map { it.data }) {
                         item?.let {
+
+                            maxNoteId = if (maxNoteId > item["id"].toString()
+                                    .toInt()
+                            ) maxNoteId else item["id"].toString().toInt()
+
                             notes.add(
                                 NoteModel(
                                     id = item["id"].toString().toInt(),
@@ -63,7 +69,7 @@ class AuthenticationRepositoryImpl @Inject constructor(
                         }
                     }
                     noteDao.insertAll(notes = notes)
-
+                    setting.lastNoteId = maxNoteId
                     Response.Success(newUser)
 
                 }
