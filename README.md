@@ -37,15 +37,15 @@ I want to develop this project using Kotlin. also, I'm learning TDD; so it is a 
  - [x] Design Profile Screen.
  - [x] Implement Updating Profile Logic.
  - [x] Implementing picture zoomable screen.
- - [ ] uploading and retrieving user image from firebase storage
+ - [ ] **uploading and retrieving user image from firebase storage**
  - [x] Design Note Screen.
  - [x] Implement Add Note logic.
  - [x] Implement Edit Note logic.
  - [x] Implement Delete and Restore Note logic.
  - [x] Implemen Search Note
  - [x] Implement Sort Note Screen Notes based on : Title, Date,Color in both ASC and DESC order.
- - [ ] Save notes on firebase firestore
- - [ ] retrieve notes when user login.
+ - [x] Save notes on firebase firestore
+ - [x] retrieve notes when user login.
  - [x] Store user prefers order and reload them.
  - [ ] Design Task Screen.
  - [ ] ...
