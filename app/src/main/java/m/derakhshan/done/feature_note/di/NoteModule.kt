@@ -6,7 +6,6 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import m.derakhshan.done.core.data.data_source.DoneDatabase
-import m.derakhshan.done.feature_note.data.data_source.NoteSyncDao
 import m.derakhshan.done.feature_note.data.repository.NoteRepositoryImpl
 import m.derakhshan.done.feature_note.domain.repository.NoteRepository
 import m.derakhshan.done.feature_note.domain.use_case.*

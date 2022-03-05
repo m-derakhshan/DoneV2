@@ -1,7 +1,7 @@
 package m.derakhshan.done.feature_note.presentation.note_screen
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Sync
+import androidx.compose.material.icons.filled.SyncDisabled
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -17,7 +17,7 @@ data class NoteState(
     val selectedOrderSortType: NoteOrderSortType = NoteOrderSortType.Ascending,
     val selectedOrderType: NoteOrderType = NoteOrderType.Date,
     val search: String = "",
-    val syncIcon: ImageVector = Icons.Default.Sync,
+    val syncIcon: ImageVector = Icons.Default.SyncDisabled,
     val isSyncIconRotating: Boolean = false,
     val syncNumber: Int = 0
 )

@@ -44,7 +44,10 @@ import m.derakhshan.done.feature_note.domain.model.NoteOrderSortType
 import m.derakhshan.done.feature_note.domain.model.NoteOrderType
 import m.derakhshan.done.feature_note.presentation.note_screen.NoteEvent
 import m.derakhshan.done.feature_note.presentation.note_screen.NoteViewModel
-import m.derakhshan.done.ui.theme.*
+import m.derakhshan.done.ui.theme.LightGray
+import m.derakhshan.done.ui.theme.Red
+import m.derakhshan.done.ui.theme.White
+import m.derakhshan.done.ui.theme.spacing
 
 @Composable
 fun NoteScreen(
@@ -63,7 +66,7 @@ fun NoteScreen(
     val searchFocusRequest = remember { FocusRequester() }
     var offset by remember { mutableStateOf(0f) }
     val syncRotation by animateFloatAsState(
-        targetValue = if (state.isSyncIconRotating && state.syncNumber > 0) 360000f else 0f,
+        targetValue = if (state.isSyncIconRotating) 360000f else 0f,
         animationSpec = tween(60000)
     )
 

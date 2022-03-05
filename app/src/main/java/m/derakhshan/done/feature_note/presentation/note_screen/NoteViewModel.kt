@@ -1,7 +1,6 @@
 package m.derakhshan.done.feature_note.presentation.note_screen
 
 
-import android.util.Log
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Sync
 import androidx.compose.material.icons.filled.SyncDisabled
@@ -97,15 +96,17 @@ class NoteViewModel @Inject constructor(
                 getNotes()
             }
             NoteEvent.OnNoteSyncClicked -> {
+                _state.value = _state.value.copy(
+                    isSyncIconRotating = true
+                )
                 viewModelScope.launch {
-                    _state.value = _state.value.copy(
-                        isSyncIconRotating = true
-                    )
                     useCases.syncNotes(notes = noteToSyncList)
+
                     _state.value = _state.value.copy(
                         isSyncIconRotating = false
                     )
                 }
+
             }
         }
     }
