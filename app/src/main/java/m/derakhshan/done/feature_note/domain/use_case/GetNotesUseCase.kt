@@ -11,8 +11,9 @@ class GetNotesUseCase @Inject constructor(private val repository: NoteRepository
 
     operator fun invoke(
         orderType: NoteOrderType,
-        sortType: NoteOrderSortType
+        sortType: NoteOrderSortType,
+        keyword: String
     ): Flow<List<NoteModel>?> {
-        return repository.getNotes(orderType = orderType, sortType = sortType)
+        return repository.getNotes(orderType = orderType, sortType = sortType, keyword = keyword)
     }
 }

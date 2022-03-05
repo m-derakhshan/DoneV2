@@ -14,10 +14,15 @@ class NoteRepositoryImpl(
 ) : NoteRepository {
     override fun getNotes(
         orderType: NoteOrderType,
-        sortType: NoteOrderSortType
+        sortType: NoteOrderSortType,
+        keyword: String
     ): Flow<List<NoteModel>?> {
 
-        return noteDao.getNotes().map { items ->
+        val dao =
+            if (keyword.isBlank()) noteDao.getNotes()
+            else noteDao.searchNotes(keyword = keyword)
+
+        return dao.map { items ->
             when (orderType) {
                 NoteOrderType.Color ->
                     if (sortType is NoteOrderSortType.Ascending)

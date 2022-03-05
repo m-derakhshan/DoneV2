@@ -77,6 +77,7 @@ class NoteViewModel @Inject constructor(
                 _state.value = _state.value.copy(
                     search = event.search
                 )
+                getNotes()
             }
         }
     }
@@ -85,7 +86,8 @@ class NoteViewModel @Inject constructor(
         job?.cancel()
         job = useCases.getNotes(
             orderType = _state.value.selectedOrderType,
-            sortType = _state.value.selectedOrderSortType
+            sortType = _state.value.selectedOrderSortType,
+            keyword = _state.value.search
         ).onEach {
             it?.let { notes ->
                 _state.value = _state.value.copy(
