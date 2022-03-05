@@ -2,22 +2,30 @@ package m.derakhshan.done.feature_note.presentation.note_screen.composable
 
 import androidx.compose.animation.*
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.draggable
+import androidx.compose.foundation.gestures.rememberDraggableState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Sort
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -25,12 +33,14 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import kotlinx.coroutines.launch
 import m.derakhshan.done.R
+import m.derakhshan.done.core.presentation.composable.BackSwipeGesture
 import m.derakhshan.done.core.presentation.composable.DefaultRadioButton
 import m.derakhshan.done.feature_home.presentation.HomeNavGraph
 import m.derakhshan.done.feature_note.domain.model.NoteOrderSortType
 import m.derakhshan.done.feature_note.domain.model.NoteOrderType
 import m.derakhshan.done.feature_note.presentation.note_screen.NoteEvent
 import m.derakhshan.done.feature_note.presentation.note_screen.NoteViewModel
+import m.derakhshan.done.ui.theme.LightGray
 import m.derakhshan.done.ui.theme.spacing
 
 @Composable
@@ -47,10 +57,28 @@ fun NoteScreen(
     val noteIsDeleted = stringResource(id = R.string.note_is_deleted)
     val undo = stringResource(id = R.string.undo)
     val fabOffset by animateDpAsState(targetValue = state.fabOffset)
+    val searchFocusRequest = remember { FocusRequester() }
+    var offset by remember { mutableStateOf(0f) }
+
+    //--------------------(request focus for opening the keyboard for searching)--------------------//
+    LaunchedEffect(state.isSearchSectionVisible) {
+        if (state.isSearchSectionVisible)
+            searchFocusRequest.requestFocus()
+    }
 
     Scaffold(
         scaffoldState = scaffoldState,
-        modifier = Modifier.padding(paddingValues),
+        modifier = Modifier
+            .padding(paddingValues)
+            .draggable(
+                orientation = Orientation.Horizontal, state = rememberDraggableState { delta ->
+                    offset += (delta * 0.2f)
+                }, onDragStopped = {
+                    if (offset > 90)
+                        navController.navigateUp()
+                    offset = 0f
+                }
+            ),
         topBar = {
             TopAppBar {
                 Text(
@@ -93,13 +121,24 @@ fun NoteScreen(
                         style = MaterialTheme.typography.h5
                     )
 
-                    IconButton(
-                        onClick = { viewModel.onEvent(NoteEvent.ToggleOrderSectionVisibility) },
-                    ) {
-                        Icon(imageVector = Icons.Default.Sort, contentDescription = "sort")
+                    Row {
+
+                        IconButton(
+                            onClick = { viewModel.onEvent(NoteEvent.ToggleSearchSectionVisibility) },
+                        ) {
+                            Icon(imageVector = Icons.Default.Search, contentDescription = "search")
+
+                        }
+                        IconButton(
+                            onClick = { viewModel.onEvent(NoteEvent.ToggleOrderSectionVisibility) },
+                        ) {
+                            Icon(imageVector = Icons.Default.Sort, contentDescription = "sort")
+                        }
+
                     }
                 }
 
+                //--------------------(order section)--------------------//
                 AnimatedVisibility(
                     visible = state.isOrderSectionVisible,
                     enter = slideInVertically() + fadeIn(),
@@ -164,6 +203,32 @@ fun NoteScreen(
                         }
                     }
                 }
+
+                //--------------------(search section)--------------------//
+                AnimatedVisibility(
+                    visible = state.isSearchSectionVisible,
+                    enter = slideInVertically() + fadeIn(),
+                    exit = slideOutVertically() + fadeOut()
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .padding(MaterialTheme.spacing.small)
+                            .background(color = LightGray, shape = RoundedCornerShape(10.dp))
+                            .padding(MaterialTheme.spacing.medium)
+                    ) {
+                        BasicTextField(
+                            value = state.search,
+                            onValueChange = {
+                                viewModel.onEvent(NoteEvent.Search(it))
+                            },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .focusRequester(searchFocusRequest),
+                            maxLines = 1,
+                        )
+                    }
+                }
+
             }
 
             //--------------------(hide or show add button)--------------------//
@@ -207,6 +272,8 @@ fun NoteScreen(
                 }
             }
         }
+
+        BackSwipeGesture(offset = offset)
     }
 }
 

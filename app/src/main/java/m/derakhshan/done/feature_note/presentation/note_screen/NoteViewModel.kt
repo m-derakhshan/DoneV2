@@ -47,24 +47,36 @@ class NoteViewModel @Inject constructor(
                 getNotes()
             }
 
-            is NoteEvent.ToggleOrderSectionVisibility -> {
-                _state.value = _state.value.copy(
-                    isOrderSectionVisible = !_state.value.isOrderSectionVisible
-                )
-            }
-            NoteEvent.ListScrollDown -> {
+            is NoteEvent.ListScrollDown -> {
                 _state.value = _state.value.copy(fabOffset = (100).dp)
             }
-            NoteEvent.ListScrollUp -> {
+            is NoteEvent.ListScrollUp -> {
                 _state.value = _state.value.copy(fabOffset = (0).dp)
             }
-            NoteEvent.RestoreNote -> {
+            is NoteEvent.RestoreNote -> {
                 viewModelScope.launch {
                     lastNote?.let { note ->
                         useCases.restoreNote(note)
                     }
                     lastNote = null
                 }
+            }
+            is NoteEvent.ToggleOrderSectionVisibility -> {
+                _state.value = _state.value.copy(
+                    isOrderSectionVisible = !_state.value.isOrderSectionVisible,
+                    isSearchSectionVisible = false
+                )
+            }
+            is NoteEvent.ToggleSearchSectionVisibility -> {
+                _state.value = _state.value.copy(
+                    isSearchSectionVisible = !_state.value.isSearchSectionVisible,
+                    isOrderSectionVisible = false
+                )
+            }
+            is NoteEvent.Search -> {
+                _state.value = _state.value.copy(
+                    search = event.search
+                )
             }
         }
     }
