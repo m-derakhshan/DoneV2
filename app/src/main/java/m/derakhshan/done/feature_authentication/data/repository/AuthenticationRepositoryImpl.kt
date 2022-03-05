@@ -32,8 +32,6 @@ class AuthenticationRepositoryImpl @Inject constructor(
             authentication.signInWithEmailAndPassword(email, password)
                 .await()
                 .user.let { info ->
-
-
                     val userInformation =
                         storage.collection("users").document(info!!.uid).get().await()
 
@@ -52,14 +50,15 @@ class AuthenticationRepositoryImpl @Inject constructor(
                     var maxNoteId = 0
                     for (item in noteInfo.documents.map { it.data }) {
                         item?.let {
-
-                            maxNoteId = if (maxNoteId > item["id"].toString()
-                                    .toInt()
-                            ) maxNoteId else item["id"].toString().toInt()
+                            val noteId = item["id"].toString().toInt()
+                            maxNoteId = if (maxNoteId > noteId)
+                                maxNoteId
+                            else
+                                noteId
 
                             notes.add(
                                 NoteModel(
-                                    id = item["id"].toString().toInt(),
+                                    id = noteId,
                                     title = item["title"] as String,
                                     content = item["content"] as String,
                                     timestamp = item["timestamp"] as Long,
@@ -69,7 +68,7 @@ class AuthenticationRepositoryImpl @Inject constructor(
                         }
                     }
                     noteDao.insertAll(notes = notes)
-                    setting.lastNoteId = maxNoteId+1
+                    setting.lastNoteId = maxNoteId + 1
                     Response.Success(newUser)
 
                 }
