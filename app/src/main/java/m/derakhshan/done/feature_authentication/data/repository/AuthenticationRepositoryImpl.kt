@@ -1,6 +1,8 @@
 package m.derakhshan.done.feature_authentication.data.repository
 
 
+
+
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthInvalidUserException
@@ -11,13 +13,16 @@ import m.derakhshan.done.feature_authentication.data.data_source.dao.UserDao
 import m.derakhshan.done.feature_authentication.domain.model.UserModel
 import m.derakhshan.done.feature_authentication.domain.repository.AuthenticationRepository
 import m.derakhshan.done.feature_authentication.utils.credentialValidityChecker
+import m.derakhshan.done.feature_note.data.data_source.NoteDao
+import m.derakhshan.done.feature_note.domain.model.NoteModel
 import java.util.concurrent.CancellationException
 import javax.inject.Inject
 
 class AuthenticationRepositoryImpl @Inject constructor(
     private val authentication: FirebaseAuth,
     private val storage: FirebaseFirestore,
-    private val databaseDao: UserDao
+    private val userDao: UserDao,
+    private val noteDao: NoteDao,
 ) : AuthenticationRepository {
     override suspend fun login(email: String, password: String): Response<UserModel> {
 
@@ -37,7 +42,28 @@ class AuthenticationRepositoryImpl @Inject constructor(
                         email = email,
                         name = userInformation.data?.get("name").toString()
                     )
-                    databaseDao.insert(newUser)
+                    userDao.insert(newUser)
+
+
+                    val noteInfo = storage.collection("users").document(info.uid)
+                        .collection("notes").get().await()
+
+                    val notes = ArrayList<NoteModel>()
+                    for (item in noteInfo.documents.map { it.data }) {
+                        item?.let {
+                            notes.add(
+                                NoteModel(
+                                    id = item["id"].toString().toInt(),
+                                    title = item["title"] as String,
+                                    content = item["content"] as String,
+                                    timestamp = item["timestamp"] as Long,
+                                    color = item["color"].toString().toInt()
+                                )
+                            )
+                        }
+                    }
+                    noteDao.insertAll(notes = notes)
+
                     Response.Success(newUser)
 
                 }
@@ -77,7 +103,7 @@ class AuthenticationRepositoryImpl @Inject constructor(
                         email = email,
                         name = name
                     )
-                    databaseDao.insert(newUser)
+                    userDao.insert(newUser)
                     Response.Success(newUser)
                 }
         } catch (e: Exception) {

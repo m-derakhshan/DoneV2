@@ -40,7 +40,8 @@ object AuthenticationModule {
         return AuthenticationRepositoryImpl(
             authentication = authentication,
             storage = storage,
-            databaseDao = database.userDao
+            userDao = database.userDao,
+            noteDao = database.noteDao
         )
     }
 }
