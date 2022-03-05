@@ -46,6 +46,6 @@ I want to develop this project using Kotlin. also, I'm learning TDD; so it is a 
  - [x] Implement Sort Note Screen Notes based on : Title, Date,Color in both ASC and DESC order.
  - [ ] Save notes on firebase firestore
  - [ ] retrieve notes when user login.
- - [ ] Store user prefers order and reload them.
+ - [x] Store user prefers order and reload them.
  - [ ] Design Task Screen.
  - [ ] ...
