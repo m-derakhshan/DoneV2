@@ -69,7 +69,7 @@ class AuthenticationRepositoryImpl @Inject constructor(
                         }
                     }
                     noteDao.insertAll(notes = notes)
-                    setting.lastNoteId = maxNoteId
+                    setting.lastNoteId = maxNoteId+1
                     Response.Success(newUser)
 
                 }
