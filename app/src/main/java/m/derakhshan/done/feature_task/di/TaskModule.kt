@@ -10,6 +10,7 @@ import m.derakhshan.done.feature_task.domain.repository.TaskRepository
 import m.derakhshan.done.feature_task.domain.use_case.GetTasksUseCase
 import m.derakhshan.done.feature_task.domain.use_case.InsertNewTask
 import m.derakhshan.done.feature_task.domain.use_case.TaskUseCases
+import m.derakhshan.done.feature_task.domain.use_case.UpdateTaskStatus
 import javax.inject.Singleton
 
 
@@ -30,7 +31,8 @@ object TaskModule {
     fun provideTaskUseCases(repository: TaskRepository): TaskUseCases {
         return TaskUseCases(
             getTasksUseCase = GetTasksUseCase(repository = repository),
-            insertNewTask = InsertNewTask(repository = repository)
+            insertNewTask = InsertNewTask(repository = repository),
+            updateTaskStatus = UpdateTaskStatus(repository = repository)
         )
     }
 

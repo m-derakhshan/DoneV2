@@ -86,7 +86,10 @@ fun TaskScreen(
                             color = White
                         )
                     }
-                    items(items = (taskGroup.tasks), key = { it.id }) { item ->
+                    items(
+                        items = (taskGroup.tasks),
+                        key = { it.id }
+                    ) { item ->
                         TaskItem(task = item, onCheckChange = {
                             viewModel.onEvent(
                                 TaskEvent.OnTaskCheckClicked(

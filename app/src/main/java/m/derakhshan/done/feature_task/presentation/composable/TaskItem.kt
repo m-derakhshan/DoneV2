@@ -119,7 +119,6 @@ fun TaskItem(task: TaskModel, onCheckChange: (Boolean) -> Unit) {
                             when (task.status) {
                                 is TaskStatus.Done -> Green
                                 is TaskStatus.InProgress -> Blue
-                                is TaskStatus.Postpone -> Orange
                             }, shape = CircleShape
                         )
                 )

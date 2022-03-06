@@ -52,7 +52,9 @@ class TaskViewModel @Inject constructor(
                 _state.value = _state.value.copy(fabOffset = (0).dp)
             }
             is TaskEvent.OnTaskCheckClicked -> {
-                // TODO: update the task
+                viewModelScope.launch {
+                    useCase.updateTaskStatus(taskModel = event.task, checked = event.checked)
+                }
             }
         }
 

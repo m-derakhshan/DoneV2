@@ -44,7 +44,6 @@ fun TaskModel.toDarkColor():Color{
 sealed class TaskStatus(val status:String) {
     object Done : TaskStatus("Done")
     object InProgress : TaskStatus("InProgress")
-    object Postpone : TaskStatus("Postpone")
 }
 
 class TaskStatusConverter {
@@ -53,8 +52,7 @@ class TaskStatusConverter {
     fun fromInt(status: Int): TaskStatus {
         return when (status) {
             0 -> TaskStatus.Done
-            1 -> TaskStatus.Postpone
-            2 -> TaskStatus.InProgress
+            1 -> TaskStatus.InProgress
             else -> throw IllegalArgumentException("Status not found")
         }
     }
@@ -63,8 +61,7 @@ class TaskStatusConverter {
     fun toInt(status: TaskStatus): Int {
         return when (status) {
             is TaskStatus.Done -> 0
-            TaskStatus.Postpone -> 1
-            is TaskStatus.InProgress -> 2
+            is TaskStatus.InProgress -> 1
         }
     }
 }
