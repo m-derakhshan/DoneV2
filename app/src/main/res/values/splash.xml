@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <style name="Theme.App.starting" parent="Theme.SplashScreen">
-        <item name="windowSplashScreenBackground">@color/dark_blue</item>
+        <item name="windowSplashScreenBackground">@color/blue</item>
         <item name="windowSplashScreenAnimatedIcon">@mipmap/logo_256</item>
         <item name="postSplashScreenTheme">@style/Theme.Done</item>
     </style>
+
 </resources>

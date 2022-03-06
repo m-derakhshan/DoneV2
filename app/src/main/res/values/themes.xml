@@ -3,5 +3,6 @@
 
     <style name="Theme.Done" parent="android:Theme.Material.Light.NoActionBar">
         <item name="android:statusBarColor">@color/dark_blue</item>
+
     </style>
 </resources>

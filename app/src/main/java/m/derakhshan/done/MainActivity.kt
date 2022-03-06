@@ -3,6 +3,7 @@ package m.derakhshan.done
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
@@ -20,7 +21,9 @@ class MainActivity : ComponentActivity() {
     @Inject
     lateinit var setting: Setting
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        installSplashScreen()
         super.onCreate(savedInstanceState)
 
         val startDestination = if (setting.isUserLoggedIn)
