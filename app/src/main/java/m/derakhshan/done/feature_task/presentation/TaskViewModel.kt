@@ -37,10 +37,10 @@ class TaskViewModel @Inject constructor(
                     useCase.insertNewTask(
                         TaskModel(
                             description = "just for testing new task\njust for testing new task\njust for testing new task",
-                            color = TaskModel.colors[1].toArgb(),
-                            date = "08-02-2022",
+                            color = TaskModel.colors[3].toArgb(),
+                            date = "09-02-2022",
                             time = "18:28",
-                            status = TaskStatus.Done
+                            status = TaskStatus.InProgress
                         )
                     )
                 }

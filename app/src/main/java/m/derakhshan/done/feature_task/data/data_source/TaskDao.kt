@@ -13,7 +13,7 @@ interface TaskDao {
     @Delete
     suspend fun delete(task: TaskModel)
 
-    @Query("SELECT * FROM TaskModel order by date DESC, status ")
+    @Query("SELECT * FROM TaskModel order by status DESC,date DESC, time DESC")
     fun getTasks(): Flow<List<TaskModel>?>
 
     @Query("DELETE FROM TaskModel")
