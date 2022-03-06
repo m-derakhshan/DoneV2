@@ -3,6 +3,9 @@ package m.derakhshan.done.feature_task.presentation.composable
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.draggable
+import androidx.compose.foundation.gestures.rememberDraggableState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.LazyColumn
@@ -10,8 +13,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
@@ -21,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import m.derakhshan.done.R
+import m.derakhshan.done.core.presentation.composable.BackSwipeGesture
 import m.derakhshan.done.feature_note.presentation.note_screen.composable.isScrollingUp
 import m.derakhshan.done.feature_task.presentation.TaskEvent
 import m.derakhshan.done.feature_task.presentation.TaskViewModel
@@ -38,6 +41,9 @@ fun TaskScreen(
     val state = viewModel.state.value
     val lazyState = rememberLazyListState()
     val fabOffset by animateDpAsState(targetValue = state.fabOffset)
+    var offset by remember {
+        mutableStateOf(0f)
+    }
 
     Scaffold(
         topBar = {
@@ -58,7 +64,19 @@ fun TaskScreen(
                 Icon(imageVector = Icons.Default.Add, contentDescription = "add note")
             }
         },
-        modifier = Modifier.padding(paddingValues)
+        modifier = Modifier
+            .padding(paddingValues)
+            .draggable(
+                orientation = Orientation.Horizontal,
+                state = rememberDraggableState { delta ->
+                    offset += (delta * 0.2f)
+                },
+                onDragStopped = {
+                    if (offset > 90)
+                        navController.navigateUp()
+                    offset = 0f
+                }
+            )
     ) {
         Column(
             modifier = Modifier
@@ -100,11 +118,9 @@ fun TaskScreen(
                         })
                     }
                 }
-
             }
-
         }
 
+        BackSwipeGesture(offset = offset)
     }
-
 }
