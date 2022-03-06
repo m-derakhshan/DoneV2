@@ -29,6 +29,7 @@ object ProfileModule {
         return ProfileRepositoryImpl(
             userDao = database.userDao,
             noteDao = database.noteDao,
+            taskDao = database.taskDao,
             setting = setting,
             authentication = authentication,
             fireStore = fireStore
