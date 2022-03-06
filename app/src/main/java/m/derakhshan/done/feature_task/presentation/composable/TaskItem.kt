@@ -28,10 +28,10 @@ import m.derakhshan.done.feature_task.domain.model.toDarkColor
 import m.derakhshan.done.ui.theme.*
 
 @Composable
-fun TaskItem(task: TaskModel, onCheckChange: (Boolean) -> Unit) {
+fun TaskItem(task: TaskModel, modifier: Modifier = Modifier, onCheckChange: (Boolean) -> Unit) {
 
     Box(
-        modifier = Modifier
+        modifier = modifier
             .alpha(if (task.status == TaskStatus.Done) 0.5f else 1f)
             .padding(MaterialTheme.spacing.small)
             .fillMaxWidth()

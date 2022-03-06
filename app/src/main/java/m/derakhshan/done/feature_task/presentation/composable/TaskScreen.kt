@@ -108,14 +108,17 @@ fun TaskScreen(
                         items = (taskGroup.tasks),
                         key = { it.id }
                     ) { item ->
-                        TaskItem(task = item, onCheckChange = {
-                            viewModel.onEvent(
-                                TaskEvent.OnTaskCheckClicked(
-                                    task = item,
-                                    checked = it
+                        TaskItem(
+                            task = item,
+                            modifier = Modifier.animateItemPlacement(),
+                            onCheckChange = {
+                                viewModel.onEvent(
+                                    TaskEvent.OnTaskCheckClicked(
+                                        task = item,
+                                        checked = it
+                                    )
                                 )
-                            )
-                        })
+                            })
                     }
                 }
             }
