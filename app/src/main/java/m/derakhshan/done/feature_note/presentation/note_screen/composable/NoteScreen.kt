@@ -4,6 +4,7 @@ import androidx.compose.animation.*
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.Orientation
@@ -49,6 +50,7 @@ import m.derakhshan.done.ui.theme.Red
 import m.derakhshan.done.ui.theme.White
 import m.derakhshan.done.ui.theme.spacing
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun NoteScreen(
     navController: NavController,
@@ -293,6 +295,7 @@ fun NoteScreen(
                     NoteItem(
                         note = note,
                         modifier = Modifier
+                            .animateItemPlacement()
                             .fillMaxWidth()
                             .padding(MaterialTheme.spacing.medium)
                             .clickable {
