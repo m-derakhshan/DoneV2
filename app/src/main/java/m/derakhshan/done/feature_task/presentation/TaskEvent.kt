@@ -6,5 +6,6 @@ sealed class TaskEvent {
     object OnNewTaskClicked : TaskEvent()
     object ListScrollUp : TaskEvent()
     object ListScrollDown : TaskEvent()
+    object NewTaskPanelClosed : TaskEvent()
     data class OnTaskCheckClicked(val task: TaskModel,val checked:Boolean) : TaskEvent()
 }

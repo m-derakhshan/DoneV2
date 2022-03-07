@@ -9,7 +9,8 @@ import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.filled.EventAvailable
+import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -17,10 +18,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.unit.TextUnit
-import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import m.derakhshan.done.feature_task.domain.model.TaskModel
 import m.derakhshan.done.feature_task.domain.model.TaskStatus
@@ -43,7 +41,7 @@ fun TaskItem(task: TaskModel, modifier: Modifier = Modifier, onCheckChange: (Boo
         Column(
             modifier = Modifier
                 .offset(x = 5.dp)
-                .background(LightGray, shape = RoundedCornerShape(10.dp))
+                .background(White, shape = RoundedCornerShape(10.dp))
                 .padding(MaterialTheme.spacing.small)
         ) {
 

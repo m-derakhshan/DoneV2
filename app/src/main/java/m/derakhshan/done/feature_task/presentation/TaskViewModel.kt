@@ -33,28 +33,21 @@ class TaskViewModel @Inject constructor(
     fun onEvent(event: TaskEvent) {
         when (event) {
             is TaskEvent.OnNewTaskClicked -> {
-                viewModelScope.launch {
-                    useCase.insertNewTask(
-                        TaskModel(
-                            description = "just for testing new task\njust for testing new task\njust for testing new task",
-                            color = TaskModel.colors[3].toArgb(),
-                            date = "09-02-2022",
-                            time = "18:28",
-                            status = TaskStatus.InProgress
-                        )
-                    )
-                }
+                _state.value = _state.value.copy(showAddTaskSection = true)
             }
-            TaskEvent.ListScrollDown -> {
-                _state.value = _state.value.copy(fabOffset = (100).dp)
-            }
-            TaskEvent.ListScrollUp -> {
-                _state.value = _state.value.copy(fabOffset = (0).dp)
+            is TaskEvent.NewTaskPanelClosed -> {
+                _state.value = _state.value.copy(showAddTaskSection = false)
             }
             is TaskEvent.OnTaskCheckClicked -> {
                 viewModelScope.launch {
                     useCase.updateTaskStatus(taskModel = event.task, checked = event.checked)
                 }
+            }
+            is TaskEvent.ListScrollDown -> {
+                _state.value = _state.value.copy(fabOffset = (100).dp)
+            }
+            is TaskEvent.ListScrollUp -> {
+                _state.value = _state.value.copy(fabOffset = (0).dp)
             }
         }
 
