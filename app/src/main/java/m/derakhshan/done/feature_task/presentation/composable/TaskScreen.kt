@@ -1,7 +1,6 @@
 package m.derakhshan.done.feature_task.presentation.composable
 
 
-import android.util.Log
 import androidx.compose.animation.*
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.*
@@ -14,7 +13,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -36,8 +34,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import m.derakhshan.done.R
 import m.derakhshan.done.core.presentation.composable.BackSwipeGesture
-import m.derakhshan.done.feature_note.presentation.add_edit_note_screen.AddEditNoteEvent
-import m.derakhshan.done.feature_note.presentation.note_screen.NoteEvent
 import m.derakhshan.done.feature_note.presentation.note_screen.composable.isScrollingUp
 import m.derakhshan.done.feature_task.domain.model.TaskModel
 import m.derakhshan.done.feature_task.presentation.TaskEvent
@@ -150,8 +146,16 @@ fun TaskScreen(
             exit = slideOutVertically { 5 * it } + fadeOut()
         ) {
             AddTaskSection(
-                taskColor = LightBlue,
-                taskColorSelected = {},
+                taskDescription = state.newTaskDescription,
+                taskColor = state.newTaskColor,
+                taskColorSelected = { color ->
+                    viewModel.onEvent(
+                        TaskEvent.NewTaskColorSelected(
+                            color
+                        )
+                    )
+                },
+                taskDescriptionChanged = { viewModel.onEvent(TaskEvent.NewTaskDescriptionChanged(it)) },
                 panelCloseListener = { viewModel.onEvent(TaskEvent.NewTaskPanelClosed) }
             )
         }
@@ -164,7 +168,9 @@ fun TaskScreen(
 
 @Composable
 private fun AddTaskSection(
+    taskDescription: String,
     taskColor: Color,
+    taskDescriptionChanged: (String) -> Unit,
     taskColorSelected: (Color) -> Unit,
     panelCloseListener: () -> Unit
 ) {
@@ -254,14 +260,15 @@ private fun AddTaskSection(
             Column(
                 modifier = Modifier
                     .padding(MaterialTheme.spacing.small)
-                    .background(color = VeryLightBlue, shape = RoundedCornerShape(10.dp))
                     .weight(1f)
-                    .padding(MaterialTheme.spacing.medium)
             ) {
-                BasicTextField(
-                    value = "",
-                    onValueChange = {},
-                    modifier = Modifier.fillMaxWidth(),
+                OutlinedTextField(
+                    value = taskDescription,
+                    onValueChange = { taskDescriptionChanged(it) },
+                    label = {
+                        Text(text = stringResource(id = R.string.task_description))
+                    },
+                    modifier = Modifier.fillMaxWidth()
                 )
             }
             IconButton(onClick = { /*TODO*/ }) {

@@ -2,7 +2,6 @@ package m.derakhshan.done.feature_task.presentation
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -11,8 +10,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import m.derakhshan.done.feature_task.domain.model.TaskModel
-import m.derakhshan.done.feature_task.domain.model.TaskStatus
 import m.derakhshan.done.feature_task.domain.use_case.TaskUseCases
 import javax.inject.Inject
 
@@ -49,7 +46,18 @@ class TaskViewModel @Inject constructor(
             is TaskEvent.ListScrollUp -> {
                 _state.value = _state.value.copy(fabOffset = (0).dp)
             }
+            is TaskEvent.NewTaskColorSelected -> {
+                _state.value = _state.value.copy(
+                    newTaskColor = event.color
+                )
+            }
+            is TaskEvent.NewTaskDescriptionChanged -> {
+                _state.value = _state.value.copy(
+                    newTaskDescription = event.description
+                )
+            }
         }
+
 
     }
 

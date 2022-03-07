@@ -32,5 +32,7 @@
     <string name="note_is_deleted">Note is deleted.</string>
     <string name="undo">Undo</string>
 
+    <string name="task_description">Task description…</string>
+
 
 </resources>

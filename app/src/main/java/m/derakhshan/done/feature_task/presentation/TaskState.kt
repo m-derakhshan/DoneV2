@@ -4,13 +4,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import m.derakhshan.done.feature_task.domain.model.TaskModel
-import m.derakhshan.done.ui.theme.LightBlue
+import m.derakhshan.done.ui.theme.LightGreen
 
 data class TaskState(
     val tasks: List<TaskGroup> = emptyList(),
     val fabOffset: Dp = 0.dp,
     val showAddTaskSection: Boolean = false,
-    val selectedNewTaskColor: Color = LightBlue,
+    val newTaskColor: Color = LightGreen,
+    val newTaskDescription: String = "",
 )
 
 data class TaskGroup(
