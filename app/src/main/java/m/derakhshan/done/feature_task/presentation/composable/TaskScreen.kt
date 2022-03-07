@@ -3,6 +3,7 @@ package m.derakhshan.done.feature_task.presentation.composable
 
 import androidx.compose.animation.*
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.*
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.draggable
@@ -143,7 +144,7 @@ fun TaskScreen(
 
         AnimatedVisibility(visible = state.showAddTaskSection,
             enter = slideInVertically { it } + fadeIn(),
-            exit = slideOutVertically { 5 * it } + fadeOut()
+            exit = fadeOut(tween(200))
         ) {
             AddTaskSection(
                 taskDescription = state.newTaskDescription,
@@ -156,7 +157,8 @@ fun TaskScreen(
                     )
                 },
                 taskDescriptionChanged = { viewModel.onEvent(TaskEvent.NewTaskDescriptionChanged(it)) },
-                panelCloseListener = { viewModel.onEvent(TaskEvent.NewTaskPanelClosed) }
+                panelCloseListener = { viewModel.onEvent(TaskEvent.NewTaskPanelClosed) },
+                saveTaskListener = { viewModel.onEvent(TaskEvent.NewTaskSaveClick) }
             )
         }
 
@@ -172,7 +174,8 @@ private fun AddTaskSection(
     taskColor: Color,
     taskDescriptionChanged: (String) -> Unit,
     taskColorSelected: (Color) -> Unit,
-    panelCloseListener: () -> Unit
+    panelCloseListener: () -> Unit,
+    saveTaskListener: () -> Unit
 ) {
     val horizontalScrollState = rememberScrollState()
     var offset by remember { mutableStateOf(0f) }
@@ -185,7 +188,6 @@ private fun AddTaskSection(
             .fillMaxWidth()
             .shadow(25.dp, shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp))
             .background(LightGray, shape = RoundedCornerShape(topEnd = 20.dp, topStart = 20.dp))
-            .padding(MaterialTheme.spacing.small)
             .draggable(
                 orientation = Orientation.Vertical,
                 state = rememberDraggableState {
@@ -193,15 +195,16 @@ private fun AddTaskSection(
                         offset += (it * 0.25f)
                 },
                 onDragStopped = {
-                    if (offset > 65) panelCloseListener()
-                    offset = 0f
+                    if (offset > 70) panelCloseListener()
+                    else
+                        offset = 0f
                 }
             )
     ) {
 
         Box(
             modifier = Modifier
-                .padding(bottom = MaterialTheme.spacing.small)
+                .padding(MaterialTheme.spacing.small)
                 .width(100.dp)
                 .height(2.dp)
                 .background(Blue, shape = RoundedCornerShape(10.dp))
@@ -215,7 +218,7 @@ private fun AddTaskSection(
             verticalAlignment = Alignment.CenterVertically
         ) {
 
-            IconButton(onClick = { /*TODO*/ }) {
+            IconButton(onClick = { /*TODO open date picker*/ }) {
                 Icon(
                     imageVector = Icons.Default.EventAvailable,
                     contentDescription = "add date",
@@ -223,7 +226,7 @@ private fun AddTaskSection(
                 )
             }
 
-            IconButton(onClick = { /*TODO*/ }) {
+            IconButton(onClick = { /*TODO open time picker*/ }) {
                 Icon(
                     imageVector = Icons.Default.Schedule,
                     contentDescription = "add time",
@@ -256,7 +259,12 @@ private fun AddTaskSection(
             }
         }
 
-        Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+        Row(
+            modifier = Modifier
+                .padding(MaterialTheme.spacing.small)
+                .fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
             Column(
                 modifier = Modifier
                     .padding(MaterialTheme.spacing.small)
@@ -271,7 +279,7 @@ private fun AddTaskSection(
                     modifier = Modifier.fillMaxWidth()
                 )
             }
-            IconButton(onClick = { /*TODO*/ }) {
+            IconButton(onClick = saveTaskListener) {
                 Icon(
                     imageVector = Icons.Default.Send,
                     contentDescription = "add task",
@@ -279,6 +287,5 @@ private fun AddTaskSection(
                 )
             }
         }
-
     }
 }

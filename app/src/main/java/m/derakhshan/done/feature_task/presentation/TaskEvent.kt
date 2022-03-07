@@ -8,6 +8,7 @@ sealed class TaskEvent {
     object ListScrollUp : TaskEvent()
     object ListScrollDown : TaskEvent()
     object NewTaskPanelClosed : TaskEvent()
+    object NewTaskSaveClick : TaskEvent()
     data class NewTaskDescriptionChanged(val description: String) : TaskEvent()
     data class NewTaskColorSelected(val color: Color) : TaskEvent()
     data class OnTaskCheckClicked(val task: TaskModel, val checked: Boolean) : TaskEvent()

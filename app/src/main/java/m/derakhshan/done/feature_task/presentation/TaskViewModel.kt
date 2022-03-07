@@ -2,6 +2,7 @@ package m.derakhshan.done.feature_task.presentation
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -10,6 +11,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import m.derakhshan.done.feature_task.domain.model.TaskModel
 import m.derakhshan.done.feature_task.domain.use_case.TaskUseCases
 import javax.inject.Inject
 
@@ -55,6 +57,23 @@ class TaskViewModel @Inject constructor(
                 _state.value = _state.value.copy(
                     newTaskDescription = event.description
                 )
+            }
+            TaskEvent.NewTaskSaveClick -> {
+                viewModelScope.launch {
+
+                    useCase.insertNewTask(
+                        task = TaskModel(
+                            description = _state.value.newTaskDescription,
+                            color = _state.value.newTaskColor.toArgb(),
+                            time = "18:30",
+                            date = "2021/01/01"
+                        )
+                    )
+                    _state.value =_state.value.copy(
+                        newTaskDescription = "",
+                        showAddTaskSection = false
+                    )
+                }
             }
         }
 
