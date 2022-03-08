@@ -8,6 +8,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -21,8 +23,13 @@ class TaskViewModel @Inject constructor(
 ) : ViewModel() {
 
     private var job: Job? = null
+    private var deletedTask: TaskModel? = null
+
     private val _state = mutableStateOf(TaskState())
     val state: State<TaskState> = _state
+
+    private val _snackBar = MutableSharedFlow<String>()
+    val snackBar = _snackBar.asSharedFlow()
 
 
     init {
@@ -61,7 +68,6 @@ class TaskViewModel @Inject constructor(
             }
             TaskEvent.NewTaskSaveClick -> {
                 viewModelScope.launch {
-
                     useCase.insertNewTask(
                         task = TaskModel(
                             description = _state.value.newTaskDescription,
@@ -75,6 +81,23 @@ class TaskViewModel @Inject constructor(
                         showAddTaskSection = false,
                         isAddTaskEnable = false
                     )
+                }
+            }
+            is TaskEvent.TaskDeleteClicked -> {
+                viewModelScope.launch {
+
+                    useCase.deleteTaskUseCase(task = event.task)
+
+                    deletedTask = event.task
+                    _snackBar.emit("Task deleted.")
+                }
+            }
+            TaskEvent.TaskUndo -> {
+                viewModelScope.launch {
+                    deletedTask?.let {
+                        useCase.insertNewTask(task = it)
+                    }
+                    deletedTask = null
                 }
             }
         }

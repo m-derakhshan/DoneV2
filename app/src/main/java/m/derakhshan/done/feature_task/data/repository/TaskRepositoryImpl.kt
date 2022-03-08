@@ -28,4 +28,8 @@ class TaskRepositoryImpl(
         )
         taskDao.insert(task = updateTask)
     }
+
+    override suspend fun deleteTask(task: TaskModel) {
+        return taskDao.delete(task = task)
+    }
 }

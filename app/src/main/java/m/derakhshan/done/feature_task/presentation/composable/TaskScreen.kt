@@ -1,7 +1,6 @@
 package m.derakhshan.done.feature_task.presentation.composable
 
 
-import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
@@ -38,6 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.graphics.ColorUtils
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import kotlinx.coroutines.flow.collectLatest
 import m.derakhshan.done.R
 import m.derakhshan.done.core.presentation.composable.BackSwipeGesture
 import m.derakhshan.done.feature_note.presentation.note_screen.composable.isScrollingUp
@@ -58,9 +58,22 @@ fun TaskScreen(
     val state = viewModel.state.value
     val lazyState = rememberLazyListState()
     val fabOffset by animateDpAsState(targetValue = state.fabOffset)
-    var offset by remember {
-        mutableStateOf(0f)
+    var offset by remember { mutableStateOf(0f) }
+    val scaffoldState = rememberScaffoldState()
+
+    LaunchedEffect(viewModel.snackBar) {
+        scaffoldState.snackbarHostState.currentSnackbarData?.dismiss()
+        viewModel.snackBar.collectLatest { message ->
+            if (message.isNotBlank()) {
+                val undo =
+                    scaffoldState.snackbarHostState.showSnackbar(message, actionLabel = "Undo")
+                if (undo == SnackbarResult.ActionPerformed)
+                    viewModel.onEvent(TaskEvent.TaskUndo)
+            }
+
+        }
     }
+
 
     Box(
         modifier = Modifier
@@ -97,7 +110,7 @@ fun TaskScreen(
                         navController.navigateUp()
                     offset = 0f
                 }
-            )
+            ), scaffoldState = scaffoldState
         ) {
             Column(
                 modifier = Modifier
@@ -133,7 +146,7 @@ fun TaskScreen(
                                 task = item,
                                 modifier = Modifier.animateItemPlacement(),
                                 onItemSwiped = {
-                                    Log.i("Log", "TaskScreen: item swiped")
+                                    viewModel.onEvent(TaskEvent.TaskDeleteClicked(task = item))
                                 },
                                 onCheckChange = {
                                     viewModel.onEvent(

@@ -1,6 +1,5 @@
 package m.derakhshan.done.feature_task.presentation.composable
 
-import android.util.Log
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.Orientation
@@ -8,16 +7,11 @@ import androidx.compose.foundation.gestures.draggable
 import androidx.compose.foundation.gestures.rememberDraggableState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Checkbox
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.DeleteForever
-import androidx.compose.material.icons.filled.EventAvailable
-import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -26,13 +20,13 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.capitalize
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import m.derakhshan.done.feature_task.domain.model.TaskModel
 import m.derakhshan.done.feature_task.domain.model.TaskStatus
-import m.derakhshan.done.feature_task.domain.model.toDarkColor
 import m.derakhshan.done.ui.theme.*
-import kotlin.math.log
+import java.util.*
 
 
 @Composable
@@ -44,6 +38,7 @@ fun TaskItem(
 ) {
     var changedOffset by remember { mutableStateOf(5f) }
     val foregroundOffset by animateDpAsState(targetValue = changedOffset.dp)
+
 
     Box(
         modifier = modifier
@@ -89,7 +84,7 @@ fun TaskItem(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = task.description,
+                    text = task.description.replaceFirstChar { it.titlecase(Locale.getDefault()) },
                     style = TextStyle(
                         textDecoration =
                         if (task.status == TaskStatus.Done) TextDecoration.LineThrough

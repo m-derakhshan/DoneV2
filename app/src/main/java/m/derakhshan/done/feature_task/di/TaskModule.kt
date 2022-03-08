@@ -7,10 +7,7 @@ import dagger.hilt.components.SingletonComponent
 import m.derakhshan.done.core.data.data_source.DoneDatabase
 import m.derakhshan.done.feature_task.data.repository.TaskRepositoryImpl
 import m.derakhshan.done.feature_task.domain.repository.TaskRepository
-import m.derakhshan.done.feature_task.domain.use_case.GetTasksUseCase
-import m.derakhshan.done.feature_task.domain.use_case.InsertNewTask
-import m.derakhshan.done.feature_task.domain.use_case.TaskUseCases
-import m.derakhshan.done.feature_task.domain.use_case.UpdateTaskStatus
+import m.derakhshan.done.feature_task.domain.use_case.*
 import javax.inject.Singleton
 
 
@@ -32,7 +29,8 @@ object TaskModule {
         return TaskUseCases(
             getTasksUseCase = GetTasksUseCase(repository = repository),
             insertNewTask = InsertNewTask(repository = repository),
-            updateTaskStatus = UpdateTaskStatus(repository = repository)
+            updateTaskStatus = UpdateTaskStatus(repository = repository),
+            deleteTaskUseCase = DeleteTaskUseCase(repository = repository)
         )
     }
 
