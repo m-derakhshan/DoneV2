@@ -1,6 +1,11 @@
 package m.derakhshan.done.feature_task.presentation.composable
 
+import android.util.Log
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.draggable
+import androidx.compose.foundation.gestures.rememberDraggableState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -9,9 +14,12 @@ import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.DeleteForever
 import androidx.compose.material.icons.filled.EventAvailable
 import androidx.compose.material.icons.filled.Schedule
-import androidx.compose.runtime.Composable
+import androidx.compose.material.icons.outlined.Delete
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -24,23 +32,53 @@ import m.derakhshan.done.feature_task.domain.model.TaskModel
 import m.derakhshan.done.feature_task.domain.model.TaskStatus
 import m.derakhshan.done.feature_task.domain.model.toDarkColor
 import m.derakhshan.done.ui.theme.*
+import kotlin.math.log
 
 
 @Composable
-fun TaskItem(task: TaskModel, modifier: Modifier = Modifier, onCheckChange: (Boolean) -> Unit) {
+fun TaskItem(
+    task: TaskModel,
+    modifier: Modifier = Modifier,
+    onItemSwiped: () -> Unit,
+    onCheckChange: (Boolean) -> Unit,
+) {
+    var changedOffset by remember { mutableStateOf(5f) }
+    val foregroundOffset by animateDpAsState(targetValue = changedOffset.dp)
+
     Box(
         modifier = modifier
             .alpha(if (task.status == TaskStatus.Done) 0.5f else 1f)
             .padding(bottom = MaterialTheme.spacing.small)
             .fillMaxWidth()
             .background(Color(task.color))
+            .draggable(
+                orientation = Orientation.Horizontal,
+                state = rememberDraggableState { delta ->
+                    val value = changedOffset + delta * 0.25f
+                    if (value > 5 && value < 100)
+                        changedOffset = value
+                },
+                onDragStopped = {
+                    if (changedOffset > 55)
+                        onItemSwiped()
+                    changedOffset = 5f
+                }
+            )
 
 
     ) {
-
+        Icon(
+            imageVector = Icons.Outlined.Delete,
+            contentDescription = "delete",
+            modifier = Modifier
+                .offset(x = 20.dp)
+                .size(30.dp)
+                .align(Alignment.CenterStart),
+            tint = White
+        )
         Column(
             modifier = Modifier
-                .offset(x = 5.dp)
+                .offset(x = foregroundOffset)
                 .background(White)
                 .padding(MaterialTheme.spacing.small)
         ) {
@@ -100,7 +138,6 @@ fun TaskItem(task: TaskModel, modifier: Modifier = Modifier, onCheckChange: (Boo
 
 
         }
-
     }
 
 }

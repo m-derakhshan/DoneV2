@@ -1,6 +1,7 @@
 package m.derakhshan.done.feature_task.presentation.composable
 
 
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
@@ -115,7 +116,7 @@ fun TaskScreen(
                             Text(
                                 text = taskGroup.title,
                                 modifier = Modifier
-                                    .padding(bottom = MaterialTheme.spacing.small)
+                                    .padding(bottom = MaterialTheme.spacing.medium)
                                     .fillMaxWidth()
                                     .shadow(2.dp)
                                     .background(LightBlue)
@@ -131,6 +132,9 @@ fun TaskScreen(
                             TaskItem(
                                 task = item,
                                 modifier = Modifier.animateItemPlacement(),
+                                onItemSwiped = {
+                                    Log.i("Log", "TaskScreen: item swiped")
+                                },
                                 onCheckChange = {
                                     viewModel.onEvent(
                                         TaskEvent.OnTaskCheckClicked(
