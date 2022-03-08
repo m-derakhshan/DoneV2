@@ -8,11 +8,8 @@ import androidx.compose.foundation.gestures.rememberDraggableState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Checkbox
-import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -20,9 +17,12 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.capitalize
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.rememberLottieComposition
+import m.derakhshan.done.R
 import m.derakhshan.done.feature_task.domain.model.TaskModel
 import m.derakhshan.done.feature_task.domain.model.TaskStatus
 import m.derakhshan.done.ui.theme.*
@@ -38,6 +38,7 @@ fun TaskItem(
 ) {
     var changedOffset by remember { mutableStateOf(5f) }
     val foregroundOffset by animateDpAsState(targetValue = changedOffset.dp)
+    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.delete))
 
 
     Box(
@@ -62,15 +63,16 @@ fun TaskItem(
 
 
     ) {
-        Icon(
-            imageVector = Icons.Outlined.Delete,
-            contentDescription = "delete",
+
+        LottieAnimation(
+            composition,
+            changedOffset/110f,
             modifier = Modifier
-                .offset(x = 20.dp)
-                .size(30.dp)
+                .offset(x = 10.dp)
+                .size(50.dp)
                 .align(Alignment.CenterStart),
-            tint = White
         )
+
         Column(
             modifier = Modifier
                 .offset(x = foregroundOffset)
