@@ -47,5 +47,8 @@ I want to develop this project using Kotlin. also, I'm learning TDD; so it is a 
  - [x] Save notes on firebase firestore
  - [x] retrieve notes when user login.
  - [x] Store user prefers order and reload them.
- - [ ] Design Task Screen.
+ - [x] Design Task Screen.
+ - [ ] Implement add task logic.
+ - [ ] Implement date selection logic
+ - [ ] Implement time selection logic
  - [ ] ...
