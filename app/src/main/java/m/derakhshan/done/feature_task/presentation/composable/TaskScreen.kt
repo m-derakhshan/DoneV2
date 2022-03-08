@@ -1,6 +1,10 @@
 package m.derakhshan.done.feature_task.presentation.composable
 
 
+import android.app.Activity
+import android.util.Log
+import androidx.activity.ComponentActivity
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
@@ -31,12 +35,15 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.ColorUtils
+import androidx.fragment.app.FragmentTransaction
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.google.android.material.datepicker.MaterialDatePicker
 import kotlinx.coroutines.flow.collectLatest
 import m.derakhshan.done.R
 import m.derakhshan.done.core.presentation.composable.BackSwipeGesture
@@ -81,6 +88,7 @@ fun TaskScreen(
             .fillMaxSize(),
         contentAlignment = Alignment.BottomCenter
     ) {
+
         Scaffold(
             topBar = {
                 TopAppBar {
@@ -200,6 +208,9 @@ private fun AddTaskSection(
     panelCloseListener: () -> Unit,
     saveTaskListener: () -> Unit
 ) {
+
+
+
     val horizontalScrollState = rememberScrollState()
     var offset by remember { mutableStateOf(0f) }
 
@@ -241,7 +252,9 @@ private fun AddTaskSection(
             verticalAlignment = Alignment.CenterVertically
         ) {
 
-            IconButton(onClick = { /*TODO open date picker*/ }) {
+            IconButton(onClick = {
+
+            }) {
                 Icon(
                     imageVector = Icons.Default.EventAvailable,
                     contentDescription = "add date",
