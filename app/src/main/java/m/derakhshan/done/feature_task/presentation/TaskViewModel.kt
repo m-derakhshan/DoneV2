@@ -55,7 +55,8 @@ class TaskViewModel @Inject constructor(
             }
             is TaskEvent.NewTaskDescriptionChanged -> {
                 _state.value = _state.value.copy(
-                    newTaskDescription = event.description
+                    newTaskDescription = event.description,
+                    isAddTaskEnable = event.description.length > 2
                 )
             }
             TaskEvent.NewTaskSaveClick -> {
@@ -69,9 +70,10 @@ class TaskViewModel @Inject constructor(
                             date = "2021/01/01"
                         )
                     )
-                    _state.value =_state.value.copy(
+                    _state.value = _state.value.copy(
                         newTaskDescription = "",
-                        showAddTaskSection = false
+                        showAddTaskSection = false,
+                        isAddTaskEnable = false
                     )
                 }
             }

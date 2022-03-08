@@ -26,6 +26,7 @@ import androidx.compose.material.icons.filled.Send
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
@@ -150,6 +151,7 @@ fun TaskScreen(
             exit = fadeOut(tween(200))
         ) {
             AddTaskSection(
+                isAddTaskEnable = state.isAddTaskEnable,
                 taskDescription = state.newTaskDescription,
                 taskColor = state.newTaskColor,
                 taskColorSelected = { color ->
@@ -173,6 +175,7 @@ fun TaskScreen(
 
 @Composable
 private fun AddTaskSection(
+    isAddTaskEnable: Boolean,
     taskDescription: String,
     taskColor: Color,
     taskDescriptionChanged: (String) -> Unit,
@@ -282,8 +285,9 @@ private fun AddTaskSection(
                     modifier = Modifier.fillMaxWidth()
                 )
             }
-            IconButton(onClick = saveTaskListener) {
+            IconButton(onClick = saveTaskListener, enabled = isAddTaskEnable) {
                 Icon(
+                    modifier = Modifier.alpha(if (isAddTaskEnable) 1f else 0.5f),
                     imageVector = Icons.Default.Send,
                     contentDescription = "add task",
                     tint = DarkBlue

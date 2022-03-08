@@ -25,59 +25,26 @@ import m.derakhshan.done.feature_task.domain.model.TaskStatus
 import m.derakhshan.done.feature_task.domain.model.toDarkColor
 import m.derakhshan.done.ui.theme.*
 
+
 @Composable
 fun TaskItem(task: TaskModel, modifier: Modifier = Modifier, onCheckChange: (Boolean) -> Unit) {
-
     Box(
         modifier = modifier
             .alpha(if (task.status == TaskStatus.Done) 0.5f else 1f)
-            .padding(MaterialTheme.spacing.small)
+            .padding(bottom = MaterialTheme.spacing.small)
             .fillMaxWidth()
-            .clip(shape = RoundedCornerShape(10.dp))
-            .background(Color(task.color), shape = RoundedCornerShape(10.dp))
+            .background(Color(task.color))
+
 
     ) {
 
         Column(
             modifier = Modifier
                 .offset(x = 5.dp)
-                .background(White, shape = RoundedCornerShape(10.dp))
+                .background(White)
                 .padding(MaterialTheme.spacing.small)
         ) {
 
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-            ) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(
-                        imageVector = Icons.Default.EventAvailable,
-                        contentDescription = "calendar",
-                        tint = task.toDarkColor()
-                    )
-                    Spacer(modifier = Modifier.padding(MaterialTheme.spacing.extraSmall))
-                    Text(text = task.date, style = MaterialTheme.typography.caption)
-                }
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(
-                        imageVector = Icons.Default.Schedule,
-                        contentDescription = "clock",
-                        tint = task.toDarkColor()
-                    )
-                    Spacer(modifier = Modifier.padding(MaterialTheme.spacing.extraSmall))
-                    Text(text = task.time, style = MaterialTheme.typography.caption)
-                }
-            }
-
-            Box(
-                modifier = Modifier
-                    .padding(vertical = MaterialTheme.spacing.extraSmall)
-                    .alpha(0.25f)
-                    .fillMaxWidth()
-                    .height(2.dp)
-                    .background(Gray)
-            )
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -94,10 +61,9 @@ fun TaskItem(task: TaskModel, modifier: Modifier = Modifier, onCheckChange: (Boo
                 )
                 Checkbox(checked = task.status == TaskStatus.Done, onCheckedChange = onCheckChange)
             }
-
             Box(
                 modifier = Modifier
-                    .padding(vertical = MaterialTheme.spacing.extraSmall)
+                    .padding(bottom = MaterialTheme.spacing.extraSmall)
                     .alpha(0.25f)
                     .fillMaxWidth()
                     .height(2.dp)
@@ -108,8 +74,10 @@ fun TaskItem(task: TaskModel, modifier: Modifier = Modifier, onCheckChange: (Boo
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
+
                 Box(
                     modifier = Modifier
+                        .padding(end = MaterialTheme.spacing.extraSmall)
                         .size(10.dp)
                         .clip(shape = CircleShape)
                         .background(
@@ -120,11 +88,123 @@ fun TaskItem(task: TaskModel, modifier: Modifier = Modifier, onCheckChange: (Boo
                             }, shape = CircleShape
                         )
                 )
-                Spacer(modifier = Modifier.padding(MaterialTheme.spacing.extraSmall))
-                Text(text = task.status.status, style = MaterialTheme.typography.caption)
+
+                Text(
+                    text = "${task.date}  ${task.time}",
+                    style = MaterialTheme.typography.caption,
+                    color = DarkGray,
+                )
+
+
             }
+
+
         }
 
-
     }
+
 }
+//
+//@Composable
+//fun TaskItem(task: TaskModel, modifier: Modifier = Modifier, onCheckChange: (Boolean) -> Unit) {
+//
+//    Box(
+//        modifier = modifier
+//            .alpha(if (task.status == TaskStatus.Done) 0.5f else 1f)
+//            .padding(MaterialTheme.spacing.small)
+//            .fillMaxWidth()
+//            .clip(shape = RoundedCornerShape(10.dp))
+//            .background(Color(task.color), shape = RoundedCornerShape(10.dp))
+//
+//    ) {
+//
+//        Column(
+//            modifier = Modifier
+//                .offset(x = 5.dp)
+//                .background(White, shape = RoundedCornerShape(10.dp))
+//                .padding(MaterialTheme.spacing.small)
+//        ) {
+//
+//
+//            Row(
+//                modifier = Modifier.fillMaxWidth(),
+//                horizontalArrangement = Arrangement.SpaceBetween,
+//            ) {
+//                Row(verticalAlignment = Alignment.CenterVertically) {
+//                    Icon(
+//                        imageVector = Icons.Default.EventAvailable,
+//                        contentDescription = "calendar",
+//                        tint = task.toDarkColor()
+//                    )
+//                    Spacer(modifier = Modifier.padding(MaterialTheme.spacing.extraSmall))
+//                    Text(text = task.date, style = MaterialTheme.typography.caption)
+//                }
+//                Row(verticalAlignment = Alignment.CenterVertically) {
+//                    Icon(
+//                        imageVector = Icons.Default.Schedule,
+//                        contentDescription = "clock",
+//                        tint = task.toDarkColor()
+//                    )
+//                    Spacer(modifier = Modifier.padding(MaterialTheme.spacing.extraSmall))
+//                    Text(text = task.time, style = MaterialTheme.typography.caption)
+//                }
+//            }
+//
+//            Box(
+//                modifier = Modifier
+//                    .padding(vertical = MaterialTheme.spacing.extraSmall)
+//                    .alpha(0.25f)
+//                    .fillMaxWidth()
+//                    .height(2.dp)
+//                    .background(Gray)
+//            )
+//
+//            Row(
+//                modifier = Modifier.fillMaxWidth(),
+//                verticalAlignment = Alignment.CenterVertically
+//            ) {
+//                Text(
+//                    text = task.description,
+//                    style = TextStyle(
+//                        textDecoration =
+//                        if (task.status == TaskStatus.Done) TextDecoration.LineThrough
+//                        else TextDecoration.None
+//                    ) + MaterialTheme.typography.body1,
+//                    modifier = Modifier.weight(1f)
+//                )
+//                Checkbox(checked = task.status == TaskStatus.Done, onCheckedChange = onCheckChange)
+//            }
+//
+//            Box(
+//                modifier = Modifier
+//                    .padding(vertical = MaterialTheme.spacing.extraSmall)
+//                    .alpha(0.25f)
+//                    .fillMaxWidth()
+//                    .height(2.dp)
+//                    .background(Gray)
+//            )
+//
+//            Row(
+//                modifier = Modifier.fillMaxWidth(),
+//                verticalAlignment = Alignment.CenterVertically
+//            ) {
+//                Box(
+//                    modifier = Modifier
+//                        .size(10.dp)
+//                        .clip(shape = CircleShape)
+//                        .background(
+//                            color =
+//                            when (task.status) {
+//                                is TaskStatus.Done -> Green
+//                                is TaskStatus.InProgress -> Blue
+//                            }, shape = CircleShape
+//                        )
+//                )
+//                Spacer(modifier = Modifier.padding(MaterialTheme.spacing.extraSmall))
+//                Text(text = task.status.status, style = MaterialTheme.typography.caption)
+//            }
+//        }
+//
+//
+//    }
+//}

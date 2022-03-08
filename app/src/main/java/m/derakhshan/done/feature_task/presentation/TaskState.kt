@@ -12,6 +12,7 @@ data class TaskState(
     val showAddTaskSection: Boolean = false,
     val newTaskColor: Color = LightGreen,
     val newTaskDescription: String = "",
+    val isAddTaskEnable: Boolean = false
 )
 
 data class TaskGroup(
