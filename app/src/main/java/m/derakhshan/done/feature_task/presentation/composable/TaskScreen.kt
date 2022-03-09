@@ -62,7 +62,7 @@ fun TaskScreen(
     paddingValues: PaddingValues,
     viewModel: TaskViewModel = hiltViewModel()
 ) {
-    var monthNumber by remember { mutableStateOf(0) }
+
 
     val state = viewModel.state.value
     val lazyState = rememberLazyListState()
@@ -194,10 +194,7 @@ fun TaskScreen(
             )
         }
 
-        DatePicker(
-            myCalendar = MyCalendar(monthNumber),
-            onNexMonthClickListener = { monthNumber++ },
-            onPreviousMonthClickListener = { monthNumber-- })
+
     }
 
 
@@ -214,10 +211,10 @@ private fun AddTaskSection(
     saveTaskListener: () -> Unit
 ) {
 
-
+    var monthNumber by remember { mutableStateOf(0) }
     val horizontalScrollState = rememberScrollState()
     var offset by remember { mutableStateOf(0f) }
-
+    var isDatePickerVisible by remember { mutableStateOf(false) }
 
     val animateOffset by animateDpAsState(targetValue = offset.dp)
     Column(
@@ -249,6 +246,13 @@ private fun AddTaskSection(
                 .align(Alignment.CenterHorizontally)
         )
 
+        AnimatedVisibility(visible = isDatePickerVisible) {
+            DatePicker(
+                myCalendar = MyCalendar(monthNumber),
+                onNexMonthClickListener = { monthNumber++ },
+                onPreviousMonthClickListener = { monthNumber-- })
+        }
+
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -257,7 +261,7 @@ private fun AddTaskSection(
         ) {
 
             IconButton(onClick = {
-
+                isDatePickerVisible = !isDatePickerVisible
             }) {
                 Icon(
                     imageVector = Icons.Default.EventAvailable,

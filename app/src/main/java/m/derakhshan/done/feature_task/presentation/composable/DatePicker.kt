@@ -113,7 +113,7 @@ fun DatePicker(
 private fun DaysList(days: List<TaskDate>) {
     val selectedList = remember { mutableStateListOf(TaskDate.today) }
 
-    Box(modifier = Modifier.fillMaxSize()) {
+    Box(modifier = Modifier.fillMaxWidth()) {
         LazyVerticalGrid(
             cells = GridCells.Fixed(7),
             contentPadding = PaddingValues(top = 8.dp, start = 4.dp, end = 4.dp)
