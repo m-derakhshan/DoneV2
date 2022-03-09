@@ -48,6 +48,7 @@ import kotlinx.coroutines.flow.collectLatest
 import m.derakhshan.done.R
 import m.derakhshan.done.core.presentation.composable.BackSwipeGesture
 import m.derakhshan.done.feature_note.presentation.note_screen.composable.isScrollingUp
+import m.derakhshan.done.feature_task.domain.model.MyCalendar
 import m.derakhshan.done.feature_task.domain.model.TaskModel
 import m.derakhshan.done.feature_task.presentation.TaskEvent
 import m.derakhshan.done.feature_task.presentation.TaskViewModel
@@ -61,6 +62,7 @@ fun TaskScreen(
     paddingValues: PaddingValues,
     viewModel: TaskViewModel = hiltViewModel()
 ) {
+    var monthNumber by remember { mutableStateOf(0) }
 
     val state = viewModel.state.value
     val lazyState = rememberLazyListState()
@@ -192,7 +194,10 @@ fun TaskScreen(
             )
         }
 
-
+        DatePicker(
+            myCalendar = MyCalendar(monthNumber),
+            onNexMonthClickListener = { monthNumber++ },
+            onPreviousMonthClickListener = { monthNumber-- })
     }
 
 
@@ -208,7 +213,6 @@ private fun AddTaskSection(
     panelCloseListener: () -> Unit,
     saveTaskListener: () -> Unit
 ) {
-
 
 
     val horizontalScrollState = rememberScrollState()
