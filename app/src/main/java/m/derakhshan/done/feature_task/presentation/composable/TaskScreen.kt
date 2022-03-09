@@ -1,10 +1,7 @@
 package m.derakhshan.done.feature_task.presentation.composable
 
 
-import android.app.Activity
 import android.util.Log
-import androidx.activity.ComponentActivity
-import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
@@ -35,20 +32,19 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.ColorUtils
-import androidx.fragment.app.FragmentTransaction
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.google.android.material.datepicker.MaterialDatePicker
 import kotlinx.coroutines.flow.collectLatest
 import m.derakhshan.done.R
 import m.derakhshan.done.core.presentation.composable.BackSwipeGesture
 import m.derakhshan.done.feature_note.presentation.note_screen.composable.isScrollingUp
 import m.derakhshan.done.feature_task.domain.model.MyCalendar
+import m.derakhshan.done.feature_task.domain.model.TaskDate
 import m.derakhshan.done.feature_task.domain.model.TaskModel
 import m.derakhshan.done.feature_task.presentation.TaskEvent
 import m.derakhshan.done.feature_task.presentation.TaskViewModel
@@ -190,7 +186,8 @@ fun TaskScreen(
                 },
                 taskDescriptionChanged = { viewModel.onEvent(TaskEvent.NewTaskDescriptionChanged(it)) },
                 panelCloseListener = { viewModel.onEvent(TaskEvent.NewTaskPanelClosed) },
-                saveTaskListener = { viewModel.onEvent(TaskEvent.NewTaskSaveClick) }
+                saveTaskListener = { viewModel.onEvent(TaskEvent.NewTaskSaveClick) },
+                selectedDateListener = { viewModel.onEvent(TaskEvent.NewTaskDateSelectedSelected(it)) }
             )
         }
 
@@ -208,7 +205,8 @@ private fun AddTaskSection(
     taskDescriptionChanged: (String) -> Unit,
     taskColorSelected: (Color) -> Unit,
     panelCloseListener: () -> Unit,
-    saveTaskListener: () -> Unit
+    saveTaskListener: () -> Unit,
+    selectedDateListener: (List<TaskDate>) -> Unit
 ) {
 
     var monthNumber by remember { mutableStateOf(0) }
@@ -250,7 +248,9 @@ private fun AddTaskSection(
             DatePicker(
                 myCalendar = MyCalendar(monthNumber),
                 onNexMonthClickListener = { monthNumber++ },
-                onPreviousMonthClickListener = { monthNumber-- })
+                onPreviousMonthClickListener = { monthNumber-- },
+                selectedDateListener = selectedDateListener
+            )
         }
 
         Row(

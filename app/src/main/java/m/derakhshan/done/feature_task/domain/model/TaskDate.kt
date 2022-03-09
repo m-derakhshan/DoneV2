@@ -13,7 +13,7 @@ data class TaskDate(
                 val calendar = Calendar.getInstance()
                 return TaskDate(
                     day = calendar.get(Calendar.DAY_OF_MONTH),
-                    month = calendar.get(Calendar.MONTH),
+                    month = calendar.get(Calendar.MONTH) + 1,
                     year = calendar.get(Calendar.YEAR)
                 )
             }

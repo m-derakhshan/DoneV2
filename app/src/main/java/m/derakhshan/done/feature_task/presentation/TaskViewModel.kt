@@ -68,14 +68,15 @@ class TaskViewModel @Inject constructor(
             }
             TaskEvent.NewTaskSaveClick -> {
                 viewModelScope.launch {
-                    useCase.insertNewTask(
-                        task = TaskModel(
-                            description = _state.value.newTaskDescription,
-                            color = _state.value.newTaskColor.toArgb(),
-                            time = "18:30",
-                            date = "2021/01/01"
+                    for (date in _state.value.newTaskDate)
+                        useCase.insertNewTask(
+                            task = TaskModel(
+                                description = _state.value.newTaskDescription,
+                                color = _state.value.newTaskColor.toArgb(),
+                                time = "18:30",
+                                date = "${date.year}/${date.month}/${date.day}"
+                            )
                         )
-                    )
                     _state.value = _state.value.copy(
                         newTaskDescription = "",
                         showAddTaskSection = false,
@@ -99,6 +100,11 @@ class TaskViewModel @Inject constructor(
                     }
                     deletedTask = null
                 }
+            }
+            is TaskEvent.NewTaskDateSelectedSelected -> {
+                _state.value = _state.value.copy(
+                    newTaskDate = event.dates
+                )
             }
         }
 

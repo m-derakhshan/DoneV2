@@ -35,10 +35,14 @@ fun DatePicker(
     titleBackground: Color = MaterialTheme.colors.primary,
     myCalendar: MyCalendar,
     onNexMonthClickListener: () -> Unit,
-    onPreviousMonthClickListener: () -> Unit
+    onPreviousMonthClickListener: () -> Unit,
+    selectedDateListener: (List<TaskDate>) -> Unit
 ) {
 
-    Column(modifier = Modifier.fillMaxWidth()) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+    ) {
 
         Row(
             modifier = Modifier
@@ -102,7 +106,7 @@ fun DatePicker(
             }
         }
 
-        DaysList(days = myCalendar.generateDays())
+        DaysList(days = myCalendar.generateDays(), selectedDateListener = selectedDateListener)
 
     }
 }
@@ -110,7 +114,7 @@ fun DatePicker(
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-private fun DaysList(days: List<TaskDate>) {
+private fun DaysList(days: List<TaskDate>, selectedDateListener: (List<TaskDate>) -> Unit) {
     val selectedList = remember { mutableStateListOf(TaskDate.today) }
 
     Box(modifier = Modifier.fillMaxWidth()) {
@@ -136,6 +140,8 @@ private fun DaysList(days: List<TaskDate>) {
 
                     if (selectedList.isEmpty())
                         selectedList.add(TaskDate.today)
+
+                    selectedDateListener(selectedList)
 
                 }
 

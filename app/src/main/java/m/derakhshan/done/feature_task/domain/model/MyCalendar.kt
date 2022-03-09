@@ -13,21 +13,21 @@ class MyCalendar(nextMonth: Int = 0) {
     private val originalDayOfWeek = dayOfMonth % 7
 
     val year = calendar.get(Calendar.YEAR)
-    val month = calendar.get(Calendar.MONTH)
+    val month = calendar.get(Calendar.MONTH)+1
 
     private fun getDaysOfMonthCount(month: Int): Int {
         return when (month) {
-            0 -> 31
-            1 -> if (leapYearChecker()) 29 else 28
-            2 -> 31
-            3 -> 30
-            4 -> 31
-            5 -> 30
-            6 -> 31
+            1 -> 31
+            2 -> if (leapYearChecker()) 29 else 28
+            3 -> 31
+            4 -> 30
+            5 -> 31
+            6 -> 30
             7 -> 31
-            8 -> 30
-            9 -> 31
-            10 -> 30
+            8 -> 31
+            9 -> 30
+            10 -> 31
+            11 -> 30
             else -> 31
         }
     }
@@ -44,17 +44,17 @@ class MyCalendar(nextMonth: Int = 0) {
 
     fun getMonthName(month: Int): String {
         return when (month) {
-            0 -> "January"
-            1 -> "February"
-            2 -> "March"
-            3 -> "April"
-            4 -> "May"
-            5 -> "June"
-            6 -> "July"
-            7 -> "August"
-            8 -> "September"
-            9 -> "October"
-            10 -> "November"
+            1 -> "January"
+            2 -> "February"
+            3 -> "March"
+            4 -> "April"
+            5 -> "May"
+            6 -> "June"
+            7 -> "July"
+            8 -> "August"
+            9 -> "September"
+            10 -> "October"
+            11 -> "November"
             else -> "December"
         }
     }

@@ -3,6 +3,7 @@ package m.derakhshan.done.feature_task.presentation
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import m.derakhshan.done.feature_task.domain.model.TaskDate
 import m.derakhshan.done.feature_task.domain.model.TaskModel
 import m.derakhshan.done.ui.theme.LightGreen
 
@@ -12,6 +13,7 @@ data class TaskState(
     val showAddTaskSection: Boolean = false,
     val newTaskColor: Color = LightGreen,
     val newTaskDescription: String = "",
+    val newTaskDate: List<TaskDate> = listOf(TaskDate.today),
     val isAddTaskEnable: Boolean = false
 )
 
