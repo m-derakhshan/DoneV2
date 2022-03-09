@@ -1,7 +1,8 @@
 package m.derakhshan.done.feature_task.presentation.composable
 
 
-import android.util.Log
+
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
@@ -37,7 +38,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.ColorUtils
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import kotlinx.coroutines.flow.collectLatest
 import m.derakhshan.done.R
@@ -65,6 +65,10 @@ fun TaskScreen(
     val fabOffset by animateDpAsState(targetValue = state.fabOffset)
     var offset by remember { mutableStateOf(0f) }
     val scaffoldState = rememberScaffoldState()
+
+    BackHandler(enabled = state.showAddTaskSection) {
+        viewModel.onEvent(TaskEvent.NewTaskPanelClosed)
+    }
 
     LaunchedEffect(viewModel.snackBar) {
         scaffoldState.snackbarHostState.currentSnackbarData?.dismiss()
