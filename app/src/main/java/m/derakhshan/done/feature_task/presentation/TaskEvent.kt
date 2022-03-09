@@ -11,6 +11,7 @@ sealed class TaskEvent {
     object NewTaskPanelClosed : TaskEvent()
     object NewTaskSaveClick : TaskEvent()
     object TaskUndo : TaskEvent()
+    object OnTaskSyncClicked : TaskEvent()
     data class TaskDeleteClicked(val task: TaskModel) : TaskEvent()
     data class NewTaskDescriptionChanged(val description: String) : TaskEvent()
     data class NewTaskColorSelected(val color: Color) : TaskEvent()

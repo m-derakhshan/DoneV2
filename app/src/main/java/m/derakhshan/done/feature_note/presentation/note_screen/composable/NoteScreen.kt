@@ -1,9 +1,7 @@
 package m.derakhshan.done.feature_note.presentation.note_screen.composable
 
 import androidx.compose.animation.*
-import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -67,9 +65,15 @@ fun NoteScreen(
     val fabOffset by animateDpAsState(targetValue = state.fabOffset)
     val searchFocusRequest = remember { FocusRequester() }
     var offset by remember { mutableStateOf(0f) }
-    val syncRotation by animateFloatAsState(
-        targetValue = if (state.isSyncIconRotating) 360000f else 0f,
-        animationSpec = tween(60000)
+
+    val infiniteTransition = rememberInfiniteTransition()
+    val syncRotation by infiniteTransition.animateFloat(
+        initialValue = 0f,
+        targetValue = 360f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(1000, easing = LinearEasing),
+            repeatMode = RepeatMode.Reverse
+        )
     )
 
     //--------------------(request focus for opening the keyboard for searching)--------------------//
@@ -110,9 +114,6 @@ fun NoteScreen(
                                 style = MaterialTheme.typography.body2
                             )
                         }
-
-
-
                     IconButton(
                         onClick = { viewModel.onEvent(NoteEvent.OnNoteSyncClicked) },
                         enabled = state.syncNumber > 0

@@ -4,8 +4,7 @@ package m.derakhshan.done.feature_task.presentation.composable
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.*
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
@@ -30,6 +29,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
@@ -42,6 +42,7 @@ import androidx.navigation.NavController
 import kotlinx.coroutines.flow.collectLatest
 import m.derakhshan.done.R
 import m.derakhshan.done.core.presentation.composable.BackSwipeGesture
+import m.derakhshan.done.feature_note.presentation.note_screen.NoteEvent
 import m.derakhshan.done.feature_note.presentation.note_screen.composable.isScrollingUp
 import m.derakhshan.done.feature_task.domain.model.MyCalendar
 import m.derakhshan.done.feature_task.domain.model.TaskDate
@@ -65,6 +66,15 @@ fun TaskScreen(
     val fabOffset by animateDpAsState(targetValue = state.fabOffset)
     var offset by remember { mutableStateOf(0f) }
     val scaffoldState = rememberScaffoldState()
+    val infiniteTransition = rememberInfiniteTransition()
+    val syncRotation by infiniteTransition.animateFloat(
+        initialValue = 0f,
+        targetValue = 360f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(1000, easing = LinearEasing),
+            repeatMode = RepeatMode.Reverse
+        )
+    )
 
     BackHandler(enabled = state.showAddTaskSection) {
         viewModel.onEvent(TaskEvent.NewTaskPanelClosed)
@@ -94,12 +104,44 @@ fun TaskScreen(
         Scaffold(
             topBar = {
                 TopAppBar {
-                    Text(
-                        text = stringResource(id = R.string.tasks),
-                        style = MaterialTheme.typography.h6,
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier.fillMaxWidth()
-                    )
+                    Box {
+
+                        if (state.syncNumber > 0)
+                            Box(
+                                modifier = Modifier
+                                    .size(21.dp)
+                                    .clip(shape = CircleShape)
+                                    .background(color = Red, shape = CircleShape)
+                            ) {
+                                Text(
+                                    text = state.syncNumber.toString(),
+                                    color = White,
+                                    textAlign = TextAlign.Center,
+                                    modifier = Modifier.align(Alignment.Center),
+                                    style = MaterialTheme.typography.body2
+                                )
+                            }
+                        IconButton(
+                            onClick = { viewModel.onEvent(TaskEvent.OnTaskSyncClicked) },
+                            enabled = state.syncNumber > 0
+                        ) {
+                            Icon(
+                                imageVector = state.syncIcon,
+                                contentDescription = "sync",
+                                modifier = Modifier.rotate(syncRotation)
+                            )
+                        }
+
+                        Text(
+                            text = stringResource(id = R.string.tasks),
+                            style = MaterialTheme.typography.h6,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .align(Alignment.Center)
+                        )
+                    }
+
                 }
             },
             floatingActionButton = {
