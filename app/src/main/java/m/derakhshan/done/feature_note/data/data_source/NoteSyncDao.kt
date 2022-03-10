@@ -13,6 +13,9 @@ interface NoteSyncDao {
     @Delete
     suspend fun delete(noteSyncModel: NoteSyncModel)
 
+    @Query("DELETE FROM NoteSyncModel")
+    suspend fun deleteAll()
+
     @Query("SELECT * FROM NoteSyncModel")
     fun getNotesToSync(): Flow<List<NoteSyncModel>?>
 

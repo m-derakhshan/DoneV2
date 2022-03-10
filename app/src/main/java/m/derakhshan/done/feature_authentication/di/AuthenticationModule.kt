@@ -44,7 +44,8 @@ object AuthenticationModule {
             storage = storage,
             userDao = database.userDao,
             noteDao = database.noteDao,
-            setting = setting
+            setting = setting,
+            taskDao = database.taskDao
         )
     }
 }

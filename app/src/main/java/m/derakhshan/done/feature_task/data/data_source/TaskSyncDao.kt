@@ -13,6 +13,9 @@ interface TaskSyncDao {
     @Delete
     suspend fun delete(taskSyncModel: TaskSyncModel)
 
+    @Query("DELETE FROM TaskSyncModel")
+    suspend fun deleteAll()
+
     @Query("SELECT * FROM TaskSyncModel")
     fun getTaskToSync(): Flow<List<TaskSyncModel>?>
 

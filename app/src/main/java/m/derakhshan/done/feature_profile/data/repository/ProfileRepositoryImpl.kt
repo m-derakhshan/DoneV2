@@ -9,8 +9,10 @@ import m.derakhshan.done.core.domain.model.Response
 import m.derakhshan.done.feature_authentication.data.data_source.dao.UserDao
 import m.derakhshan.done.feature_authentication.domain.model.UserModel
 import m.derakhshan.done.feature_note.data.data_source.NoteDao
+import m.derakhshan.done.feature_note.data.data_source.NoteSyncDao
 import m.derakhshan.done.feature_profile.domain.repository.ProfileRepository
 import m.derakhshan.done.feature_task.data.data_source.TaskDao
+import m.derakhshan.done.feature_task.data.data_source.TaskSyncDao
 import java.util.concurrent.CancellationException
 import javax.inject.Inject
 
@@ -18,6 +20,8 @@ class ProfileRepositoryImpl @Inject constructor(
     private val userDao: UserDao,
     private val noteDao: NoteDao,
     private val taskDao: TaskDao,
+    private val noteSyncDao: NoteSyncDao,
+    private val taskSyncDao: TaskSyncDao,
     private val setting: Setting,
     private val authentication: FirebaseAuth,
     private val fireStore: FirebaseFirestore
@@ -30,6 +34,8 @@ class ProfileRepositoryImpl @Inject constructor(
         userDao.delete()
         noteDao.deleteAll()
         taskDao.deleteAll()
+        taskSyncDao.deleteAll()
+        noteSyncDao.deleteAll()
         setting.isUserLoggedIn = false
         authentication.signOut()
     }

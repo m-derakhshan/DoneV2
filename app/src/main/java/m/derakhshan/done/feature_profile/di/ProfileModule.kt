@@ -30,6 +30,8 @@ object ProfileModule {
             userDao = database.userDao,
             noteDao = database.noteDao,
             taskDao = database.taskDao,
+            noteSyncDao = database.noteSyncDao,
+            taskSyncDao = database.taskSyncDao,
             setting = setting,
             authentication = authentication,
             fireStore = fireStore

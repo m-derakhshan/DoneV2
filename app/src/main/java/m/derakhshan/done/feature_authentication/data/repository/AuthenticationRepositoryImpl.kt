@@ -1,6 +1,7 @@
 package m.derakhshan.done.feature_authentication.data.repository
 
 
+import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthInvalidUserException
@@ -14,6 +15,9 @@ import m.derakhshan.done.feature_authentication.domain.repository.Authentication
 import m.derakhshan.done.feature_authentication.utils.credentialValidityChecker
 import m.derakhshan.done.feature_note.data.data_source.NoteDao
 import m.derakhshan.done.feature_note.domain.model.NoteModel
+import m.derakhshan.done.feature_task.data.data_source.TaskDao
+import m.derakhshan.done.feature_task.domain.model.TaskModel
+import m.derakhshan.done.feature_task.domain.model.TaskStatus
 import java.util.concurrent.CancellationException
 import javax.inject.Inject
 
@@ -22,6 +26,7 @@ class AuthenticationRepositoryImpl @Inject constructor(
     private val storage: FirebaseFirestore,
     private val userDao: UserDao,
     private val noteDao: NoteDao,
+    private val taskDao: TaskDao,
     private val setting: Setting
 ) : AuthenticationRepository {
     override suspend fun login(email: String, password: String): Response<UserModel> {
@@ -32,6 +37,10 @@ class AuthenticationRepositoryImpl @Inject constructor(
             authentication.signInWithEmailAndPassword(email, password)
                 .await()
                 .user.let { info ->
+
+                    // TODO: make these tasks run in parallel
+
+
                     val userInformation =
                         storage.collection("users").document(info!!.uid).get().await()
 
@@ -42,10 +51,9 @@ class AuthenticationRepositoryImpl @Inject constructor(
                     )
                     userDao.insert(newUser)
 
-
+                    //--------------------(fetch notes from fire store and insert in local db)--------------------//
                     val noteInfo = storage.collection("users").document(info.uid)
                         .collection("notes").get().await()
-
                     val notes = ArrayList<NoteModel>()
                     var maxNoteId = 0
                     for (item in noteInfo.documents.map { it.data }) {
@@ -67,8 +75,35 @@ class AuthenticationRepositoryImpl @Inject constructor(
                             )
                         }
                     }
+
                     noteDao.insertAll(notes = notes)
                     setting.lastNoteId = maxNoteId + 1
+
+                    //--------------------(fetch tasks from fire store and insert in local db)--------------------//
+                    val taskInfo = storage.collection("users").document(info.uid)
+                        .collection("tasks").get().await()
+                    val tasks = ArrayList<TaskModel>()
+                    for (item in taskInfo.documents.map { it.data }) {
+                        item?.let {
+                            tasks.add(
+                                TaskModel(
+                                    id = item["id"] as Long,
+                                    description = item["description"] as String,
+                                    color = item["color"].toString().toInt(),
+                                    date = item["date"].toString(),
+                                    time = item["time"].toString(),
+                                    status = when ((item["status"] as Map<*, *>).values.first()) {
+                                        "InProgress" -> TaskStatus.InProgress
+                                        else -> TaskStatus.Done
+                                    }
+                                )
+                            )
+                        }
+                    }
+                    taskDao.insert(tasks)
+
+
+
                     Response.Success(newUser)
 
                 }
