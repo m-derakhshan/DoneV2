@@ -63,3 +63,16 @@ class TaskStatusConverter {
         }
     }
 }
+
+fun TaskModel.toTaskSyncModel(uid: String, action: TaskSyncAction): TaskSyncModel {
+    return TaskSyncModel(
+        userId = uid,
+        id = this.id,
+        description = this.description,
+        color = this.color,
+        date=this.date,
+        time=this.time,
+        status=this.status,
+        action = action
+    )
+}

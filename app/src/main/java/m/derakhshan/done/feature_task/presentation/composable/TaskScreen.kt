@@ -42,7 +42,6 @@ import androidx.navigation.NavController
 import kotlinx.coroutines.flow.collectLatest
 import m.derakhshan.done.R
 import m.derakhshan.done.core.presentation.composable.BackSwipeGesture
-import m.derakhshan.done.feature_note.presentation.note_screen.NoteEvent
 import m.derakhshan.done.feature_note.presentation.note_screen.composable.isScrollingUp
 import m.derakhshan.done.feature_task.domain.model.MyCalendar
 import m.derakhshan.done.feature_task.domain.model.TaskDate

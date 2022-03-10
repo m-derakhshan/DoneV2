@@ -13,23 +13,31 @@ import m.derakhshan.done.feature_note.domain.model.NoteModel
 import m.derakhshan.done.feature_note.domain.model.NoteSyncActionConverter
 import m.derakhshan.done.feature_note.domain.model.NoteSyncModel
 import m.derakhshan.done.feature_task.data.data_source.TaskDao
+import m.derakhshan.done.feature_task.data.data_source.TaskSyncDao
 import m.derakhshan.done.feature_task.domain.model.TaskModel
 import m.derakhshan.done.feature_task.domain.model.TaskStatusConverter
+import m.derakhshan.done.feature_task.domain.model.TaskSyncActionConverter
+import m.derakhshan.done.feature_task.domain.model.TaskSyncModel
 
 @Database(
     entities = [
         UserModel::class, InspirationQuoteModel::class,
-        NoteModel::class, NoteSyncModel::class, TaskModel::class
+        NoteModel::class, NoteSyncModel::class, TaskModel::class, TaskSyncModel::class
     ],
     version = 1,
     exportSchema = false
 )
-@TypeConverters(NoteSyncActionConverter::class, TaskStatusConverter::class)
+@TypeConverters(
+    NoteSyncActionConverter::class,
+    TaskStatusConverter::class,
+    TaskSyncActionConverter::class
+)
 abstract class DoneDatabase : RoomDatabase() {
     abstract val userDao: UserDao
     abstract val inspirationQuoteDao: InspirationQuoteDao
     abstract val noteDao: NoteDao
     abstract val noteSyncDao: NoteSyncDao
     abstract val taskDao: TaskDao
+    abstract val taskSyncDao: TaskSyncDao
 }
 

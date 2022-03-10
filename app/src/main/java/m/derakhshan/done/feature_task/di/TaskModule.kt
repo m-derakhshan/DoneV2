@@ -1,5 +1,6 @@
 package m.derakhshan.done.feature_task.di
 
+import com.google.firebase.firestore.FirebaseFirestore
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -17,9 +18,12 @@ object TaskModule {
 
     @Provides
     @Singleton
-    fun provideTaskRepository(database: DoneDatabase): TaskRepository {
+    fun provideTaskRepository(database: DoneDatabase, storage: FirebaseFirestore): TaskRepository {
         return TaskRepositoryImpl(
-            taskDao = database.taskDao
+            taskDao = database.taskDao,
+            taskSyncDao = database.taskSyncDao,
+            userDao = database.userDao,
+            storage = storage
         )
     }
 
@@ -27,10 +31,12 @@ object TaskModule {
     @Singleton
     fun provideTaskUseCases(repository: TaskRepository): TaskUseCases {
         return TaskUseCases(
-            getTasksUseCase = GetTasksUseCase(repository = repository),
+            getTasks = GetTasksUseCase(repository = repository),
             insertNewTask = InsertNewTask(repository = repository),
             updateTaskStatus = UpdateTaskStatus(repository = repository),
-            deleteTaskUseCase = DeleteTaskUseCase(repository = repository)
+            deleteTask = DeleteTaskUseCase(repository = repository),
+            syncTasks = SyncTasksUseCase(repository = repository),
+            getTasksToSync = GetTasksToSyncUseCase(repository = repository)
         )
     }
 
