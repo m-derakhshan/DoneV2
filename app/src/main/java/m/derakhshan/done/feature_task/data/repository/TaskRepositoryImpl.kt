@@ -5,8 +5,6 @@ import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.tasks.await
 import m.derakhshan.done.feature_authentication.data.data_source.dao.UserDao
-import m.derakhshan.done.feature_note.domain.model.NoteSyncAction
-import m.derakhshan.done.feature_note.domain.model.toNoteSyncModel
 import m.derakhshan.done.feature_task.data.data_source.TaskDao
 import m.derakhshan.done.feature_task.data.data_source.TaskSyncDao
 import m.derakhshan.done.feature_task.domain.model.*
