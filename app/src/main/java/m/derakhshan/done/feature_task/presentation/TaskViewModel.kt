@@ -1,5 +1,8 @@
 package m.derakhshan.done.feature_task.presentation
 
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Sync
+import androidx.compose.material.icons.filled.SyncDisabled
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.toArgb
@@ -10,8 +13,12 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import m.derakhshan.done.feature_note.domain.model.NoteSyncModel
 import m.derakhshan.done.feature_task.domain.model.TaskModel
+import m.derakhshan.done.feature_task.domain.model.TaskSyncModel
 import m.derakhshan.done.feature_task.domain.use_case.TaskUseCases
 import javax.inject.Inject
 
@@ -29,6 +36,8 @@ class TaskViewModel @Inject constructor(
     private val _snackBar = MutableSharedFlow<String>()
     val snackBar = _snackBar.asSharedFlow()
 
+    private var syncJob: Job? = null
+    private var taskToSyncList = ArrayList<TaskSyncModel>()
 
     init {
         getTasks()
@@ -85,7 +94,7 @@ class TaskViewModel @Inject constructor(
             is TaskEvent.TaskDeleteClicked -> {
                 viewModelScope.launch {
 
-                    useCase.deleteTaskUseCase(task = event.task)
+                    useCase.deleteTask(task = event.task)
 
                     deletedTask = event.task
                     _snackBar.emit("Task deleted.")
@@ -104,6 +113,17 @@ class TaskViewModel @Inject constructor(
                     newTaskDate = event.dates
                 )
             }
+            TaskEvent.OnTaskSyncClicked -> {
+                _state.value = _state.value.copy(
+                    isSyncIconRotating = true
+                )
+                viewModelScope.launch {
+                    useCase.syncTasks(tasks = taskToSyncList)
+                    _state.value = _state.value.copy(
+                        isSyncIconRotating = false
+                    )
+                }
+            }
         }
 
 
@@ -112,7 +132,7 @@ class TaskViewModel @Inject constructor(
 
     private fun getTasks() {
         job?.cancel()
-        job = useCase.getTasksUseCase().onEach {
+        job = useCase.getTasks().onEach {
             it?.let { tasks ->
                 val group = tasks.groupBy { item -> item.date }
                 val result = ArrayList<TaskGroup>()
@@ -123,12 +143,26 @@ class TaskViewModel @Inject constructor(
                     tasks = result
                 )
             }
+            getSyncTasks()
         }.launchIn(viewModelScope)
     }
 
+    private fun getSyncTasks() {
+        syncJob?.cancel()
+        syncJob = useCase.getTasksToSync().onEach {
+            _state.value = _state.value.copy(
+                syncNumber = it?.size ?: 0,
+                syncIcon = if (it != null && it.isNotEmpty()) Icons.Default.Sync else Icons.Default.SyncDisabled
+            )
+            it?.let { notes ->
+                taskToSyncList.addAll(notes)
+            }
+        }.launchIn(viewModelScope)
+    }
 
     override fun onCleared() {
         job?.cancel()
+        syncJob?.cancel()
         super.onCleared()
     }
 }
