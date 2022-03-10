@@ -5,6 +5,8 @@ import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.tasks.await
 import m.derakhshan.done.feature_authentication.data.data_source.dao.UserDao
+import m.derakhshan.done.feature_note.domain.model.NoteSyncAction
+import m.derakhshan.done.feature_note.domain.model.toNoteSyncModel
 import m.derakhshan.done.feature_task.data.data_source.TaskDao
 import m.derakhshan.done.feature_task.data.data_source.TaskSyncDao
 import m.derakhshan.done.feature_task.domain.model.*
@@ -23,6 +25,9 @@ class TaskRepositoryImpl(
 
     override suspend fun insertTask(task: TaskModel) {
         taskDao.insert(task = task)
+        val uid = userDao.getUserId()
+        taskSyncDao.insert(taskSyncModel = task.toTaskSyncModel(uid, TaskSyncAction.Insert))
+
     }
 
     override suspend fun updateTaskStatus(task: TaskModel, checked: Boolean) {
@@ -35,6 +40,8 @@ class TaskRepositoryImpl(
             status = if (checked) TaskStatus.Done else TaskStatus.InProgress
         )
         taskDao.insert(task = updateTask)
+        val uid = userDao.getUserId()
+        taskSyncDao.insert(taskSyncModel = updateTask.toTaskSyncModel(uid, TaskSyncAction.Insert))
     }
 
     override suspend fun deleteTask(task: TaskModel) {

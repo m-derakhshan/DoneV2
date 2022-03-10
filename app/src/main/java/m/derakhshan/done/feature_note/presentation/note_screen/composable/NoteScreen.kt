@@ -69,9 +69,9 @@ fun NoteScreen(
     val infiniteTransition = rememberInfiniteTransition()
     val syncRotation by infiniteTransition.animateFloat(
         initialValue = 0f,
-        targetValue = 360f,
+        targetValue = if (state.isSyncIconRotating)360f else 0f,
         animationSpec = infiniteRepeatable(
-            animation = tween(1000, easing = LinearEasing),
+            animation = tween(3000, easing = LinearEasing),
             repeatMode = RepeatMode.Reverse
         )
     )
