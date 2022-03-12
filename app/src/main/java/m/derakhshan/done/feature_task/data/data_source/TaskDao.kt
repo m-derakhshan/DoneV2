@@ -19,6 +19,9 @@ interface TaskDao {
     @Query("SELECT * FROM TaskModel order by status DESC,date DESC, time DESC")
     fun getTasks(): Flow<List<TaskModel>?>
 
+    @Query("SELECT * FROM TaskModel WHERE date=:date order by status DESC,date DESC, time DESC")
+    fun getTodayTasks(date: String): Flow<List<TaskModel>?>
+
     @Query("DELETE FROM TaskModel")
     suspend fun deleteAll()
 

@@ -1,7 +1,6 @@
 package m.derakhshan.done.feature_authentication.data.repository
 
 
-import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthInvalidUserException

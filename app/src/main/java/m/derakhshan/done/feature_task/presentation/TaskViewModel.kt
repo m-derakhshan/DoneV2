@@ -72,7 +72,7 @@ class TaskViewModel @Inject constructor(
                     isAddTaskEnable = event.description.length > 2
                 )
             }
-            TaskEvent.NewTaskSaveClick -> {
+            is TaskEvent.NewTaskSaveClick -> {
                 viewModelScope.launch {
                     for (date in _state.value.newTaskDate)
                         useCase.insertNewTask(
@@ -99,7 +99,7 @@ class TaskViewModel @Inject constructor(
                     _snackBar.emit("Task deleted.")
                 }
             }
-            TaskEvent.TaskUndo -> {
+            is TaskEvent.TaskUndo -> {
                 viewModelScope.launch {
                     deletedTask?.let {
                         useCase.insertNewTask(task = it)
@@ -112,7 +112,7 @@ class TaskViewModel @Inject constructor(
                     newTaskDate = event.dates
                 )
             }
-            TaskEvent.OnTaskSyncClicked -> {
+            is TaskEvent.OnTaskSyncClicked -> {
                 _state.value = _state.value.copy(
                     isSyncIconRotating = true
                 )

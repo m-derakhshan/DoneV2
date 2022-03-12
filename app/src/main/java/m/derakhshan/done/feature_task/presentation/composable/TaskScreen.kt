@@ -22,7 +22,6 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.EventAvailable
-import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.material.icons.filled.Send
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -314,14 +313,14 @@ private fun AddTaskSection(
                     tint = DarkBlue
                 )
             }
-
-            IconButton(onClick = { /*TODO open time picker*/ }) {
-                Icon(
-                    imageVector = Icons.Default.Schedule,
-                    contentDescription = "add time",
-                    tint = DarkBlue
-                )
-            }
+            // TODO: adding task reminder
+//            IconButton(onClick = { /*TODO open time picker*/ }) {
+//                Icon(
+//                    imageVector = Icons.Default.Schedule,
+//                    contentDescription = "add time",
+//                    tint = DarkBlue
+//                )
+//            }
 
             TaskModel.colors.forEach { color ->
                 Box(
