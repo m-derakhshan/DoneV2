@@ -52,3 +52,6 @@ I want to develop this project using Kotlin. also, I'm learning TDD; so it is a 
  - [ ] Implement date selection logic
  - [ ] Implement time selection logic
  - [ ] ...
+
+## See Screen shots:
+<a href="https://drive.google.com/drive/folders/1LkMCHizfH6ZPRXPc5OfJj22kehdtmXWK?usp=sharing">screen shots</a>
